@@ -36,6 +36,8 @@ gem 'spring',        group: :development
 # Use Slim for views
 gem 'slim'
 
+gem "angularjs-rails"
+gem "omniauth"
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
@@ -43,14 +45,17 @@ group :development, :test do
   gem 'binding_of_caller', '~> 0.7.2'
   gem 'pry'
   gem 'pry-byebug'
-  gem 'cucumber-rails'
-  gem 'cucumber-rails-training-wheels'
   gem 'jasmine'
   gem 'rspec-rails', '~> 2.14.1'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'autotest-rails'
+end
+
+group :test do
+  gem 'cucumber-rails'
+  gem 'cucumber-rails-training-wheels'
 end
 
 # code coverage code climate
