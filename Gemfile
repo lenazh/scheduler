@@ -34,7 +34,7 @@ gem 'spring',        group: :development
 # gem 'capistrano-rails', group: :development
 
 # Use Slim for views
-gem 'slim'
+gem 'slim-rails'
 
 gem "angularjs-rails"
 gem "omniauth"

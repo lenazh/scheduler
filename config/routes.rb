@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :sections
+
   get 'section_calendar/show'
 
   # The priority is based upon order of creation: first created -> highest priority.

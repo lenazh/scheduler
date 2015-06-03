@@ -1,0 +1,31 @@
+h1 Listing sections
+
+table
+  thead
+    tr
+      th Name
+      th Lecture
+      th Start time
+      th End time
+      th Gsi
+      th Weekday
+      th
+      th
+      th
+
+  tbody
+    - @sections.each do |section|
+      tr
+        td = section.name
+        td = section.lecture_id
+        td = section.start_time
+        td = section.end_time
+        td = section.gsi_id
+        td = section.weekday
+        td = link_to 'Show', section
+        td = link_to 'Edit', edit_section_path(section)
+        td = link_to 'Destroy', section, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Section', new_section_path
