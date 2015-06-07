@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :courses
+
   resources :sections
 
   get 'section_calendar/show'
