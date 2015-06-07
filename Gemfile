@@ -38,6 +38,7 @@ gem 'slim-rails'
 
 gem "angularjs-rails"
 gem "omniauth"
+gem "twitter-bootstrap-rails"
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
