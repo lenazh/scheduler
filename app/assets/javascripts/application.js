@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//  require turbolinks
+//= require turbolinks
 //= require angular
 //= require angular-route
 //= require angular-animate
