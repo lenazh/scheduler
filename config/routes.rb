@@ -3,8 +3,8 @@ Rails.application.routes.draw do
   root 'main#index'
 
   scope "api" do
-    resources :courses, :defaults => { :format => :json }
-    resources :sections, :defaults => { :format => :json }
+    resources :courses, :except => [:new, :edit], :defaults => { :format => :json }
+    resources :sections, :except => [:new, :edit], :defaults => { :format => :json }
   end
 
 

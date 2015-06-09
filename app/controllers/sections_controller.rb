@@ -1,4 +1,5 @@
 class SectionsController < ApplicationController
+  respond_to :json
   before_action :set_section, only: [:show, :edit, :update, :destroy]
 
   # GET /sections
@@ -12,42 +13,25 @@ class SectionsController < ApplicationController
   def show
   end
 
-  # GET /sections/new
-  def new
-    @section = Section.new
-  end
-
-  # GET /sections/1/edit
-  def edit
-  end
 
   # POST /sections
   # POST /sections.json
   def create
     @section = Section.new(section_params)
-
-    respond_to do |format|
-      if @section.save
-        format.html { redirect_to @section, notice: 'Section was successfully created.' }
-        format.json { render :show, status: :created, location: @section }
-      else
-        format.html { render :new }
-        format.json { render json: @section.errors, status: :unprocessable_entity }
-      end
+    if @section.save
+      render :show, status: :created, location: @section
+    else
+      render json: @section.errors, status: :unprocessable_entity 
     end
   end
 
   # PATCH/PUT /sections/1
   # PATCH/PUT /sections/1.json
   def update
-    respond_to do |format|
-      if @section.update(section_params)
-        format.html { redirect_to @section, notice: 'Section was successfully updated.' }
-        format.json { render :show, status: :ok, location: @section }
-      else
-        format.html { render :edit }
-        format.json { render json: @section.errors, status: :unprocessable_entity }
-      end
+    if @section.update(section_params)
+      render :show, status: :ok, location: @section
+    else
+      render json: @section.errors, status: :unprocessable_entity
     end
   end
 
@@ -55,10 +39,7 @@ class SectionsController < ApplicationController
   # DELETE /sections/1.json
   def destroy
     @section.destroy
-    respond_to do |format|
-      format.html { redirect_to sections_url, notice: 'Section was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private
@@ -69,6 +50,6 @@ class SectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def section_params
-      params.require(:section).permit(:name, :lecture_id, :start_time, :end_time, :gsi_id, :weekday)
+      params.require(:section).permit(:name, :lecture_id, :start_time, :end_time, :gsi_id, :weekday, :room, :class_id)
     end
 end
