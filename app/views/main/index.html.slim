@@ -1,0 +1,11 @@
+h1 Main#index
+p Find me in app/views/main/index.html.slim
+div ng-app="coursesApp"
+  div ng-controller="coursesCtrl"
+    div ng-repeat="course in courses"
+      p Course title: {{ course.name }}
+      p Course owner: {{ course.user_id }}
+      p Course url: {{ course.url }}
+
+    div 
+      p Foo variable: {{ foo }}

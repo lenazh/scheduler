@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
-  resources :courses
 
-  resources :sections
+  root 'main#index'
 
-  get 'section_calendar/show'
+  scope "api" do
+    resources :courses, :defaults => { :format => :json }
+    resources :sections, :defaults => { :format => :json }
+  end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,3 +1,4 @@
-@coursesApp.controller 'CoursesCtrl', ['$scope', ($scope) ->
-  # Notice how this controller body is empty
+@coursesModule.controller 'coursesCtrl', ['$scope', 'Course', ($scope, Course) ->
+  $scope.courses = Course.query()
+  $scope.foo = "bar"
 ]
