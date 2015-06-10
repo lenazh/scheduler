@@ -12,5 +12,8 @@ FactoryGirl.define do
       user_id 2
     end
 
+    factory :another_course do
+      name "Physics For Future Presidents Berkeley Summer 2015"
+    end
   end
 end

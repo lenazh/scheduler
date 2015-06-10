@@ -16,7 +16,7 @@
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-shared_examples 'a JSON controller for a resource,' do
+shared_examples 'a JSON resource controller:' do
 
   # singular downcase string of the class name
   let(:model_string) { model_class.to_s.underscore }
