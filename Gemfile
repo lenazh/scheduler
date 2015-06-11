@@ -50,6 +50,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
   gem 'jasmine'
+  gem 'jasmine-rails'
   gem 'rspec-rails', '~> 2.14.1'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
