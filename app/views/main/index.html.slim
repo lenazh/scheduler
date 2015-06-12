@@ -1,11 +1,26 @@
 h1 Main#index
 p Find me in app/views/main/index.html.slim
-div ng-app="coursesApp"
-  div ng-controller="coursesCtrl"
-    div ng-repeat="course in courses"
-      p Course title: {{ course.name }}
-      p Course owner: {{ course.user_id }}
-      p Course url: {{ course.url }}
 
-    div 
-      p Foo variable: {{ foo }}
+div[class="container theme-showcase" role="main"]
+  div.page-header ng-app="coursesApp"
+    h1 My classess
+
+    div.row ng-controller="coursesCtrl"      
+      table[class="table table-striped"]
+        thead 
+        tr
+          th Title
+          th Created
+          th
+        tr ng-repeat="course in courses"
+          td 
+            button[class="btn btn-link"] {{ course.name }} 
+          td ng-bind="course.created_at | date"
+          td.text-center 
+            button[class="btn btn-danger"] Delete
+        tr
+          td colspan="2"
+            input type="text" placeholder="New class..."
+          td.text-center          
+            button[class="btn btn-success"] Add
+          
