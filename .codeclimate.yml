@@ -17,4 +17,4 @@ languages:
 #
 exclude_paths:
  - "test/*"
- - "features/step_definitioins/web_steps.rb"
+ - "features/step_definitions/web_steps.rb"
