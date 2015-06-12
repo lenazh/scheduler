@@ -17,29 +17,28 @@ nav[class="navbar navbar-default"]
           a href="#calendar" Section calendar
 
 
-div[class="container theme-showcase" role="main"]
+div[class="container theme-showcase" role="main" ng-app="coursesApp"]
 
-
-  div.page-header ng-app="coursesApp"
+  div.page-header
     h1 My classess
 
-    div.row ng-controller="coursesCtrl"      
-      table[class="table table-striped"]
-        thead 
-        tr
-          th Title
-          th Created
-          th
-        tr ng-repeat="course in courses"
-          td 
-            button[class="btn btn-link"] {{ course.name }} 
-          td ng-bind="course.created_at | date"
-          td.text-center 
-            button[class="btn btn-danger"] Delete
-        tr
-          td colspan="2"
-            form.form-inline
-              input.form-control type="text"  placeholder="New class..."
-          td.text-center          
-            button[class="btn btn-success"] Add
-          
+  div.row ng-controller="coursesCtrl"      
+    table[class="table table-striped"]
+      thead 
+      tr
+        th Title
+        th Created
+        th
+      tr ng-repeat="course in courses"
+        td 
+          button[class="btn btn-link"] {{ course.name }} 
+        td ng-bind="course.created_at | date"
+        td.text-center 
+          button[class="btn btn-danger"] Delete
+      tr
+        td colspan="2"
+          form.form-inline
+            input.form-control type="text"  placeholder="New class..."
+        td.text-center          
+          button[class="btn btn-success"] Add
+        
