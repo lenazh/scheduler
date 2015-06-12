@@ -1,7 +1,25 @@
-h1 Main#index
-p Find me in app/views/main/index.html.slim
+nav[class="navbar navbar-default"]
+  div.container-fluid
+    div.navbar-heared
+      button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand 8A Physics Berkeley Fall 2015
+    div#navbar class="navbar-collapse collapse"
+      ul class="nav navbar-nav"
+        li.active
+          a href="#" My classes
+        li
+          a href="#gsi" GSIs
+        li
+          a href="#calendar" Section calendar
+
 
 div[class="container theme-showcase" role="main"]
+
+
   div.page-header ng-app="coursesApp"
     h1 My classess
 
@@ -20,7 +38,8 @@ div[class="container theme-showcase" role="main"]
             button[class="btn btn-danger"] Delete
         tr
           td colspan="2"
-            input type="text" placeholder="New class..."
+            form.form-inline
+              input.form-control type="text"  placeholder="New class..."
           td.text-center          
             button[class="btn btn-success"] Add
           
