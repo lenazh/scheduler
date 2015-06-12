@@ -18,10 +18,10 @@ describe "coursesCtrl", ->
       $scope = $rootScope.$new()
       $controller 'coursesCtrl', {$scope: $scope}
 
-  it "should query all courses owned by the user", ->
+  it "should query() all courses owned by the user", ->
     expect(factoryMock.query).toHaveBeenCalled()
   
-  it "should assign the courses to 'courses' variable", ->
+  it "should assign the returned courses to 'courses' variable", ->
     expect($scope.courses).toBeDefined()
     expect($scope.courses).toEqual fakeResults
     
