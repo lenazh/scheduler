@@ -5,11 +5,11 @@
     Course.remove id 
 
   $scope.save = (name) ->
-    Course.save name
+    Course.save {name: name}
 
   $scope.update = (id, name) ->
     Course.update id, name
-    
+
   $scope.select = (id) ->
     null
 ]

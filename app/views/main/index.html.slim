@@ -34,12 +34,12 @@ div[class="container theme-showcase" role="main" ng-app="coursesApp"]
           button[class="btn btn-link"] {{ course.name }} 
         td ng-bind="course.created_at | date"
         td.text-center 
-          button[class="btn btn-danger"] Delete
+          button[class="btn btn-danger" ng-click="remove(course.id)"] Delete
 
       tr
         td colspan="2"
           form.form-inline
             input.form-control[type="text"  placeholder="New class..." required]
         td.text-center          
-          button[class="btn btn-success"] Add
+          button[class="btn btn-success" ng-click=""] Add
         

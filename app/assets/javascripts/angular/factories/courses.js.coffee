@@ -3,9 +3,9 @@
     constructor: ()->
       @service = $resource "/api/courses/:id"
 
-    create: (name) ->
+    create: (params) ->
       new @service(params).$save (entry) ->
-        params.id = resource.id
+        params.id = entry.id
       params
 
     update: (id, name) ->
