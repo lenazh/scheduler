@@ -34,7 +34,7 @@ div[class="container theme-showcase" role="main" ng-app="coursesApp"]
           button[class="btn btn-link"] {{ course.name }} 
         td ng-bind="course.created_at | date"
         td.text-center 
-          button[class="btn btn-danger" ng-click="remove(course.id)"] Delete
+          button[class="btn btn-danger" ng-click="remove(course)"] Delete
 
       tr
         td colspan="2"

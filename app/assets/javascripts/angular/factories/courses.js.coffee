@@ -1,23 +1,22 @@
 @coursesModule.factory 'Course', ($resource) -> 
-  class Course
-    constructor: ()->
+  {
+    init: ()->
       @service = $resource "/api/courses/:id"
 
-    create: (params) ->
+    create: (name) ->
       new @service(params).$save (entry) ->
         params.id = entry.id
       params
 
-    update: (id, name) ->
+    update: (course, name) ->
       entry = @service.get {id: id}
       if (entry != null)
         entry.name = name
         entry.$save()
         
-    remove: (id) ->
-      @service.remove {id: id} 
+    remove: (course) ->
+      @service.remove course
 
     all: () ->
       @service.query()
-
-  new Course()
+  }

@@ -6,19 +6,19 @@ describe "coursesCtrl", ->
 
   factoryMock = {
     all: () -> fakeResults,
-    save: () -> null,
+    saveNew: () -> null,
     update: () -> null,
     remove: () -> null
   }
 
   $scope = {}
   coursesController = {}
-  id = 123
+  course = {user_id: 123, name: "New course"}
   name = "Physics 8A"
 
   beforeEach ->  
     spyOn(factoryMock, 'all').and.callThrough()
-    spyOn(factoryMock, 'save')
+    spyOn(factoryMock, 'saveNew')
     spyOn(factoryMock, 'update')
     spyOn(factoryMock, 'remove')
 
@@ -37,22 +37,22 @@ describe "coursesCtrl", ->
     expect($scope.courses).toBeDefined()
     expect($scope.courses).toEqual fakeResults
     
-  it "has method remove(id) that is routed to the model", ->
+  it "has method remove(course) that is routed to the model", ->
     expect($scope.remove).toBeDefined()
-    $scope.remove(id)
-    expect(factoryMock.remove).toHaveBeenCalledWith(id)
+    $scope.remove(course)
+    expect(factoryMock.remove).toHaveBeenCalledWith(course)
 
-  it "has method save(params) that is routed to the model", ->
-    expect($scope.save).toBeDefined()
-    $scope.save(name)
-    expect(factoryMock.save).toHaveBeenCalledWith(name)
+  it "has method saveNew(params) that is routed to the model", ->
+    expect($scope.saveNew).toBeDefined()
+    $scope.saveNew(name)
+    expect(factoryMock.saveNew).toHaveBeenCalledWith(name)
 
-  it "has method update(id, params) that is routed to the model", ->
+  it "has method update(course, params) that is routed to the model", ->
     expect($scope.update).toBeDefined()
-    $scope.update(id, name)
-    expect(factoryMock.update).toHaveBeenCalledWith(id, name)
+    $scope.update(course, name)
+    expect(factoryMock.update).toHaveBeenCalledWith(course, name)
 
-  it "has method select(id) that makes the selected course active", ->
+  it "has method select(course) that makes the selected course active", ->
     expect($scope.select).toBeDefined()
-    $scope.select(id)
+    $scope.select(course)
     pending "Backend for selecting a course is not implemented"

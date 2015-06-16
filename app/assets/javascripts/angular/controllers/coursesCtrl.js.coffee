@@ -1,15 +1,16 @@
 @coursesModule.controller 'coursesCtrl', ['$scope', 'Course', ($scope, Course) ->
+  Course.init()
   $scope.courses = Course.all()
 
-  $scope.remove = (id) ->
-    Course.remove id 
+  $scope.remove = (course) ->
+    Course.remove course 
 
-  $scope.save = (name) ->
-    Course.save {name: name}
+  $scope.saveNew = (name) ->
+    Course.saveNew name
 
-  $scope.update = (id, name) ->
-    Course.update id, name
+  $scope.update = (course, name) ->
+    Course.update course, name
 
-  $scope.select = (id) ->
+  $scope.select = (course) ->
     null
 ]
