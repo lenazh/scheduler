@@ -1,22 +1,22 @@
 @coursesModule.factory 'Course', ($resource) -> 
   {
     init: ()->
-      @service = $resource "/api/courses/:id"
+      @course = $resource "/api/courses/:id", 
+        { id: '@id' }, 
+        { 'update': { method:'PUT' }}
 
-    create: (name) ->
-      new @service(params).$save (entry) ->
-        params.id = entry.id
-      params
+#TODO - validations go here somewhere
+    saveNew: (name) ->
+      newCourse = new @course {name: name}
+      newCourse.$save()
+      newCourse
 
     update: (course, name) ->
-      entry = @service.get {id: id}
-      if (entry != null)
-        entry.name = name
-        entry.$save()
+      @course.update {name: name}, course
         
     remove: (course) ->
-      @service.remove course
+      @course.remove course
 
     all: () ->
-      @service.query()
+      @course.query()
   }
