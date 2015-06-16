@@ -5,6 +5,7 @@ describe "coursesCtrl", ->
   ]
 
   factoryMock = {
+    init: () -> null
     all: () -> fakeResults,
     saveNew: () -> null,
     update: () -> null,
@@ -21,6 +22,7 @@ describe "coursesCtrl", ->
     spyOn(factoryMock, 'saveNew')
     spyOn(factoryMock, 'update')
     spyOn(factoryMock, 'remove')
+    spyOn(factoryMock, 'init')
 
     module "coursesApp", ($provide) ->
       $provide.value 'Course', factoryMock
@@ -30,7 +32,8 @@ describe "coursesCtrl", ->
       $scope = $rootScope.$new()
       coursesController = $controller 'coursesCtrl', {$scope: $scope}
 
-  it "should query all() courses owned by the user", ->
+  it "should call Courses.init() and Courses.all() when instantiated", ->
+    expect(factoryMock.init).toHaveBeenCalled()
     expect(factoryMock.all).toHaveBeenCalled()
   
   it "should assign the returned courses to 'courses' variable", ->
