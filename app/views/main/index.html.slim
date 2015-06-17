@@ -22,24 +22,33 @@ div[class="container theme-showcase" role="main" ng-app="coursesApp"]
   div.page-header
     h1 My classess
 
-  div.row ng-controller="coursesCtrl"      
-    table[class="table table-striped"]
-      thead 
-      tr
-        th Title
-        th Created
-        th
-      tr ng-repeat="course in courses"
-        td 
-          button[class="btn btn-link"] {{ course.name }} 
-        td ng-bind="course.created_at | date"
-        td.text-center 
-          button[class="btn btn-danger" ng-click="remove(course)"] Delete
+  div.row ng-controller="coursesCtrl"    
+    form.form-inline[name="form" novalidate]  
+      table[class="table table-striped"]
+        thead 
+        tr
+          th Title
+          th Created
+          th
+          th
+        tr ng-repeat="course in courses"
+          td 
+            button[class="btn btn-link"] {{ course.name }} 
+          td ng-bind="course.created_at | date"
 
-      tr
-        td colspan="2"
-          form.form-inline
-            input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="newName"]
-        td.text-center          
-          button[class="btn btn-success" ng-click="saveNew(newName)"] Add
+          td.text-right 
+            button[class="btn btn-default" ng-click="editForm(course)" ng-disabled="disableEditingAndDeletion"] Edit
+
+          td.text-center 
+            button[class="btn btn-danger" ng-click="remove(course)" ng-disabled="disableEditingAndDeletion"] X
+          
+
+        tr
+          td colspan="3"
+            input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="courseName" name="courseName"]
+          td.text-center          
+            button[class="btn btn-success" ng-click="saveNew()" ng-disabled="form.courseName.$invalid" ng-hide="hideAddButton" ng-disabled="disableEditingAndDeletion"] Add
+
+            button[class="btn btn-primary" ng-click="edit()" ng-disabled="form.courseName.$invalid" ng-hide="hideUpdateButton"] Update
+
         
