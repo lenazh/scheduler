@@ -1,4 +1,4 @@
-@coursesModule.factory 'Course', ($resource) -> 
+@coursesModule.factory 'Course', ['$resource', ($resource) -> 
   {
     init: ()->
       @course = $resource "/api/courses/:id", 
@@ -23,3 +23,4 @@
     all: () ->
       @course.query()
   }
+]
