@@ -46,9 +46,16 @@ div[class="container theme-showcase" role="main" ng-app="coursesApp"]
         tr
           td colspan="3"
             input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="courseName" name="courseName"]
-          td.text-center          
-            button[class="btn btn-success" ng-click="saveNew()" ng-disabled="form.courseName.$invalid" ng-hide="hideAddButton" ng-disabled="disableEditingAndDeletion"] Add
 
-            button[class="btn btn-primary" ng-click="edit()" ng-disabled="form.courseName.$invalid" ng-hide="hideUpdateButton"] Update
+            button[class="btn btn-defauls" ng-click="addForm()" ng-hide="hideUpdateButton"] Cancel
+
+
+          td.text-center          
+            button[class="btn btn-success" ng-click="saveNew()" ng-disabled="form.courseName.$invalid || disableEditingAndDeletion" ng-hide="hideAddButton"] Add
+
+            button[class="btn btn-primary" ng-click="update()" ng-disabled="form.courseName.$invalid" ng-hide="hideUpdateButton"] Update
+
+            
+
 
         

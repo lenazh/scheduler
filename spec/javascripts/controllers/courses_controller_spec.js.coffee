@@ -79,9 +79,10 @@ describe "coursesCtrl", ->
     expect($scope.update).toBeDefined()
     id = 0
     name = "Physics 8A"
-    courseToUpdate = fakeResults[id] 
-    $scope.update(courseToUpdate, name)
-    expect(factoryMock.update).toHaveBeenCalledWith(courseToUpdate, name, jasmine.any(Function))
+    $scope.courseToUpdate = fakeResults[id] 
+    $scope.courseName = name
+    $scope.update()
+    expect(factoryMock.update).toHaveBeenCalledWith(fakeResults[id], name, jasmine.any(Function))
     newResults = [
       { name: "Physics 8A", user_id: "1"},
       { name: "Course2", user_id: "1"}
@@ -99,6 +100,8 @@ describe "coursesCtrl", ->
     expect($scope.hideUpdateButton).toBe false
     expect($scope.hideAddButton).toBe true
     expect($scope.disableEditingAndDeletion).toBe true
+    expect($scope.courseToUpdate).toEqual fakeResults[0]
+    expect($scope.courseName).toEqual fakeResults[0]['name']
 
   it "has addForm method that shows 'Add' button, hides 'Update' button and enables other buttons", ->
     $scope.addForm()

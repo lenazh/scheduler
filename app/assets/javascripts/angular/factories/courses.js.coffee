@@ -15,7 +15,7 @@
       newCourse
 
     update: (course, name, callback) ->
-      @course.update {name: name}, course, callback
+      @course.update {'course[name]': name}, course, callback
         
     remove: (course) ->
       @course.remove course

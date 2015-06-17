@@ -99,7 +99,7 @@ describe "Courses", ->
       newName = "Blahblahology101"
 
       #run the test
-      $httpBackend.expectPUT("#{resourcePath}/#{id+1}?name=#{newName}")
+      $httpBackend.expectPUT("#{resourcePath}/#{id+1}?course%5Bname%5D=#{newName}")
         .respond(200, updatedCourse)
       result = Courses.update(updatedCourseResource, newName, ->)
       $httpBackend.flush()
