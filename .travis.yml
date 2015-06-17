@@ -2,10 +2,9 @@ language: ruby
 rvm:
 - 2.1.5
 bundler_args: "--without production --path=~/.bundle"
+cache: bundler
 before_install:
 - 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
-before_script:
-- cp config/database.yml.travis config/database.yml
 script:
 - bundle exec rake db:migrate db:test:prepare
 - bundle exec rake spec
