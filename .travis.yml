@@ -1,0 +1,20 @@
+language: ruby
+rvm:
+- 2.1.5
+bundler_args: "--without production --path=~/.bundle"
+cache: bundler
+before_install:
+- 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
+script:
+- bundle exec rake db:migrate db:test:prepare
+- bundle exec rake spec
+- bundle exec rake spec:javascript
+- bundle exec rake cucumber
+after_script:
+- bundle_cache
+env:
+  global:
+  - BUNDLE_ARCHIVE="bundle.tgz"
+  - RAILS_ENV=test
+  - CODECLIMATE_REPO_TOKEN=643a8c52b0a23625f34651117734a257aba622cce26995204b27b6d2ced4a5aa
+  - secure: "JNMJS+n19kkrm53OyeqGTBnvAug0QhLasIPvxEiGFMabBOsH4ZKRHI3DVKQyCZlMdW4GOgMaS0f4UAnrjBnhV5wDUW/9644Tsf/Jg/vanzugMm9IYX/mewNmmDWA5O+CZhYpMDsNLTNVAuoPiJDao/IlpezU6A8kyzFB4TeUqqY4Jjx91WkRUBMJyLnyOcjWlmx+hn8KZEC1+YOGryPuywmYVAnLo8aivlRak6VFczwnYJMPE7sphiGl+sHe7Vf1l3YnQKfgiD4xwPR0g6oYU8p78TlQy6dyW1eD1MV5RHCronr9AqLtBGthC6D9X9GsJBbIeleuAc6yjQ6GAH8K9xC9BK1Dh2QjxlM6a4Bxjz0IvXnt+QNaM/3QgUOW2k99z4H/54QZ6mbCOMhp8HA797I26GP8rZNC7DMgdV+GK5Nky0hhaJzUWAzvORt2EkMm4UNe66B6aTJ4BoYTv1TL3E+5Ve22ycVHQQVnHW4ZWX4EfazvqND55eTIzEj1ztcRwMPt/xmLcmSTA+HdoAyVfwW8e0pcBg7Rb5GyA+oVNs6aK5eRoWmoNg1Ov8AEVSobCcfwQpbshsoUh7cDxMbo872reCq+OyRCzq0z90+BJAamAPvm0oHfCS2h0S/VwXWntsg5SuBO2NVYr7IUQxlngf+e8TkijIUJWvcVYt787lo="
