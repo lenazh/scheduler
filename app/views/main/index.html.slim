@@ -39,7 +39,7 @@ div[class="container theme-showcase" role="main" ng-app="coursesApp"]
       tr
         td colspan="2"
           form.form-inline
-            input.form-control[type="text" placeholder="New class..." required]
+            input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="newName"]
         td.text-center          
-          button[class="btn btn-success" ng-model="newName" ng-click="saveNew('newName')"] Add
+          button[class="btn btn-success" ng-click="saveNew(newName)"] Add
         
