@@ -1,26 +1,31 @@
 describe "coursesCtrl", ->
-  fakeResults = [
-    { name: "Course1", user_id: "1"},
-    { name: "Course2", user_id: "1"}
-  ]
-
-  factoryMock = {
-    init: () -> null
-    all: () -> fakeResults,
-    saveNew: () -> null,
-    update: () -> null,
-    remove: () -> null
-  }
-
   $scope = {}
   coursesController = {}
-  course = {user_id: 123, name: "New course"}
-  name = "Physics 8A"
+  fakeResults = {}
+  factoryMock = {}
+
+
+  beforeEach ->
+    fakeResults = [
+      { name: "Course1", user_id: "1"},
+      { name: "Course2", user_id: "1"}
+    ]
+
+    factoryMock = {
+      init: () -> null
+      all: () -> fakeResults,
+      saveNew: (name) -> {name: "New course", user_id: "1"},
+      update: (course, name, callback) -> 
+        callback()
+        {name: "Physics 8A", user_id: "1"}
+      ,
+      remove: (course) -> null
+    }
 
   beforeEach ->  
     spyOn(factoryMock, 'all').and.callThrough()
-    spyOn(factoryMock, 'saveNew')
-    spyOn(factoryMock, 'update')
+    spyOn(factoryMock, 'saveNew').and.callThrough()
+    spyOn(factoryMock, 'update').and.callThrough()
     spyOn(factoryMock, 'remove')
     spyOn(factoryMock, 'init')
 
@@ -36,26 +41,45 @@ describe "coursesCtrl", ->
     expect(factoryMock.init).toHaveBeenCalled()
     expect(factoryMock.all).toHaveBeenCalled()
   
-  it "should assign the returned courses to 'courses' variable", ->
+  it "should assign the returned courses to $scope.courses", ->
     expect($scope.courses).toBeDefined()
     expect($scope.courses).toEqual fakeResults
     
-  it "has method remove(course) that is routed to the model", ->
+  it "has method remove(course) that is routed to the model and deletes the course from $scope.courses", ->
     expect($scope.remove).toBeDefined()
-    $scope.remove(course)
-    expect(factoryMock.remove).toHaveBeenCalledWith(course)
+    id = 0
+    courseToRemove = fakeResults[id] 
+    $scope.remove(courseToRemove)
+    expect(factoryMock.remove).toHaveBeenCalledWith(courseToRemove)
+    newResults = [{ name: "Course2", user_id: "1"}]
+    expect($scope.courses).toEqual newResults
 
-  it "has method saveNew(params) that is routed to the model", ->
+  it "has method saveNew(params) that is routed to the model and appends the new course to $scope.courses", ->
     expect($scope.saveNew).toBeDefined()
-    $scope.saveNew(name)
-    expect(factoryMock.saveNew).toHaveBeenCalledWith(name)
+    $scope.saveNew("New Course")
+    expect(factoryMock.saveNew).toHaveBeenCalledWith("New Course")
+    newResults = [
+      { name: "Course1", user_id: "1"},
+      { name: "Course2", user_id: "1"},
+      { name: "New course", user_id: "1"}
+    ]
+    expect($scope.courses).toEqual newResults
 
-  it "has method update(course, params) that is routed to the model", ->
+  it "has method update(course, params) that is routed to the model and updates this course in $scope.courses", ->
     expect($scope.update).toBeDefined()
-    $scope.update(course, name)
-    expect(factoryMock.update).toHaveBeenCalledWith(course, name)
+    id = 0
+    name = "Physics 8A"
+    courseToUpdate = fakeResults[id] 
+    $scope.update(courseToUpdate, name)
+    expect(factoryMock.update).toHaveBeenCalledWith(courseToUpdate, name, jasmine.any(Function))
+    newResults = [
+      { name: "Physics 8A", user_id: "1"},
+      { name: "Course2", user_id: "1"}
+    ]
+    expect($scope.courses).toEqual newResults
 
   it "has method select(course) that makes the selected course active", ->
+    course = { name: "Physics 8A", user_id: "1"}
     expect($scope.select).toBeDefined()
     $scope.select(course)
     pending "Backend for selecting a course is not implemented"

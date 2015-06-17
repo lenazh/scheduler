@@ -101,5 +101,5 @@ describe "Courses", ->
       #run the test
       $httpBackend.expectPUT("#{resourcePath}/#{id+1}?name=#{newName}")
         .respond(200, updatedCourse)
-      result = Courses.update(updatedCourseResource, newName)
+      result = Courses.update(updatedCourseResource, newName, ->)
       $httpBackend.flush()
