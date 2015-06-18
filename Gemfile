@@ -39,9 +39,16 @@ gem 'spring',        group: :development
 # Use Slim for views
 gem 'slim-rails'
 
+# Use AngularJS for the frontend
 gem "angularjs-rails"
+
 gem "omniauth"
+
+# Use twitter bootstrap CSS
 gem "twitter-bootstrap-rails"
+
+# Use gon to give JS variables from the controller
+gem 'gon' 
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
