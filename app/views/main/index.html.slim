@@ -17,45 +17,6 @@ nav[class="navbar navbar-default"]
           a href="#calendar" Section calendar
 
 
-div[class="container theme-showcase" role="main" ng-app="coursesApp"]
+div[class="container theme-showcase" role="main"]
 
-  div.page-header
-    h1 My classess
-
-  div.row ng-controller="coursesCtrl"    
-    form.form-inline[name="form" novalidate]  
-      table[class="table table-striped"]
-        thead 
-        tr
-          th Title
-          th Created
-          th
-          th
-        tr ng-repeat="course in courses"
-          td 
-            button[class="btn btn-link"] {{ course.name }} 
-          td ng-bind="course.created_at | date"
-
-          td.text-right 
-            button[class="btn btn-default" ng-click="editForm(course)" ng-disabled="disableEditingAndDeletion"] Edit
-
-          td.text-right 
-            button[class="btn btn-danger" ng-click="remove(course)" ng-disabled="disableEditingAndDeletion"] X
-          
-
-        tr
-          td colspan="2"
-            input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="courseName" name="courseName"]
-
-            button[class="btn btn-defauls" ng-click="addForm()" ng-hide="hideUpdateButton"] Cancel
-
-
-          td class="text-right" colspan="2"          
-            button[class="btn btn-success" ng-click="saveNew()" ng-disabled="form.courseName.$invalid || disableEditingAndDeletion" ng-hide="hideAddButton"] Add
-
-            button[class="btn btn-primary" ng-click="update()" ng-disabled="form.courseName.$invalid" ng-hide="hideUpdateButton"] Update
-
-            
-
-
-        
+  <ng-view></ng-view>

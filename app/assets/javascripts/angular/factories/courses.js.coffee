@@ -1,4 +1,4 @@
-@coursesModule.factory 'Course', ['$resource', ($resource) -> 
+@schedulerModule.factory 'Course', ['$resource', ($resource) -> 
   {
     init: ()->
       @course = $resource "#{gon.courses_api_path}/:id", 

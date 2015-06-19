@@ -45,7 +45,7 @@ describe "Courses", ->
   gon.courses_api_path = resourcePath
 
 # initialize the dependencies and get the objects
-  beforeEach module('coursesApp')
+  beforeEach module('schedulerApp')
   beforeEach ->
     inject ($injector) ->
       $httpBackend = $injector.get '$httpBackend'
