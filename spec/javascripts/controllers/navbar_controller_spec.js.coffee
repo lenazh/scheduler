@@ -17,28 +17,6 @@ describe "navbarCtrl", ->
     expect(navbar.title).toBeDefined()
 
   describe "select method", ->
-    menuItems = 
-      [
-        {
-          title: "Option 1",
-          active: "",
-          href: "#option1"
-        },
-        {
-          title: "Option 2",
-          active: "",
-          href: "#option2"
-        },
-        {
-          title: "Option 3",
-          active: "",
-          href: "#option3"
-        }
-      ]
-
-    beforeEach ->
-      navbar.items = menuItems
-      navbar.selected = null
 
     it "should be defined", ->
       expect(navbar.select).toBeDefined()

@@ -8,7 +8,6 @@
           'post': headers: {'Content-Type': 'application/json'}
         }
 
-#TODO - validations go here somewhere
     saveNew: (name) ->
       newCourse = new @course {name: name}
       newCourse.$save()
