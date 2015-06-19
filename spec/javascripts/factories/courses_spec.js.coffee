@@ -3,6 +3,8 @@ describe "Courses", ->
   Courses = {}
   $httpBackend = {}
   resourcePath = "/api/courses"
+  hostPath = "http://192.168.56.101:3000"
+  resourceUrl = "#{hostPath}#{resourcePath}"
 
 # TODO: pass the resource path as a parameter with gon
 # canned responses defined here
@@ -12,21 +14,21 @@ describe "Courses", ->
       "name":"Class 1",
       "user_id":1,
       "created_at":"2015-06-09T01:08:39.146Z",
-      "url":"http://192.168.56.101:3000/api/courses/1"
+      "url":"#{resourceUrl}/1"
     },
     {
       "id":2,
       "name":"Class 2",
       "user_id":1,
       "created_at":"2015-06-09T01:08:46.749Z",
-      "url":"http://192.168.56.101:3000/api/courses/2"
+      "url":"#{resourceUrl}/2"
     },
     {
       "id":3,
       "name":"Class 3",
       "user_id":1,
       "created_at":"2015-06-09T01:08:46.749Z",
-      "url":"http://192.168.56.101:3000/api/courses/3"
+      "url":"#{resourceUrl}/3"
     }
   ]
 
@@ -35,7 +37,7 @@ describe "Courses", ->
     "name":"Class 4",
     "user_id":1,
     "created_at":"2015-06-09T01:08:39.146Z",
-    "url":"http://192.168.56.101:3000/api/courses/4"
+    "url":"#{resourceUrl}/4"
   }
 
 # stub out gon
