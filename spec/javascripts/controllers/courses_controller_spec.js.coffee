@@ -1,7 +1,7 @@
 describe "coursesCtrl", ->
   $scope = {}
   $controller = {}
-  coursesController = {}
+  crs = {}
   fakeResults = {}
   factoryMock = {}
 
@@ -30,81 +30,81 @@ describe "coursesCtrl", ->
     spyOn(factoryMock, 'remove')
     spyOn(factoryMock, 'init')
 
-    module "coursesApp", ($provide) ->
+    module "schedulerApp", ($provide) ->
       $provide.value 'Course', factoryMock
       return
 
     inject (_$controller_) ->
       $controller = _$controller_
 
-    coursesController = $controller 'coursesCtrl', {$scope: $scope}
+    crs = $controller 'coursesCtrl', {$scope: $scope}
 
   it "should call Courses.init() and Courses.all() when instantiated", ->
     expect(factoryMock.init).toHaveBeenCalled()
     expect(factoryMock.all).toHaveBeenCalled()
   
   it "initializes needed variables", ->
-    expect($scope.courses).toBeDefined()
-    expect($scope.courseName).toBeDefined()
-    expect($scope.courses).toEqual fakeResults
-    expect($scope.hideUpdateButton).toBe true
-    expect($scope.hideAddButton).toBe false
-    expect($scope.disableEditingAndDeletion).toBe false
+    expect(crs.courses).toBeDefined()
+    expect(crs.courseName).toBeDefined()
+    expect(crs.courses).toEqual fakeResults
+    expect(crs.hideUpdateButton).toBe true
+    expect(crs.hideAddButton).toBe false
+    expect(crs.disableEditingAndDeletion).toBe false
     
     
-  it "has method remove(course) that is routed to the model and deletes the course from $scope.courses", ->
-    expect($scope.remove).toBeDefined()
+  it "has method remove(course) that is routed to the model and deletes the course from crs.courses", ->
+    expect(crs.remove).toBeDefined()
     id = 0
     courseToRemove = fakeResults[id] 
-    $scope.remove(courseToRemove)
+    crs.remove(courseToRemove)
     expect(factoryMock.remove).toHaveBeenCalledWith(courseToRemove)
     newResults = [{ name: "Course2", user_id: "1"}]
-    expect($scope.courses).toEqual newResults
+    expect(crs.courses).toEqual newResults
 
-  it "has method saveNew() that is routed to the model and appends the new course to $scope.courses", ->
-    expect($scope.saveNew).toBeDefined()
-    $scope.courseName = "New Course"
+  it "has method saveNew() that is routed to the model and appends the new course to crs.courses", ->
+    expect(crs.saveNew).toBeDefined()
+    crs.courseName = "New Course"
     $scope.form = {courseName : {$valid : true }}
-    $scope.saveNew()
+    crs.saveNew()
     expect(factoryMock.saveNew).toHaveBeenCalledWith("New Course")
     newResults = [
       { name: "Course1", user_id: "1"},
       { name: "Course2", user_id: "1"},
       { name: "New course", user_id: "1"}
     ]
-    expect($scope.courses).toEqual newResults
-    expect($scope.courseName).toEqual ""
+    expect(crs.courses).toEqual newResults
+    expect(crs.courseName).toEqual ""
 
-  it "has method update(course, params) that is routed to the model and updates this course in $scope.courses", ->
-    expect($scope.update).toBeDefined()
+  it "has method update(course, params) that is routed to the model and updates this course in crs.courses", ->
+    expect(crs.update).toBeDefined()
     id = 0
     name = "Physics 8A"
-    $scope.courseToUpdate = fakeResults[id] 
-    $scope.courseName = name
-    $scope.update()
+    crs.courseToUpdate = fakeResults[id] 
+    crs.courseName = name
+    crs.update()
     expect(factoryMock.update).toHaveBeenCalledWith(fakeResults[id], name, jasmine.any(Function))
     newResults = [
       { name: "Physics 8A", user_id: "1"},
       { name: "Course2", user_id: "1"}
     ]
-    expect($scope.courses).toEqual newResults
+    expect(crs.courses).toEqual newResults
 
   it "has method select(course) that makes the selected course active", ->
     course = { name: "Physics 8A", user_id: "1"}
-    expect($scope.select).toBeDefined()
-    $scope.select(course)
+    expect(crs.select).toBeDefined()
+    crs.select(course)
     pending "Backend for selecting a course is not implemented"
 
   it "has editForm method that hides 'Add' button, shows 'Update' button and disables other buttons", ->
-    $scope.editForm(fakeResults[0])
-    expect($scope.hideUpdateButton).toBe false
-    expect($scope.hideAddButton).toBe true
-    expect($scope.disableEditingAndDeletion).toBe true
-    expect($scope.courseToUpdate).toEqual fakeResults[0]
-    expect($scope.courseName).toEqual fakeResults[0]['name']
+    crs.editForm(fakeResults[0])
+    expect(crs.hideUpdateButton).toBe false
+    expect(crs.hideAddButton).toBe true
+    expect(crs.disableEditingAndDeletion).toBe true
+    expect(crs.courseToUpdate).toEqual fakeResults[0]
+    expect(crs.courseName).toEqual fakeResults[0]['name']
 
   it "has addForm method that shows 'Add' button, hides 'Update' button and enables other buttons", ->
-    $scope.addForm()
-    expect($scope.hideUpdateButton).toBe true
-    expect($scope.hideAddButton).toBe false
-    expect($scope.disableEditingAndDeletion).toBe false
+    crs.addForm()
+    expect(crs.hideUpdateButton).toBe true
+    expect(crs.hideAddButton).toBe false
+    expect(crs.disableEditingAndDeletion).toBe false

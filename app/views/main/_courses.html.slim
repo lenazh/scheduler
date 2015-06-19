@@ -1,0 +1,40 @@
+div.page-header
+  h1 My classess {{ crs.testMessage }}
+
+div.row  
+  form.form-inline[name="form" novalidate]  
+    table[class="table table-striped"]
+      thead 
+      tr
+        th Title
+        th Created
+        th
+        th
+      tr ng-repeat="course in crs.courses"
+        td 
+          button[class="btn btn-link" ng-click="crs.select(course)"] {{ course.name }} 
+        td ng-bind="course.created_at | date"
+
+        td.text-right 
+          button[class="btn btn-default" ng-click="crs.editForm(course)" ng-disabled="crs.disableEditingAndDeletion"] Edit
+
+        td.text-right 
+          button[class="btn btn-danger" ng-click="crs.remove(course)" ng-disabled="crs.disableEditingAndDeletion"] X
+        
+
+      tr
+        td colspan="2"
+          input.form-control[type="text" placeholder="New class..." required ng-trim="true" ng-model="crs.courseName" name="courseName"]
+
+          button[class="btn btn-defauls" ng-click="crs.addForm()" ng-hide="crs.hideUpdateButton"] Cancel
+
+
+        td class="text-right" colspan="2"          
+          button[class="btn btn-success" ng-click="crs.saveNew()" ng-disabled="form.courseName.$invalid || crs.disableEditingAndDeletion" ng-hide="crs.hideAddButton"] Add
+
+          button[class="btn btn-primary" ng-click="crs.update()" ng-disabled="form.courseName.$invalid" ng-hide="crs.hideUpdateButton"] Update
+
+          
+
+
+      
