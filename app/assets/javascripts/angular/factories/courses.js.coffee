@@ -1,7 +1,7 @@
 @coursesModule.factory 'Course', ['$resource', ($resource) -> 
   {
     init: ()->
-      @course = $resource "/api/courses/:id", 
+      @course = $resource "#{gon.courses_api_path}/:id", 
         { id: '@id' }, 
         { 
           'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
