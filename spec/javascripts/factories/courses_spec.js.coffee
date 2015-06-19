@@ -38,6 +38,10 @@ describe "Courses", ->
     "url":"http://192.168.56.101:3000/api/courses/4"
   }
 
+# stub out gon
+  window.gon = {}
+  gon.courses_api_path = resourcePath
+
 # initialize the dependencies and get the objects
   beforeEach module('coursesApp')
   beforeEach ->
