@@ -12,7 +12,7 @@ div.row
         th
       tr ng-repeat="course in crs.courses"
         td 
-          button[class="btn btn-link"] {{ course.name }} 
+          button[class="btn btn-link" ng-click="crs.select(course)"] {{ course.name }} 
         td ng-bind="course.created_at | date"
 
         td.text-right 
