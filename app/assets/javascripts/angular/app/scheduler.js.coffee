@@ -18,9 +18,21 @@
       controllerAs: 'crs' 
     }
 
+  $routeProvider.when "/courses", {
+      templateUrl: gon.courses_view_path,
+      controller: 'coursesCtrl',
+      controllerAs: 'crs' 
+    }
+
   $routeProvider.when "/gsi", {
       templateUrl: gon.gsi_view_path,
       controller: 'gsiCtrl',
       controllerAs: 'gsi' 
+    }
+
+  $routeProvider.when "/calendar", {
+      templateUrl: gon.calendar_view_path,
+      controller: 'calendarCtrl',
+      controllerAs: 'calendar' 
     }
 ]

@@ -9,6 +9,11 @@
   @disableEditingAndDeletion = false
 
 
+  name_is_valid = () ->
+    $scope.form.courseName.$valid
+
+
+
   @remove = (course) ->
     id = @courses.indexOf course
     return if id == -1
@@ -18,7 +23,7 @@
 
 
   @saveNew = () ->
-    return unless $scope.form.courseName.$valid
+    return unless name_is_valid
     name = @courseName
     @courses.push Course.saveNew(name)
     @courseName = ""
@@ -26,7 +31,7 @@
 
 
   @update = () ->
-    return unless $scope.form.courseName.$valid
+    return unless name_is_valid
     course = @courseToUpdate
     name = @courseName
     id = @courses.indexOf course    

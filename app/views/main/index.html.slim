@@ -1,22 +1,3 @@
-nav[class="navbar navbar-default"]
-  div.container-fluid
-    div.navbar-heared
-      button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand 8A Physics Berkeley Fall 2015
-    div#navbar class="navbar-collapse collapse"
-      ul class="nav navbar-nav"
-        li.active
-          a href="#" My classes
-        li
-          a href="#gsi" GSIs
-        li
-          a href="#calendar" Section calendar
-
-
+= render partial: 'navbar'
 div[class="container theme-showcase" role="main"]
-
-  <ng-view></ng-view>
+  ng-view

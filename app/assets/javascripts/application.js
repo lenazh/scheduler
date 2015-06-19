@@ -21,5 +21,6 @@
 //= require angular-mocks
 //= require_tree .//angular//app
 //= require_tree .//angular//factories
+//= require_tree .//angular//directives
 //= require_tree .//angular//controllers
 //= require_directory ./
