@@ -6,39 +6,56 @@ describe "Courses", ->
   hostPath = "http://192.168.56.101:3000"
   resourceUrl = "#{hostPath}#{resourcePath}"
 
-# TODO: pass the resource path as a parameter with gon
 # canned responses defined here
-  allCourses = [
-    {
-      "id":1,
-      "name":"Class 1",
+  allCourses = {}
+  newCourse = {}
+
+  beforeEach ->
+    allCourses = [
+      {
+        "id":1,
+        "name":"Class 1",
+        "user_id":1,
+        "created_at":"2015-06-09T01:08:39.146Z",
+        "url":"#{resourceUrl}/1"
+      },
+      {
+        "id":2,
+        "name":"Class 2",
+        "user_id":1,
+        "created_at":"2015-06-09T01:08:46.749Z",
+        "url":"#{resourceUrl}/2"
+      },
+      {
+        "id":3,
+        "name":"Class 3",
+        "user_id":1,
+        "created_at":"2015-06-09T01:08:46.749Z",
+        "url":"#{resourceUrl}/3"
+      }
+    ]
+
+    newCourse = {
+      "id":4,
+      "name":"Class 4",
       "user_id":1,
       "created_at":"2015-06-09T01:08:39.146Z",
-      "url":"#{resourceUrl}/1"
-    },
-    {
-      "id":2,
-      "name":"Class 2",
-      "user_id":1,
-      "created_at":"2015-06-09T01:08:46.749Z",
-      "url":"#{resourceUrl}/2"
-    },
-    {
-      "id":3,
-      "name":"Class 3",
-      "user_id":1,
-      "created_at":"2015-06-09T01:08:46.749Z",
-      "url":"#{resourceUrl}/3"
+      "url":"#{resourceUrl}/4"
     }
-  ]
 
-  newCourse = {
-    "id":4,
-    "name":"Class 4",
-    "user_id":1,
-    "created_at":"2015-06-09T01:08:39.146Z",
-    "url":"#{resourceUrl}/4"
-  }
+# Function that checks if the Response object has the same
+# content as the original hash
+  expectToMatch = (response, original) ->
+    expect(response['id']).toEqual(original['id'])
+    expect(response['name']).toEqual(original['name'])
+    expect(response['user_id']).toEqual(original['user_id'])
+
+# Makes the call that returns all existing courses
+  getAllCourses = ->
+    $httpBackend.expectGET(resourcePath).respond(200, allCourses)
+    allCoursesResources = Courses.all()
+    $httpBackend.flush()
+    allCoursesResources
 
 # stub out gon
   window.gon = {}
@@ -55,57 +72,72 @@ describe "Courses", ->
       Courses = _Course_
 
 
-  it "has init() function", ->
-    expect(Courses.init()).toBeDefined()
+  it "has method all() that returns the list of all courses", ->
+    $httpBackend.expectGET(resourcePath).respond(200, allCourses)
+    result = Courses.all()
+    $httpBackend.flush()
+    for course, id in result
+      expectToMatch course, allCourses[id]
 
-
-  describe "I/O methods", ->
-    beforeEach ->
-      Courses.init()
-
-    expectToMatch = (response, original) ->
-      expect(response['id']).toEqual(original['id'])
-      expect(response['name']).toEqual(original['name'])
-      expect(response['user_id']).toEqual(original['user_id'])
-
-    it "include all() that returns the list of all courses", ->
-      $httpBackend.expectGET(resourcePath).respond(200, allCourses)
-      result = Courses.all()
-      $httpBackend.flush()
-      for course, id in result
-        expectToMatch course, allCourses[id]
-
-    it "include remove(course) that removes the given course", ->
-      $httpBackend.expectDELETE("#{resourcePath}/2")
+  describe "remove(course)", ->
+    removeCourse = (course, id) ->
+      id = course['id']
+      $httpBackend.expectDELETE("#{resourcePath}/#{id}")
         .respond(204, '')
-      result = Courses.remove {id: 2}
+      Courses.remove course 
       $httpBackend.flush()
-      # removes SPEC HAS NO EXPECTATION message
-      expect(true).toBe(true) 
 
-    it "include saveNew(name) that creates a new course with the given name", ->
-      $httpBackend.expectPOST(resourcePath, "{\"name\":\"#{newCourse.name}\"}")
+    it "sends a DELETE request to the correct route", ->
+      courses = getAllCourses()
+      removeCourse courses[2]
+      expect(true).toBe(true) # no expectation other than the $httpBackend call
+
+    it "removes this course from the list of all courses", ->
+      courses = getAllCourses()
+      removeCourse courses[1]
+      expect(courses.length).toEqual allCourses.length - 1
+      expect(courses[1].id).not.toEqual allCourses[1].id
+
+  describe "saveNew(name)", ->
+    saveNewCourse = (name) ->
+      $httpBackend.expectPOST(resourcePath, "{\"name\":\"#{name}\"}")
         .respond(201, newCourse)
-      result = Courses.saveNew newCourse.name
-      $httpBackend.flush()
-      expectToMatch result, newCourse
-
-    it "include update(course, name) that updates the given course with the name", ->
-      # Generate the resources array of all the existing courses
-      $httpBackend.expectGET(resourcePath).respond(200, allCourses)
-      allCoursesResources = Courses.all()
+      Courses.saveNew name
       $httpBackend.flush()
 
-      # what the updated course should look like
-      id = 1
-      updatedCourse = allCourses[id]
-      updatedCourseResource = allCoursesResources[id]
-      expect(updatedCourse['id']).toEqual(id+1)
-      expect(updatedCourseResource['id']).toEqual(id+1)
-      newName = "Blahblahology101"
+    it "sends a POST request to the correct route", ->
+      courses = getAllCourses()
+      saveNewCourse newCourse['name']
+      expect(true).toBe(true) # no expectation other than the $httpBackend call
 
-      #run the test
-      $httpBackend.expectPUT("#{resourcePath}/#{id+1}?course%5Bname%5D=#{newName}")
+    it "appends the new course to the list of all courses", ->
+      courses = getAllCourses()
+      saveNewCourse newCourse['name']
+      expect(courses.length).toEqual allCourses.length + 1
+      expect(courses[courses.length - 1].name).toEqual newCourse.name
+
+  describe "update(course, name)", ->
+    newName = "Blahblahology101"
+    updateCourse = (course, newName) ->
+      id = course['id']
+      updatedCourse = angular.copy(allCourses[id-1])
+      updatedCourse['name'] = newName
+      $httpBackend.expectPUT("#{resourcePath}/#{id}?course%5Bname%5D=#{newName}")
         .respond(200, updatedCourse)
-      result = Courses.update(updatedCourseResource, newName, ->)
+      Courses.update course, newName
       $httpBackend.flush()
+
+    it "sends a PUT request to the correct route", ->
+      courses = getAllCourses()
+      updateCourse courses[2], newName
+      expect(true).toBe(true) # no expectation other than the $httpBackend call
+
+    it "updates the course name in the list of all courses", ->
+      id = 0
+      courses = getAllCourses()
+      expect(courses[id].name).not.toEqual newName
+      updateCourse courses[id], newName
+      expect(courses[id].name).toEqual newName
+
+
+      

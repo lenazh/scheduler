@@ -1,9 +1,8 @@
 @schedulerModule.controller 'coursesCtrl', ['$scope', 'Course', ($scope, Course) ->
 
-  Course.init()
   @courses = Course.all()
   @courseName = ""
-  @courseToUpdate = {}
+
   @hideAddButton = false
   @hideUpdateButton = true
   @disableEditingAndDeletion = false
@@ -12,33 +11,19 @@
   name_is_valid = () ->
     $scope.form.courseName.$valid
 
-
-
-  @remove = (course) ->
-    id = @courses.indexOf course
-    return if id == -1
-    @courses.splice id, 1
-    Course.remove course 
-
-
+  @remove = (course) -> Course.remove course 
 
   @saveNew = () ->
     return unless name_is_valid
     name = @courseName
-    @courses.push Course.saveNew(name)
+    Course.saveNew(@courseName)
     @courseName = ""
-
-
 
   @update = () ->
     return unless name_is_valid
     course = @courseToUpdate
     name = @courseName
-    id = @courses.indexOf course    
-    return if id == -1
-
-    courseToUpdate = @courses[id]
-    result = Course.update course, name, -> courseToUpdate["name"] = name
+    Course.update course, name
     @addForm()
 
 
@@ -59,8 +44,7 @@
 
 
 
-  @select = (course) ->
-    null
+  @select = (course) -> null
 
 
 # The controller will not work w/o this 
