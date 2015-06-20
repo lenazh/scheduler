@@ -16,10 +16,7 @@ describe "coursesCtrl", ->
       init: () -> null
       all: () -> fakeResults,
       saveNew: (name) -> {name: "New course", user_id: "1"},
-      update: (course, name, callback) -> 
-        callback()
-        {name: "Physics 8A", user_id: "1"}
-      ,
+      update: (course, name) -> {name: "Physics 8A", user_id: "1"},
       remove: (course) -> null
     }
 
@@ -39,8 +36,7 @@ describe "coursesCtrl", ->
 
     crs = $controller 'coursesCtrl', {$scope: $scope}
 
-  it "should call Courses.init() and Courses.all() when instantiated", ->
-    expect(factoryMock.init).toHaveBeenCalled()
+  it "should call Courses.all() when instantiated", ->
     expect(factoryMock.all).toHaveBeenCalled()
   
   it "initializes needed variables", ->
@@ -52,42 +48,30 @@ describe "coursesCtrl", ->
     expect(crs.disableEditingAndDeletion).toBe false
     
     
-  it "has method remove(course) that is routed to the model and deletes the course from crs.courses", ->
+  it "has method remove(course) that is routed to the model", ->
     expect(crs.remove).toBeDefined()
     id = 0
     courseToRemove = fakeResults[id] 
     crs.remove(courseToRemove)
     expect(factoryMock.remove).toHaveBeenCalledWith(courseToRemove)
-    newResults = [{ name: "Course2", user_id: "1"}]
-    expect(crs.courses).toEqual newResults
 
-  it "has method saveNew() that is routed to the model and appends the new course to crs.courses", ->
+  it "has method saveNew() that is routed to the model", ->
     expect(crs.saveNew).toBeDefined()
     crs.courseName = "New Course"
     $scope.form = {courseName : {$valid : true }}
     crs.saveNew()
     expect(factoryMock.saveNew).toHaveBeenCalledWith("New Course")
-    newResults = [
-      { name: "Course1", user_id: "1"},
-      { name: "Course2", user_id: "1"},
-      { name: "New course", user_id: "1"}
-    ]
-    expect(crs.courses).toEqual newResults
-    expect(crs.courseName).toEqual ""
 
-  it "has method update(course, params) that is routed to the model and updates this course in crs.courses", ->
+
+  it "has method update(course, params) that is routed to the model", ->
     expect(crs.update).toBeDefined()
     id = 0
     name = "Physics 8A"
     crs.courseToUpdate = fakeResults[id] 
     crs.courseName = name
     crs.update()
-    expect(factoryMock.update).toHaveBeenCalledWith(fakeResults[id], name, jasmine.any(Function))
-    newResults = [
-      { name: "Physics 8A", user_id: "1"},
-      { name: "Course2", user_id: "1"}
-    ]
-    expect(crs.courses).toEqual newResults
+    expect(factoryMock.update).toHaveBeenCalledWith(fakeResults[id], name)
+
 
   it "has method select(course) that makes the selected course active", ->
     course = { name: "Physics 8A", user_id: "1"}
@@ -108,3 +92,4 @@ describe "coursesCtrl", ->
     expect(crs.hideUpdateButton).toBe true
     expect(crs.hideAddButton).toBe false
     expect(crs.disableEditingAndDeletion).toBe false
+    expect(crs.courseName).toEqual ''
