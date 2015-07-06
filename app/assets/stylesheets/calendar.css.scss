@@ -1,0 +1,69 @@
+table#schedule {
+    width: 100%;
+    border-collapse: collapse;
+    border-style: hidden;
+    empty-cells: show;
+    font-family: sans-serif;
+}
+
+#schedule td {  
+    box-sizing: border-box;
+}
+
+#schedule td.event-col {
+    width: 18%;
+    text-align: center;
+}
+
+#schedule .time-col {
+    width: 10%;
+    text-align: center;
+}
+
+
+#schedule td.event-col:empty:hover {
+    border: solid 2px #5C5C8A;
+}
+
+#schedule .event-parent {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#schedule .event {
+    border: outset 1px #666699;
+    background-color: #D1D1E0;
+    height: inherit;
+    margin:0px;
+    padding: 0.2em;
+    font-size: small;
+    position: absolute;
+    width: inherit;
+    top: 0px;
+    left: 0px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#schedule .event:hover {
+    box-shadow:  0 0 3px;
+}
+
+/* 
+    100% = 1 hour
+
+    set top and height atributes to position
+    the beginning and end of the event
+
+*/
+
+#schedule #dog {
+    height: 200%;
+}
+
+#schedule #cat {
+    top: 25%;
+    height: 125%;
+}

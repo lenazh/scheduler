@@ -3,23 +3,18 @@ class MainController < ApplicationController
   end
 
   def courses
-    render_partial
+    render :partial => action_name
   end
 
   def calendar
-    render_partial
+    render :partial => action_name
   end
 
   def preferences
-    render_partial
+    render :partial => action_name
   end
 
   def gsi
-    render_partial
-  end
-
-private
-  def render_partial
     render :partial => action_name
   end
 

@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   # AngularJS view where GSIs set preferences for sections 
   get 'preferences' => 'main#preferences', as: :preferences_view
 
+  # AngularJS template fot the calendar directive
+  get 'calendar_template.html' => 'calendar#calendar_template'
 
   scope "api" do
     resources :courses, :except => [:new, :edit], :defaults => { :format => :json }
