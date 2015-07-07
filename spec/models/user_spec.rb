@@ -2,29 +2,37 @@ require 'spec_helper'
 
 describe User do
   describe "that is valid" do
-    before(:each) do
-      @user = create(:user)
-      @user.should be_valid
-    end
+    subject { create(:user) }
 
-    it "has a name" { expect(@user.name).not_to be_empty }
-    it "has auth token" { expect(@user.auth_token).not_to be_empty }
-    it "has an email" { expect(@user.email).not_to be_empty }
+    it { should be_valid }
+    its (:name) { should_not be_empty }
+    its (:email) { should_not be_empty }
+    its (:auth_token) { should_not be_empty }
 
-    it "has many Sections to teach" { expect(@user.sections).to be_kind_of(Array) }
-    it "has many Courses to teach" { expect(@user.courses).to be_kind_of(Array) }
+    its (:sections) { should respond_to :[] }
+    its (:courses) { should respond_to :[] }
 
   end  
 
   describe "is invalid if" do
+    describe "name is empty" do
+      subject { build(:user, name: " ") }
+      it {should_not be_valid}
+    end
 
-    after(:each) { @user.should_not be_valid }
+    describe "email is empty" do
+      subject { build(:user, email: " ") }
+      it {should_not be_valid}
+    end
 
-    it "name is empty" { @user = build(:user, name: " ") }
-    it "auth_token is empty" { pending "Authentication is not implemented" }
-    it "email is empty" { @user = build(:user, email: " ") }
-    it "email has a wrong format" { @user = build(:user, email: "ghavcn") }
+    describe "email has invalid format" do
+      subject { build(:user, email: "ghavcn") }
+      it {should_not be_valid}
+    end
 
+    describe "auth_token is empty" do
+      pending "Authentication is not implemented" 
+    end
   end
 
 end

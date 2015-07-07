@@ -1,8 +1,13 @@
 class Section < ActiveRecord::Base
-  belongs_to :course;
+  belongs_to :course
+  belongs_to :gsi, class_name: 'User'
+  has_many :preferences
+  has_many :potential_gsis, through: :preferences, source: :user
+
   validates :name, presence: true
   validates :room, presence: true
   validates :lecture, presence: true
+  validates :weekday, presence: true
   validates :name, uniqueness: { scope: :course_id}
   validate :cannot_end_before_it_starts
 

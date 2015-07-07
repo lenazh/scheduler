@@ -5,13 +5,11 @@ describe Preference do
   let(:section) { create(:section) }
 
   describe "that is valid" do
-    before(:each) do
-      @preference = create(:preference, user: user, section: section)
-      @preference.should be_valid
-    end
+    subject { create(:preference, user: user, section: section) }
 
-    it "belongs to a Section" { expect(@preference.Section).not_to be_empty }
-    it "belongs to a User" { expect(@preference.user).not_to be_empty }
-    it "has a preference" { expect(@preference.preference).not_to be_empty }
+    it { should be_valid }
+    its (:preference) { should_not be_nil }
+    its (:section) { should_not be_nil }
+    its (:user) { should_not be_nil }
   end  
 end

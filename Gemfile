@@ -59,6 +59,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'jasmine-rails'
   gem 'rspec-rails', '~> 2.14.1'
+  gem 'rspec-core'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'capybara'
