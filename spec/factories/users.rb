@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user do
-    name "MyString"
-    auth_token "MyText"
-    email "MyString"
+    name "Darth Vader"
+    auth_token "none"
+    email "vader@gmail.com"
   end
 end

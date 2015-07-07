@@ -8,7 +8,6 @@ FactoryGirl.define do
     weekday 5
     room "115 LeConte"
     lecture "1"
-
     factory :invalid_section do
       name "  "
     end
