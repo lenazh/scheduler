@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe SectionsController do
+describe UsersController do
     # name of the model for this RESTful resource
-    let(:model_class) { Section }
+    let(:model_class) { User }
 
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in

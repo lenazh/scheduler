@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
   describe "that is valid" do
-    subject { create(:user) }
+    subject { create(:user, auth_token: "none") }
 
     it { should be_valid }
     its (:name) { should_not be_empty }

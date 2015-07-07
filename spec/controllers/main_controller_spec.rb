@@ -1,20 +1,15 @@
 require 'spec_helper'
+require 'helpers/route_helper'
 
 describe MainController do
-
-  @routes = ['index', 'courses', 'gsi', 'preferences']
-
-  @routes.each do |route|
-    describe "GET /#{route}" do
-      it "returns http success" do
-        get route
-        response.should be_success, "Expected GET /#{route} to return 200, got #{response.response_code} instead"
-      end
-    end
-  end
-
   describe "GET index" do
     it "makes path variables available to JS"
+  end
+
+  include RouteHelper
+
+  it "responds to all valid routes" do
+    expect_to_respond_to ['index', 'courses', 'gsi', 'preferences', 'calendar']
   end
 
 end

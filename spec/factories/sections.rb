@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :section do
     name "101"
-    course_id 1
     start_time "2000-01-01T10:00:00.000Z"
     end_time "2000-01-01T12:00:00.000Z"
     gsi_id 0
