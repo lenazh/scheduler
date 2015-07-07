@@ -1,1 +1,1 @@
-json.extract! @section, :id, :name, :lecture_id, :start_time, :end_time, :gsi_id, :weekday, :room, :class_id, :created_at, :updated_at
+json.extract! @section, :id, :name, :lecture, :start_time, :end_time, :gsi_id, :weekday, :room, :course_id, :created_at, :updated_at

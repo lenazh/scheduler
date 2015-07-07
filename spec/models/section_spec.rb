@@ -6,15 +6,15 @@ describe Section do
     section.should_not be_valid;
   end
 
-  it "should have a unique name within the same class" do
-    section1 = create(:section, name: "103", class_id: 1);
-    section2 = build(:section, name: "103", class_id: 1);
+  it "should have a unique name within the same course" do
+    section1 = create(:section, name: "103", course_id: 1);
+    section2 = build(:section, name: "103", course_id: 1);
     section2.should_not be_valid;
   end
 
   it "may have duplicate names as long as the classes are different" do
-    section1 = create(:section, name: "103", class_id: 1);
-    section2 = build(:section, name: "103", class_id: 2);
+    section1 = create(:section, name: "103", course_id: 1);
+    section2 = build(:section, name: "103", course_id: 2);
     section2.should be_valid;
   end
 
@@ -28,8 +28,9 @@ describe Section do
     section.should_not be_valid;
   end
 
-  it "should be invalid if the lecture is not specified" do
-    pending "Lecture model does not exist"
+  it "should be invalid if the lecture is empty" do
+    section = build(:section, lecture: " ");
+    section.should_not be_valid;
   end
 
   it "should be valid as long as all the necessary parameters are specified" do

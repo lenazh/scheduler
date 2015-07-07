@@ -2,7 +2,8 @@ class Section < ActiveRecord::Base
   belongs_to :course;
   validates :name, presence: true
   validates :room, presence: true
-  validates :name, uniqueness: { scope: :class_id}
+  validates :lecture, presence: true
+  validates :name, uniqueness: { scope: :course_id}
   validate :cannot_end_before_it_starts
 
   def cannot_end_before_it_starts
