@@ -6,6 +6,10 @@ div.row
     tr ng-repeat="hour in hours"
       td.time-col ng-bind="hour"
       td.event-col ng-repeat="weekday in weekdays" calendar-cell="calendar-cell" hour="hour" weekday="weekday"
+        div.event-parent
+          div[class="event ghost" ng-click="newEvent(hour, weekday)"] New Event...
+          calendar-event ng-repeat="event in getEvents(hour, weekday)" event="event"
+
 
     tr 
       td

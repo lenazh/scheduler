@@ -9,7 +9,7 @@ table#schedule {
 #schedule td {  
     box-sizing: border-box;
     padding: 0px;
-    height: 2em;
+    height: 3em;
 }
 
 #schedule td.event-col {
@@ -37,20 +37,30 @@ table#schedule {
 #schedule .event {
     border: outset 1px #666699;
     background-color: #D1D1E0;
-    height: 100%;
     margin:0px;
     padding: 0.2em;
-    font-size: small;
+    font-size: x-small;
     position: absolute;
     width: inherit;
     top: 0px;
     left: 0px;
     box-sizing: border-box;
     overflow-y: auto; 
+    height: 100%;
+    width: 100%;
+}
+
+.event p {
+    font-size: x-small;
+    padding: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 #schedule .ghost {
     opacity: 0.5;
+    display: none;
+    height: 200%;
 }
 
 #schedule .event:hover {
@@ -61,15 +71,9 @@ table#schedule {
     100% = 1 hour
 
     set top and height atributes to position
-    the beginning and end of the event
+    the beginning and end of the event, e.g:
+
+    top: 25%; <-- starts at 15 minutes 
+    height: 200%; <-- two hours long 
 
 */
-
-#schedule #dog {
-    height: 200%;
-}
-
-#schedule #cat {
-    top: 25%;
-    height: 125%;
-}

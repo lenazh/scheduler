@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # View that serves the one-page app
   root 'main#index'
 
+  # Isolated view for experimentation
+  get 'isolated' => 'main#isolated'
+
   # AngularJS view of owned courses
   get 'courses' => 'main#courses', as: :courses_view
   
@@ -17,8 +20,9 @@ Rails.application.routes.draw do
   # AngularJS view where GSIs set preferences for sections 
   get 'preferences' => 'main#preferences', as: :preferences_view
 
-  # AngularJS template fot the calendar directive
+  # AngularJS templates for the calendar directive
   get 'calendar_template.html' => 'calendar#calendar_template'
+  get 'event_template.html' => 'calendar#event_template'
 
   scope "api" do
     resources :courses, :except => [:new, :edit], :defaults => { :format => :json }

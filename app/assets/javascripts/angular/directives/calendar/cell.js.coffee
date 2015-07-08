@@ -1,21 +1,22 @@
 @schedulerModule.directive 'calendarCell', ->
   {
     scope: {
-      hour: '='
+      hour: '=',
       weekday: '='
-      },
+    },
     restrict: 'A',
     require: '^sectionCalendar',
     link: (scope, element, attr, sectionCalendar) ->
-
       element.on 'mouseenter', (event) ->
-        if element.is(':empty')
-          element.html "<div class='event-parent'><div class='event ghost' id='dog'>New section...</div></div>"
-          element.find("div.event").on 'click', (event) ->
-            sectionCalendar.newEvent(scope.hour, scope.weekday)
+        if element.find("div.event:not(.ghost)").length == 0
+          element.find("div.ghost").delay("fast").show("fast")
 
       element.on 'mouseleave', (event) ->
-        if element.find("div.ghost").length > 0
-          element.html ""       
+        ghost = element.find("div.ghost")
+        if ghost.is(':visible')
+          ghost.hide("fast")
+        else
+          ghost.clearQueue()
+
 
   }
