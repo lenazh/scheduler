@@ -1,7 +1,7 @@
 class Section < ActiveRecord::Base
   belongs_to :course
   belongs_to :gsi, class_name: 'User'
-  has_many :preferences
+  has_many :preferences, dependent: :destroy
   has_many :potential_gsis, through: :preferences, source: :user
 
   validates :name, presence: true
