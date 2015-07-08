@@ -8,6 +8,8 @@ table#schedule {
 
 #schedule td {  
     box-sizing: border-box;
+    padding: 0px;
+    height: 2em;
 }
 
 #schedule td.event-col {
@@ -35,7 +37,7 @@ table#schedule {
 #schedule .event {
     border: outset 1px #666699;
     background-color: #D1D1E0;
-    height: inherit;
+    height: 100%;
     margin:0px;
     padding: 0.2em;
     font-size: small;
@@ -44,7 +46,11 @@ table#schedule {
     top: 0px;
     left: 0px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow-y: auto; 
+}
+
+#schedule .ghost {
+    opacity: 0.5;
 }
 
 #schedule .event:hover {

@@ -9,7 +9,9 @@
       'post': headers: {'Content-Type': 'application/json'}
     }
 
-  all = sectionResource.query()
+  all = {}
+  
+  allSections = sectionResource.query()
 
   append_to_list = (section) ->
     all.push section

@@ -7,6 +7,12 @@
     templateUrl: 'calendar_template.html',
     controller: ['$scope', 'Section', ($scope, Section) ->
 
+      $scope.cells = {}
+      $scope.cells['Monday1200pm'] = "Do some work"
+      $scope.cells['Monday600pm'] = "Go home"
+      $scope.cells['Tuesday200pm'] = "Eat food"
+      $scope.cells['Friday700pm'] = "Walk a dog"
+
       $scope.weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
       $scope.hours = []
       $scope.hours.push "#{x}:00am" for x in [8..11]
@@ -17,11 +23,13 @@
 
       $scope.getName = (weekday, hour) ->
         weekday + hour.replace /:/, ''
-      $scope.newEvent = (event) ->
-        alert "New event created!"
-      $scope.deleteEvent = (id) ->
+      @newEvent = (hour, weekday) ->
+        alert "New event created at #{weekday} #{hour} !"
+      @deleteEvent = (id) ->
         alert "Event deleted!"
-      $scope.updateEvent = (id, event) ->
+      @updateEvent = (id, event) ->
         alert "Event updated!"
+
+      return
     ]
   }
