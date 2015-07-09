@@ -1,4 +1,24 @@
-div.event ng-style="event.style"
-  b ng-bind="event.name"
-  p Room: {{event.room}}
-  p Time: {{event.start}} -- {{event.end}}
+div.event-parent
+  div.event ng-style="eventStyle" ng-click="toggleExpand($event)"
+    div ng-show="!showEditForm"
+      b ng-bind="event.name"
+      p Room: {{event.room}}
+      p Time: {{event.start}} -- {{event.end}}
+
+    form.form-inline[name="form" ng-show="showEditForm" novalidate]
+      p
+        label for="name" Section
+        input.form-control[type="text" required ng-model="event.name" name="name" ng-click="stopPropagation($event)"]
+      p
+        label for="start" Start
+        input.form-control[type="text" required ng-model="event.start" name="start" ng-click="stopPropagation($event)"]
+      p
+        label for="end" End
+        input.form-control[type="text" required ng-model="event.end" name="end" ng-click="stopPropagation($event)"]
+      p
+        label for="Room" Room
+        input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
+      p
+        br
+        button[class="btn btn-primary" ng-click="update($event)"] Update
+        button[class="btn btn-danger" ng-click="delete($event)"] X

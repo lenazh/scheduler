@@ -41,7 +41,23 @@
         start: "12:15pm",
         end: "2pm",
         room: "275 Birge",
-        style: {top: '25%'; height: '175%'}
+        style: {top: '25%', height: '175%'}
+      }
+
+      (cells[getKey('12:00pm', 'Monday')]).push {
+        name: "Do more work",
+        start: "12:00pm",
+        end: "2pm",
+        room: "275 Birge",
+        style: {top: '0%', height: '200%'}
+      }
+
+      (cells[getKey('12:00pm', 'Monday')]).push {
+        name: "Do even more work",
+        start: "12:15pm",
+        end: "1pm",
+        room: "275 Birge",
+        style: {top: '25%', height: '75%'}
       }
 
       (cells[getKey('6:00pm', 'Monday')]).push {
@@ -49,7 +65,7 @@
         start: "6:00pm",
         end: "7:30pm",
         room: "none",
-        style: {top: '0%'; height: '150%'}
+        style: {top: '0%', height: '150%'}
       }
 
       (cells[getKey('2:00pm', 'Tuesday')]).push {
@@ -57,7 +73,7 @@
         start: "2:30pm",
         end: "3:00pm",
         room: "home",
-        style: {top: '50%'; height: '50%'}
+        style: {top: '50%', height: '50%'}
       }
 
       (cells[getKey('7:00pm', 'Friday')]).push {
@@ -65,7 +81,7 @@
         start: "7:00pm",
         end: "8:00pm",
         room: "(outside)",
-        style: {top: '0%'; height: '200%'}
+        style: {top: '0%', height: '200%'}
       }
 
       
@@ -82,19 +98,19 @@
       $scope.newEvent = (hour, weekday) ->
         cells[getKey(hour, weekday)].push {
           name: "New Event",
-          start: "7:00pm",
+          start: hour,
           end: "-",
           room: "-",
           style: {'top': '0%'; 'height': '200%'}
         }
         return
 
-      @deleteEvent = (id) ->
-        alert "Event deleted!"
+      $scope.deleteEvent = (event) ->
+        alert "Event deleted (#{event}) !"
         return
 
-      @updateEvent = (id, event) ->
-        alert "Event updated!"
+      $scope.updateEvent = (event) ->
+        alert "Event updated (#{event}) !"
         return
 
       return
