@@ -12,12 +12,12 @@
     $event.stopPropagation()
 
   $scope.update = ($event) ->
-    $scope.sectionCalendar.updateEvent($scope.event)
+    $scope.sectionCalendar.updateSection($scope.event)
     $scope.toggleExpand($event)
     $event.stopPropagation()
 
   $scope.delete = ($event) ->
-    $scope.sectionCalendar.deleteEvent($scope.event)
+    $scope.sectionCalendar.deleteSection($scope.event)
     $event.stopPropagation()
 
   return

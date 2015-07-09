@@ -5,10 +5,10 @@ div.row
     th ng-repeat="weekday in weekdays" ng-bind="weekday"
     tr ng-repeat="hour in hours"
       td.time-col ng-bind="hour"
-      td.event-col ng-repeat="weekday in weekdays" calendar-cell="calendar-cell" hour="hour" weekday="weekday"  ng-click="newEvent(hour, weekday)"
+      td.event-col ng-repeat="weekday in weekdays" calendar-cell="calendar-cell" hour="hour" weekday="weekday"  ng-click="newSection(hour, weekday)"
         div.event-parent
-          / div[class="event ghost" ] New Event...
-          calendar-event class="event-table" ng-repeat="event in getEvents(hour, weekday)" event="event" deleteEvent="deleteEvent(event)" updateEvent="updateEvent(event)"
+          / div[class="event ghost" ] New Section...
+          calendar-event class="event-table" ng-repeat="event in getSections(hour, weekday)" event="event" 
 
     tr 
       td
