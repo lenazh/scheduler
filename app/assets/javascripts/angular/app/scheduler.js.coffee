@@ -32,7 +32,5 @@
 
   $routeProvider.when "/calendar", {
       templateUrl: gon.calendar_view_path,
-      controller: 'calendarCtrl',
-      controllerAs: 'calendar' 
     }
 ]
