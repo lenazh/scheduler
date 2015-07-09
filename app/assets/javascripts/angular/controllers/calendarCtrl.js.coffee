@@ -63,6 +63,7 @@
   @updateSection = (event) ->
     updateSection(event)
 
+
   return
 
 ]
