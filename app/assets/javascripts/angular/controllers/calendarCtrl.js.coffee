@@ -1,43 +1,97 @@
 @schedulerModule.controller 'calendarCtrl',  ['$scope', 'Section', ($scope, Section) ->
 
-# Helper functions
+# Private functions
   getKey = (hour, weekday) ->
     return hours.indexOf(hour) * weekdays.length + 
       weekdays.indexOf(weekday)
+  
+  getHourKey = (section) ->
+    hourKey section['start_hour']
+
+  hourKey = (hour) ->
+    hour + ":00"
 
   makeCells = () ->
     cells = []
     for hour in hours
       for weekday in weekdays
         key = getKey(hour, weekday)
-        cells[key] = []
+        cells[key] = {}
     cells
 
-  pushSection = (hour, weekday, section) ->
-    console.log "Pushing cells[#{getKey(hour, weekday)}], hour=#{hour}, weekday=#{weekday} timestamp=#{section['start_time']} "
-    cells[getKey(hour, weekday)].push section
+  deleteSectionFromCells = (section) ->
+    for key in sectionIndex[section['id']]
+      delete cells[key][section['id']]
+    sectionIndex[section['id']] = []
+
+  addSectionIntoIndex = (section, key) ->
+    if (typeof sectionIndex[section['id']] == 'undefined')
+      sectionIndex[section['id']] = []
+    sectionIndex[section['id']].push key
+
+  addSectionToCells = (rawSection) ->
+    section = processSection rawSection
+    for weekday in section['weekdays']
+      addSectionToCell getHourKey(section), weekday, section
+
+  addSectionToCell = (hour, weekday, section) ->
+    key = getKey(hour, weekday)
+    index = cells[key].length
+    addSectionIntoIndex section, key
+    cells[key][section['id']] = section
 
   getStyle = (section) ->
     style = {}
     style['top'] = (section['start_minute'] * 100) / 60 + "%"
-    style['height'] = section['duration_in_hours'] + "%"
+    style['height'] = section['duration_hours'] * 100 + "%"
     style
+
+  isWithin = (value, min, max) ->
+    if isNaN(value)
+      return false
+    else
+      return false if (value < min) || (value > max)
+    return true
+
+  startHourValid = (section) ->
+    start_hour = section['start_hour']
+    isWithin start_hour, 0, 23
+    
+  startMinuteValid = (section) ->
+    start_minute = section['start_minute']
+    isWithin start_minute, 0, 59
+
+  durationHoursValid = (section) ->
+    duration_hours = section['duration_hours']
+    isWithin duration_hours, 0, 10
+
+  isSectionValid = (section) ->
+    valid = startHourValid(section) && 
+      startMinuteValid(section) &&
+      durationHoursValid(section)
+    for weekday in section['weekdays']
+      if weekdays.indexOf(weekday) < 0
+        valid = false
+    return valid
 
   processSection = (section) ->
     newSection = {}
     oldSection = angular.copy section
+    newSection['id'] = oldSection['id']
     newSection['name'] = oldSection['name']
     newSection['room'] = oldSection['room']
     newSection['weekday'] = oldSection['weekday']
     newSection['start_hour'] = oldSection['start_hour']
     newSection['start_minute'] = oldSection['start_minute']
-    newSection['duration_in_hours'] = oldSection['duration_in_hours']
+    newSection['duration_hours'] = oldSection['duration_hours']
     newSection['weekdays'] = oldSection['weekday'].split /[, ]+/
     newSection['style'] = getStyle newSection
+    newSection['isValid'] = isSectionValid newSection
     newSection
 
   newSection = (hour, weekday) ->
     section = {
+      'id': -1,
       'name': "New Section",
       'room': "-",
       'weekday': weekday
@@ -45,36 +99,37 @@
       'start_minute': 0,
       'duration_in_hours' : 2, 
     }
-    section = processSection(section)
-    pushSection(hour, weekday, section)
-
-  getStartHour = (section) ->
-    getHours(section['start_time']) + ":00"
+    section = processSection section
+    addSectionToCell(hour, weekday, section)
 
   getSections = (hour, weekday) ->
     cells[getKey(hour, weekday)]
 
-  deleteSection = (event) ->
-    return
-
-  updateSection = (event) ->
-    return
+  deleteSection = (section) ->
+    Section.remove section, ->
+      deleteSectionFromCells section
+      
+  updateSection = (section) ->
+    section = processSection section
+    return unless section['isValid']
+    Section.update section, ->
+      deleteSectionFromCells section
+      addSectionToCells section
 
 # Initialize the calendar
   weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
   hours = []
-  hours.push "#{x}:00" for x in [8..20]
+  hours.push hourKey(x) for x in [8..20]
   cells = makeCells()
+  sectionIndex = []
 
   $scope.hours = hours
   $scope.weekdays = weekdays
   $scope.cells = cells
 
   Section.all (all) ->
-    for rawSection in all
-      section = processSection rawSection
-      for weekday in section['weekdays']
-        pushSection("#{section['hour']}:00", weekday, section)
+    for section in all
+      addSectionToCells section
 
 
 ## Expose the interface

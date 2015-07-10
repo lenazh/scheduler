@@ -8,7 +8,7 @@ div.row
       td.event-col ng-repeat="weekday in weekdays" calendar-cell="calendar-cell" hour="hour" weekday="weekday"  ng-click="newSection(hour, weekday)"
         div.event-parent
           / div[class="event ghost" ] New Section...
-          calendar-event class="event-table" ng-repeat="event in getSections(hour, weekday)" event="event" 
+          calendar-event class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event" 
 
     tr 
       td
