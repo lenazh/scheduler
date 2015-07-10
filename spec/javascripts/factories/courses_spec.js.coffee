@@ -10,6 +10,10 @@ describe "Courses", ->
   allCourses = {}
   newCourse = {}
 
+# stub out gon
+  window.gon = {}
+  gon.courses_api_path = resourcePath
+
   beforeEach ->
     allCourses = [
       {
@@ -57,9 +61,6 @@ describe "Courses", ->
     $httpBackend.flush()
     allCoursesResources
 
-# stub out gon
-  window.gon = {}
-  gon.courses_api_path = resourcePath
 
 # initialize the dependencies and get the objects
   beforeEach module('schedulerApp')

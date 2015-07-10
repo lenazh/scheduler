@@ -9,38 +9,30 @@
       'post': headers: {'Content-Type': 'application/json'}
     }
 
-  all = {}
-  
-  allSections = sectionResource.query()
-
-  append_to_list = (section) ->
-    all.push section
-
-  update_list = (id, name) ->
-    all[id]['name'] = name
-
 # expose the interface
   {
-    saveNew: (name, start, end, room) ->
+    saveNew: (section, callback) ->
       newSection = new sectionResource {name: name, start: start, end: end, room: room}
       newSection.$save()
       append_to_list(newSection)
 
-    update: (section, name, start, end, room) ->
-      id = all.indexOf section    
-      return if id == -1
-      courseResource.update(
+    update: (section, callback) ->
+      oldSection = null
+      sectionResource.update(
           {
-            'section[name]': name,
-            'section[start]': start
-            'section[end]': end
-            'section[room]': room
-          }, section)
-      update_list(id, name)
-        
-    remove: (section) ->
-      courseResource.remove({id: section.id})
+            'section[name]': section[name],
+            'section[start_hour]': section[start_hour],
+            'section[start_minute]': section[start_minute],
+            'section[duration_hours]': section[duration_hours],
+            'section[weekday]': section[weekday],
+            'section[room]': section[room]
+          }, oldSection)
 
-    all: () -> all
+        
+    remove: (section, callback) ->
+      sectionResource.remove({id: section.id}, -> callback())
+
+    all: (callback) -> 
+      all = sectionResource.query -> callback(all)
   }
 ]
