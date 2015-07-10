@@ -9,13 +9,19 @@ class Section < ActiveRecord::Base
   validates :lecture, presence: true
   validates :weekday, presence: true
   validates :name, uniqueness: { scope: :course_id}
-  validate :cannot_end_before_it_starts
 
-  def cannot_end_before_it_starts
-    if start_time > end_time
-      msg = "can't end before it starts"
-      errors.add :end_time, msg
-      errors.add :start_time, msg
+  validates :start_hour, presence: true
+  validates :start_minute, presence: true
+  validates :duration_hours, presence: :true
+  validates :start_hour, inclusion: { in: 0..23 }
+  validates :start_minute, inclusion: { in: 0..59 }
+  validate :duration_cant_be_longer_than_10hrs_or_negative
+
+  def duration_cant_be_longer_than_10hrs_or_negative
+    if (duration_hours > 10) || (duration_hours < 0)
+      errors.add :duration_hours, "Can't be longer than 10 hours or negative"
     end
   end
+
+
 end

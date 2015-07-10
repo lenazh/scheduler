@@ -1,8 +1,9 @@
 FactoryGirl.define do
   factory :section do
     name "101"
-    start_time "2000-01-01T10:00:00.000Z"
-    end_time "2000-01-01T12:00:00.000Z"
+    start_hour 10
+    start_minute 0
+    duration_hours 2
     gsi_id 0
     weekday 5
     room "115 LeConte"
@@ -18,8 +19,9 @@ FactoryGirl.define do
     factory :another_section do
       name "333"
       lecture "2"
-      start_time "2000-01-01T14:00:00.000Z"
-      end_time "2000-01-01T16:00:00.000Z"
+      start_hour 14
+      start_minute 0
+      duration_hours 2
     end
 
 
