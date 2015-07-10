@@ -257,33 +257,63 @@ describe "calendarCtrl", ->
           calendar.updateSection section
           expect($scope.getSections('12:00', 'Monday')[2]['room']).toEqual room
           expect($scope.getSections('12:00', 'Wednesday')[2]['room']).toEqual room
-      
-
-      it "when the section has an invalid weekday it is marked as invalid", ->
-        section = $scope.getSections('16:00', 'Friday')[5]
-        section["weekday"] = "Kittens"
-        calendar.updateSection section
-        expect($scope.getSections('16:00', 'Friday')[5]['isValid']).toBeFalsy()
 
 
     describe 'updating the size', ->
       it "updates the CSS correctly when start time changes", ->
         section = $scope.getSections('16:00', 'Friday')[5]
-        section['start_time'] = "14:30"
+        section['start_minute'] = 30
         calendar.updateSection section
         expect($scope.getSections('16:00', 'Friday')[5]['style']['top']).toEqual '50%'
-        expect($scope.getSections('16:00', 'Friday')[5]['style']['height']).toEqual '50%'
 
-      it "updates the CSS correctly when end time changes", ->
+      it "updates the CSS correctly when duration changes", ->
         section = $scope.getSections('16:00', 'Friday')[5]
-        section['end_time'] = "17:30"
+        section['duration_hours'] = 1.5
         calendar.updateSection section
-        expect($scope.getSections('16:00', 'Friday')[5]['style']['top']).toEqual '0%'
         expect($scope.getSections('16:00', 'Friday')[5]['style']['height']).toEqual '150%'
 
-      it "marks the section as invalid when start hour has wrong format"
-      it "marks the section as invalid when start minute has wrong format"
-      it "marks the section as invalid when duration has wrong format"
+      describe "marks the section as invalid when", ->
+        section = {}
+        beforeEach ->
+          section = $scope.getSections('16:00', 'Friday')[5]
+        
+        afterEach ->
+          calendar.updateSection section
+          expect($scope.getSections('16:00', 'Friday')[5]['isValid']).toBeFalsy()
+
+        it "weekday is invalid", ->
+          section["weekday"] = "Kittens"
+
+        it "weekday is invalid and an array", ->
+          section["weekday"] = "Monday, Tuesday, Kittens"
+
+        it "start_hour has wrong format", ->
+          section["start_hour"] = "Kittens"
+
+        it "start_hour is negative", ->
+          section["start_hour"] = "-10"
+
+        it "start_hour is greater than 23", ->
+          section["start_hour"] = "63"
+
+        it "start_minute has wrong format", ->
+          section["start_minute"] = "Kittens"
+
+        it "start_minute is negative", ->
+          section["start_minute"] = "-10"
+
+        it "start_minute is greater than 59", ->
+          section["start_minute"] = "63"
+
+        it "duration_hours has wrong format", ->
+          section["duration_hours"] = "Kittens"
+
+        it "duration_hours is negative", ->
+          section["duration_hours"] = "-10"
+
+        it "duration_hours is greater than 10", ->
+          section["duration_hours"] = "63"
+
 
 
   describe "calendar.deleteSection", ->
@@ -329,4 +359,4 @@ describe "calendarCtrl", ->
   describe "$scope.getSections(hour, weekday)", ->
     it 'is defined', ->
       expect($scope.getSections).toBeDefined()
-      expect($scope.weekdays).toBe(jasmine.any({}))
+      expect($scope.getSections).toEqual jasmine.any(Function)

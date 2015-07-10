@@ -11,6 +11,9 @@
   hourKey = (hour) ->
     hour + ":00"
 
+  hourKeyToHour = (hourKey) ->
+    parseInt hourKey.replace(/:00/, '')
+
   makeCells = () ->
     cells = []
     for hour in hours
@@ -95,12 +98,15 @@
       'name': "New Section",
       'room': "-",
       'weekday': weekday
-      'start_hour': hour,
+      'start_hour': hourKeyToHour(hour),
       'start_minute': 0,
-      'duration_in_hours' : 2, 
+      'duration_hours' : 2
     }
-    section = processSection section
-    addSectionToCell(hour, weekday, section)
+    Section.saveNew section, ->
+      # update the section ID here
+      section = processSection section
+      console.log section
+      addSectionToCell hour, weekday, section
 
   getSections = (hour, weekday) ->
     cells[getKey(hour, weekday)]
@@ -110,7 +116,8 @@
       deleteSectionFromCells section
       
   updateSection = (section) ->
-    section = processSection section
+    section['weekdays'] = section['weekday'].split /[, ]+/
+    section['isValid'] = isSectionValid section
     return unless section['isValid']
     Section.update section, ->
       deleteSectionFromCells section
