@@ -2,6 +2,8 @@ describe "calendarCtrl", ->
   $scope = {}
   $controller = {}
   calendar = {}
+  factoryMock = {}
+  fakeResults = {}
 
   beforeEach ->
     fakeResults = [
@@ -71,17 +73,19 @@ describe "calendarCtrl", ->
     ]
 
     factoryMock = {
-      all: () -> fakeResults,
+      all: (callback) -> 
+        callback(fakeResults)
+        fakeResults
+      ,
       saveNew: (name) -> null,
       update: (course, name) -> null,
       remove: (course) -> null
     }
 
-  beforeEach ->  
     spyOn(factoryMock, 'all').and.callThrough()
     spyOn(factoryMock, 'saveNew').and.callThrough()
     spyOn(factoryMock, 'update').and.callThrough()
-    spyOn(factoryMock, 'remove')
+    spyOn(factoryMock, 'remove').and.callThrough()
 
     module "schedulerApp", ($provide) ->
       $provide.value 'Section', factoryMock
@@ -95,203 +99,238 @@ describe "calendarCtrl", ->
 
   it "initializes $scope.weekdays", ->
     expect($scope.weekdays).toBeDefined()
-    expect($scope.weekdays).toBe(Jasmine.any(Array))
+    expect($scope.weekdays.length).toBeGreaterThan 0
 
   it "initializes $scope.hours", ->
     expect($scope.hours).toBeDefined()
-    expect($scope.hours).toBe(Jasmine.any(Array))
+    expect($scope.hours.length).toBeGreaterThan 0
 
   it 'calls Section.all() while initializing', ->
     expect(factoryMock.all).toHaveBeenCalled()
 
   it "initializes $scope.cells correctly with the section data", ->
-    expect($scope.getSections('10:00am', 'Monday')[0]['id']).toEqual "1"
-    expect($scope.getSections('10:00am', 'Wednesday')[0]['id']).toEqual "1"
-    expect($scope.getSections('12:00am', 'Monday')[0]['id']).toEqual "2"
-    expect($scope.getSections('12:00am', 'Wednesday')[0]['id']).toEqual "2"
-    expect($scope.getSections('10:00am', 'Monday')[1]['id']).toEqual "3"
-    expect($scope.getSections('10:00am', 'Wednesday')[1]['id']).toEqual "3"
-    expect($scope.getSections('12:00pm', 'Tuesday')[0]['id']).toEqual "4"
-    expect($scope.getSections('12:00pm', 'Thursday')[0]['id']).toEqual "4"
-    expect($scope.getSections('4:00pm', 'Friday')[0]['id']).toEqual "5"
-    expect($scope.getSections('2:00pm', 'Tuesday')[0]['id']).toEqual "6"
-    expect($scope.getSections('2:00pm', 'Thursday')[0]['id']).toEqual "6"
-    expect($scope.getSections('4:00pm', 'Thursday')[0]['id']).toEqual "7"
+    expect($scope.getSections('10:00', 'Monday')[0]['id']).toEqual "1"
+    expect($scope.getSections('10:00', 'Wednesday')[0]['id']).toEqual "1"
+    expect($scope.getSections('12:00', 'Monday')[0]['id']).toEqual "2"
+    expect($scope.getSections('12:00', 'Wednesday')[0]['id']).toEqual "2"
+    expect($scope.getSections('10:00', 'Monday')[1]['id']).toEqual "3"
+    expect($scope.getSections('10:00', 'Wednesday')[1]['id']).toEqual "3"
+    expect($scope.getSections('12:00', 'Tuesday')[0]['id']).toEqual "4"
+    expect($scope.getSections('12:00', 'Thursday')[0]['id']).toEqual "4"
+    expect($scope.getSections('16:00', 'Friday')[0]['id']).toEqual "5"
+    expect($scope.getSections('14:00', 'Tuesday')[0]['id']).toEqual "6"
+    expect($scope.getSections('14:00', 'Thursday')[0]['id']).toEqual "6"
+    expect($scope.getSections('16:00', 'Thursday')[0]['id']).toEqual "7"
 
   it "sets CSS attributes 'top' and 'height' correctly", ->
-    expect($scope.getSections('10:00am', 'Monday')[0]['style']['top']).toEqual "25%"
-    expect($scope.getSections('10:00am', 'Monday')[0]['style']['height']).toEqual "175%"
-    expect($scope.getSections('10:00am', 'Wednesday')[0]['style']['top']).toEqual "25%"
-    expect($scope.getSections('10:00am', 'Wednesday')[0]['style']['height']).toEqual "175%"
-    expect($scope.getSections('12:00am', 'Monday')[0]['style']['top']).toEqual "50%" 
-    expect($scope.getSections('12:00am', 'Monday')[0]['style']['height']).toEqual "150%"
-    expect($scope.getSections('12:00am', 'Wednesday')[0]['style']['top']).toEqual "50%"
-    expect($scope.getSections('12:00am', 'Wednesday')[0]['style']['height']).toEqual "150%"
-    expect($scope.getSections('10:00am', 'Monday')[1]['style']['top']).toEqual "0%"
-    expect($scope.getSections('10:00am', 'Monday')[1]['style']['height']).toEqual "200%"
-    expect($scope.getSections('10:00am', 'Wednesday')[1]['style']['top']).toEqual "0%"
-    expect($scope.getSections('10:00am', 'Wednesday')[1]['style']['height']).toEqual "200%"
-    expect($scope.getSections('12:00pm', 'Tuesday')[0]['style']['top']).toEqual "0%"
-    expect($scope.getSections('12:00pm', 'Tuesday')[0]['style']['height']).toEqual "200%"
-    expect($scope.getSections('12:00pm', 'Thursday')[0]['style']['top']).toEqual "0%"
-    expect($scope.getSections('12:00pm', 'Thursday')[0]['style']['height']).toEqual "200%"
-    expect($scope.getSections('4:00pm', 'Friday')[0]['style']['top']).toEqual "0%"
-    expect($scope.getSections('4:00pm', 'Friday')[0]['style']['height']).toEqual "200%"
-    expect($scope.getSections('2:00pm', 'Tuesday')[0]['style']['top']).toEqual "0%" 
-    expect($scope.getSections('2:00pm', 'Tuesday')[0]['style']['height']).toEqual "250%" 
-    expect($scope.getSections('2:00pm', 'Thursday')[0]['style']['top']).toEqual "0%" 
-    expect($scope.getSections('2:00pm', 'Thursday')[0]['style']['height']).toEqual "250%" 
-    expect($scope.getSections('4:00pm', 'Thursday')[0]['style']['top']).toEqual "0%" 
-    expect($scope.getSections('4:00pm', 'Thursday')[0]['style']['height']).toEqual "150%" 
+    expect($scope.getSections('10:00', 'Monday')[0]['style']['top']).toEqual "25%"
+    expect($scope.getSections('10:00', 'Monday')[0]['style']['height']).toEqual "175%"
+    expect($scope.getSections('10:00', 'Wednesday')[0]['style']['top']).toEqual "25%"
+    expect($scope.getSections('10:00', 'Wednesday')[0]['style']['height']).toEqual "175%"
+    expect($scope.getSections('12:00', 'Monday')[0]['style']['top']).toEqual "50%" 
+    expect($scope.getSections('12:00', 'Monday')[0]['style']['height']).toEqual "150%"
+    expect($scope.getSections('12:00', 'Wednesday')[0]['style']['top']).toEqual "50%"
+    expect($scope.getSections('12:00', 'Wednesday')[0]['style']['height']).toEqual "150%"
+    expect($scope.getSections('10:00', 'Monday')[1]['style']['top']).toEqual "0%"
+    expect($scope.getSections('10:00', 'Monday')[1]['style']['height']).toEqual "200%"
+    expect($scope.getSections('10:00', 'Wednesday')[1]['style']['top']).toEqual "0%"
+    expect($scope.getSections('10:00', 'Wednesday')[1]['style']['height']).toEqual "200%"
+    expect($scope.getSections('12:00', 'Tuesday')[0]['style']['top']).toEqual "0%"
+    expect($scope.getSections('12:00', 'Tuesday')[0]['style']['height']).toEqual "200%"
+    expect($scope.getSections('12:00', 'Thursday')[0]['style']['top']).toEqual "0%"
+    expect($scope.getSections('12:00', 'Thursday')[0]['style']['height']).toEqual "200%"
+    expect($scope.getSections('16:00', 'Friday')[0]['style']['top']).toEqual "0%"
+    expect($scope.getSections('16:00', 'Friday')[0]['style']['height']).toEqual "200%"
+    expect($scope.getSections('14:00', 'Tuesday')[0]['style']['top']).toEqual "0%" 
+    expect($scope.getSections('14:00', 'Tuesday')[0]['style']['height']).toEqual "250%" 
+    expect($scope.getSections('14:00', 'Thursday')[0]['style']['top']).toEqual "0%" 
+    expect($scope.getSections('14:00', 'Thursday')[0]['style']['height']).toEqual "250%" 
+    expect($scope.getSections('16:00', 'Thursday')[0]['style']['top']).toEqual "0%" 
+    expect($scope.getSections('16:00', 'Thursday')[0]['style']['height']).toEqual "150%" 
 
-  it "recognizes the mock sections as valid", ->
-    expect($scope.getSections('10:00am', 'Monday')[0]['isValid']).toBe true
-    expect($scope.getSections('10:00am', 'Wednesday')[0]['isValid']).toBe true
-    expect($scope.getSections('12:00am', 'Monday')[0]['isValid']).toBe true
-    expect($scope.getSections('12:00am', 'Wednesday')[0]['isValid']).toBe true
-    expect($scope.getSections('10:00am', 'Monday')[1]['isValid']).toBe true
-    expect($scope.getSections('10:00am', 'Wednesday')[1]['isValid']).toBe true
-    expect($scope.getSections('12:00pm', 'Tuesday')[0]['isValid']).toBe true
-    expect($scope.getSections('12:00pm', 'Thursday')[0]['isValid']).toBe true
-    expect($scope.getSections('4:00pm', 'Friday')[0]['isValid']).toBe true
-    expect($scope.getSections('2:00pm', 'Tuesday')[0]['isValid']).toBe true
-    expect($scope.getSections('2:00pm', 'Thursday')[0]['isValid']).toBe true
-    expect($scope.getSections('4:00pm', 'Thursday')[0]['isValid']).toBe true
+  it "mock sections are marked as valid", ->
+    expect($scope.getSections('10:00', 'Monday')[0]['isValid']).toBe true
+    expect($scope.getSections('10:00', 'Wednesday')[0]['isValid']).toBe true
+    expect($scope.getSections('12:00', 'Monday')[0]['isValid']).toBe true
+    expect($scope.getSections('12:00', 'Wednesday')[0]['isValid']).toBe true
+    expect($scope.getSections('10:00', 'Monday')[1]['isValid']).toBe true
+    expect($scope.getSections('10:00', 'Wednesday')[1]['isValid']).toBe true
+    expect($scope.getSections('12:00', 'Tuesday')[0]['isValid']).toBe true
+    expect($scope.getSections('12:00', 'Thursday')[0]['isValid']).toBe true
+    expect($scope.getSections('16:00', 'Friday')[0]['isValid']).toBe true
+    expect($scope.getSections('14:00', 'Tuesday')[0]['isValid']).toBe true
+    expect($scope.getSections('14:00', 'Thursday')[0]['isValid']).toBe true
+    expect($scope.getSections('16:00', 'Thursday')[0]['isValid']).toBe true
 
   describe 'calendar.updateSection', ->
     describe 'updating the weekday', ->
       it 'calls the Section factory with correct parameters', ->
-        section = $scope.getSections('4:00pm', 'Friday')[0]
+        section = $scope.getSections('16:00', 'Friday')[0]
         section['weekday'] = "Monday"
         calendar.updateSection section
         expect(factoryMock.update).toHaveBeenCalledWith section
 
+
       describe 'section with a single weekday', ->
         it "when the weekday changes, the section is moved into the appropriate cell", ->
-          section = $scope.getSections('4:00pm', 'Friday')[0]
+          section = $scope.getSections('16:00', 'Friday')[0]
           id = section['id']
           section['weekday'] = "Monday"
           calendar.updateSection section
-          expect($scope.getSections('4:00pm', 'Monday')[0]['id']).toEqual id
-          expect($scope.getSections('4:00pm', 'Friday').length).toEqual 0
+          expect($scope.getSections('16:00', 'Monday')[0]['id']).toEqual id
+          expect($scope.getSections('16:00', 'Friday').length).toEqual 0
 
         it "when another section is modified to have the same weekday it is appended to the cell", ->
-          section = $scope.getSections('4:00pm', 'Thursday')[0]
+          section = $scope.getSections('16:00', 'Thursday')[0]
           id = section['id']
           section['weekday'] = "Thursday, Friday"
           calendar.updateSection section
-          expect($scope.getSections('4:00pm', 'Friday')[1]['id']).toEqual id
+          expect($scope.getSections('16:00', 'Friday')[1]['id']).toEqual id
 
         it "the section is given a second weekday, it remains
           in the original cell and is appended to the new cell", ->
-          section = $scope.getSections('4:00pm', 'Friday')[0]
+          section = $scope.getSections('16:00', 'Friday')[0]
           id = section['id']
           section['weekday'] = "Friday, Monday"
           calendar.updateSection section
-          expect($scope.getSections('4:00pm', 'Monday')[0]['id']).toEqual id
-          expect($scope.getSections('4:00pm', 'Friday')[0]['id']).toEqual id
+          expect($scope.getSections('16:00', 'Monday')[0]['id']).toEqual id
+          expect($scope.getSections('16:00', 'Friday')[0]['id']).toEqual id
+
+        it 'updates the name correctly', ->
+          section = $scope.getSections('16:00', 'Friday')[0]
+          name = "Kitten Gathering"
+          section['name'] = name
+          calendar.updateSection section
+          expect($scope.getSections('16:00', 'Friday')[0]['name']).toEqual name
+
+        it 'updates the room correctly', ->
+          section = $scope.getSections('16:00', 'Friday')[0]
+          room = "Cafe Strada"
+          section['room'] = room
+          calendar.updateSection section
+          expect($scope.getSections('16:00', 'Friday')[0]['room']).toEqual room
+
 
       describe 'section with two weekdays', ->
         it "when one weekday is removed the cells update accordingly", ->
-          section = $scope.getSections('12:00pm', 'Monday')[0]
+          section = $scope.getSections('12:00', 'Monday')[0]
           id = section['id']
-          expect($scope.getSections('12:00pm', 'Wednesday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Wednesday')[0]['id']).toEqual id
           section['weekday'] = "Monday"
           calendar.updateSection section
-          expect($scope.getSections('12:00pm', 'Monday')[0]['id']).toEqual id
-          expect($scope.getSections('12:00pm', 'Wednesday').length).toEqual 0
+          expect($scope.getSections('12:00', 'Monday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Wednesday').length).toEqual 0
 
         it "when the third weekday is added to an empty cell, the cells update accordingly", ->
-          section = $scope.getSections('12:00pm', 'Monday')[0]
+          section = $scope.getSections('12:00', 'Monday')[0]
           id = section['id']
-          expect($scope.getSections('12:00pm', 'Wednesday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Wednesday')[0]['id']).toEqual id
           section['weekday'] = "Monday, Wednesday, Friday"
           calendar.updateSection section
-          expect($scope.getSections('12:00pm', 'Monday')[0]['id']).toEqual id
-          expect($scope.getSections('12:00pm', 'Wednesday')[0]['id']).toEqual id
-          expect($scope.getSections('12:00pm', 'Friday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Monday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Wednesday')[0]['id']).toEqual id
+          expect($scope.getSections('12:00', 'Friday')[0]['id']).toEqual id
+
+        it 'updates the name correctly', ->
+          section = $scope.getSections('12:00', 'Monday')[0]
+          name = "Kitten Gathering"
+          section['name'] = name
+          calendar.updateSection section
+          expect($scope.getSections('12:00', 'Monday')[0]['name']).toEqual name
+          expect($scope.getSections('12:00', 'Wednesday')[0]['name']).toEqual name
+
+        it 'updates the room correctly', ->
+          section = $scope.getSections('12:00', 'Monday')[0]
+          room = "Cafe Strada"
+          section['room'] = room
+          calendar.updateSection section
+          expect($scope.getSections('12:00', 'Monday')[0]['room']).toEqual room
+          expect($scope.getSections('12:00', 'Wednesday')[0]['room']).toEqual room
       
-      it "when the section has an invalid weekday it is displayed as invalid", ->
-        section = $scope.getSections('4:00pm', 'Friday')[0]
+
+      it "when the section has an invalid weekday it is marked as invalid", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
         section["weekday"] = "Kittens"
         calendar.updateSection section
-        expect($scope.getSections('4:00pm', 'Friday')[0]['isValid']).toBe false
+        expect($scope.getSections('16:00', 'Friday')[0]['isValid']).toBe false
+
 
     describe 'updating the size', ->
-      it "when start time changes the CSS updates correctly", ->
-        section = $scope.getSections('4:00pm', 'Friday')[0]
-        section['start_time'] = "4:30pm"
+      it "updates the CSS correctly when start time changes", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
+        section['start_time'] = "14:30"
         calendar.update section
-        expect($scope.getSections('4:00pm', 'Friday')[0]['style']['top']).toEqual '50%'
-        expect($scope.getSections('4:00pm', 'Friday')[0]['style']['height']).toEqual '50%'
+        expect($scope.getSections('16:00', 'Friday')[0]['style']['top']).toEqual '50%'
+        expect($scope.getSections('16:00', 'Friday')[0]['style']['height']).toEqual '50%'
 
-      it "when end time changes the CSS updates correctly"
-      it "when start time is before end time the section is displayed as invalid"
-      it 'calls the Section factory with correct parameters'
+      it "updates the CSS correctly when end time changes", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
+        section['end_time'] = "17:30"
+        calendar.update section
+        expect($scope.getSections('16:00', 'Friday')[0]['style']['top']).toEqual '0%'
+        expect($scope.getSections('16:00', 'Friday')[0]['style']['height']).toEqual '150%'
 
-    it 'sets the name of the event correctly'
-    
+      it "marks the section as invalid when end time is earlier than the start time", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
+        section['start_time'] = "14:30"
+        section['end_time'] = "16:00"
+        calendar.update section
+        expect($scope.getSections('16:00', 'Friday')[0]['isValid']).toBe false
+
+      it "marks the section as invalid when end time has wrong format", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
+        section['end_time'] = "blergh"
+        calendar.update section
+        expect($scope.getSections('16:00', 'Friday')[0]['isValid']).toBe false
+
+      it "marks the section as invalid when start time has wrong format", ->
+        section = $scope.getSections('16:00', 'Friday')[0]
+        section['start_time'] = "blergh"
+        calendar.update section
+        expect($scope.getSections('16:00', 'Friday')[0]['isValid']).toBe false
+
 
   describe "calendar.deleteSection", ->
-    it "deletes the event from all the cells"
-    it 'calls the Section factory with correct parameters'
+    it 'calls the Section factory with correct parameters', ->
+      sectionToDelete = fakeResults[4]
+      calendar.deleteSection sectionToDelete
+      expect(factoryMock.remove).toHaveBeenCalledWith sectionToDelete
+    
+
+    describe "section with a single weekday", ->
+      it "deletes the event from the cell", ->
+        sectionToDelete = fakeResults[4]
+        calendar.deleteSection sectionToDelete
+        expect($scope.getSections('16:00', 'Friday').length).toEqual 0
+
+
+    describe "section with multiple weekdays", ->
+      it "deletes the event from all the cells", ->
+        sectionToDelete = fakeResults[0]
+        calendar.deleteSection sectionToDelete
+        expect($scope.getSections('10:00', 'Monday').length).toEqual 0
+        expect($scope.getSections('10:00', 'Wednesday').length).toEqual 0
+
   
   describe "$scope.newSection(hour, weekday)", ->
-    it 'calls the Section factory with correct parameters'
+    beforeEach ->
+      calendar.newSection "14:00", "Monday"
+
+    it 'calls the Section factory with correct parameters', ->
+      expect(factoryMock.saveNew).toHaveBeenCalled()
+
+    it "populates the cells corresponding to the hour and weekday", ->
+      expect($scope.getSections('14:00', 'Monday')[0]['name']).toMatch /New/
+      expect($scope.getSections('14:00', 'Wednesday')[0]['name']).toMatch /New/
+
+    it "sets correct CSS attributes on the sections", ->
+      expect($scope.getSections('14:00', 'Monday')[0]['style']['top']).toEqual '0%'
+      expect($scope.getSections('14:00', 'Wednesday')[0]['style']['top']).toEqual '0%'
+      expect($scope.getSections('14:00', 'Monday')[0]['style']['height']).toEqual '200%'
+      expect($scope.getSections('14:00', 'Wednesday')[0]['style']['height']).toEqual '200%'
+      
 
   describe "$scope.getSections(hour, weekday)", ->
     it 'is defined', ->
       expect($scope.getSections).toBeDefined()
-      expect($scope.weekdays).toBe(Jasmine.any(Function))
-
-
-# Some fake data to get a feeling of how direcrives interact
-# with each other and services before doing the proper coding
-
-  # (cells[getKey('12:00pm', 'Monday')]).push {
-  #   name: "Do some work",
-  #   start: "12:15pm",
-  #   end: "2pm",
-  #   room: "275 Birge",
-  #   style: {top: '25%', height: '175%'}
-  # }
-
-  # (cells[getKey('12:00pm', 'Monday')]).push {
-  #   name: "Do more work",
-  #   start: "12:00pm",
-  #   end: "2pm",
-  #   room: "275 Birge",
-  #   style: {top: '0%', height: '200%'}
-  # }
-
-  # (cells[getKey('12:00pm', 'Monday')]).push {
-  #   name: "Do even more work",
-  #   start: "12:15pm",
-  #   end: "1pm",
-  #   room: "275 Birge",
-  #   style: {top: '25%', height: '75%'}
-  # }
-
-  # (cells[getKey('6:00pm', 'Monday')]).push {
-  #   name: "Go home",
-  #   start: "6:00pm",
-  #   end: "7:30pm",
-  #   room: "none",
-  #   style: {top: '0%', height: '150%'}
-  # }
-
-  # (cells[getKey('2:00pm', 'Tuesday')]).push {
-  #   name: "Eat food",
-  #   start: "2:30pm",
-  #   end: "3:00pm",
-  #   room: "home",
-  #   style: {top: '50%', height: '50%'}
-  # }
-
-  # (cells[getKey('7:00pm', 'Friday')]).push {
-  #   name: "Walk a dog",
-  #   start: "7:00pm",
-  #   end: "8:00pm",
-  #   room: "(outside)",
-  #   style: {top: '0%', height: '200%'}
-  # }
+      expect($scope.weekdays).toBe(jasmine.any(Function))
