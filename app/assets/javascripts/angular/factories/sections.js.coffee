@@ -1,36 +1,36 @@
 @schedulerModule.factory 'Section', ['$resource', ($resource) -> 
-  sectionResource = $resource "#{gon.sections_api_path}/:course_id/:id", 
-    { 
-      id: '@id',
-      course_id: '@course_id'
-    }, 
-    { 
-      'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
-      'post': headers: {'Content-Type': 'application/json'}
+  sectionResource = {}
+  
+  buildParams = (section) ->
+    {
+      'section[name]': section[name],
+      'section[start_hour]': section[start_hour],
+      'section[start_minute]': section[start_minute],
+      'section[duration_hours]': section[duration_hours],
+      'section[weekday]': section[weekday],
+      'section[room]': section[room]
     }
 
-# expose the interface
   {
+    init: (course_id) ->
+      sectionResource = $resource "#{gon.courses_api_path}/#{course_id}/sections/:id", 
+        { 
+          id: '@id',
+        }, 
+        { 
+          'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
+          'post': headers: {'Content-Type': 'application/json'}
+        }
+
     saveNew: (section, callback) ->
-      newSection = new sectionResource {name: name, start: start, end: end, room: room}
-      newSection.$save()
-      append_to_list(newSection)
+      newSection = new sectionResource buildParams(section)
+      newSection.$save -> callback(newSection)
 
     update: (section, callback) ->
-      oldSection = null
-      sectionResource.update(
-          {
-            'section[name]': section[name],
-            'section[start_hour]': section[start_hour],
-            'section[start_minute]': section[start_minute],
-            'section[duration_hours]': section[duration_hours],
-            'section[weekday]': section[weekday],
-            'section[room]': section[room]
-          }, oldSection)
-
-        
+      section.$update(buildParams(section), -> callback section)
+      
     remove: (section, callback) ->
-      sectionResource.remove({id: section.id}, -> callback())
+      section.$remove(callback)
 
     all: (callback) -> 
       all = sectionResource.query -> callback(all)

@@ -78,16 +78,8 @@
     return valid
 
   processSection = (section) ->
-    newSection = {}
-    oldSection = angular.copy section
-    newSection['id'] = oldSection['id']
-    newSection['name'] = oldSection['name']
-    newSection['room'] = oldSection['room']
-    newSection['weekday'] = oldSection['weekday']
-    newSection['start_hour'] = oldSection['start_hour']
-    newSection['start_minute'] = oldSection['start_minute']
-    newSection['duration_hours'] = oldSection['duration_hours']
-    newSection['weekdays'] = oldSection['weekday'].split /[, ]+/
+    newSection = angular.copy section
+    newSection['weekdays'] = newSection['weekday'].split /[, ]+/
     newSection['style'] = getStyle newSection
     newSection['isValid'] = isSectionValid newSection
     newSection
@@ -105,7 +97,6 @@
     Section.saveNew section, ->
       # update the section ID here
       section = processSection section
-      console.log section
       addSectionToCell hour, weekday, section
 
   getSections = (hour, weekday) ->
@@ -134,6 +125,8 @@
   $scope.weekdays = weekdays
   $scope.cells = cells
 
+  course_id = 1 # fixme
+  Section.init(course_id)
   Section.all (all) ->
     for section in all
       addSectionToCells section

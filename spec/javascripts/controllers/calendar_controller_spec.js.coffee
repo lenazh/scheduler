@@ -80,6 +80,7 @@ describe "calendarCtrl", ->
     ]
 
     factoryMock = {
+      init: (course_id) ->
       all: (callback) -> 
         callback(fakeResults)
         fakeResults
@@ -93,6 +94,7 @@ describe "calendarCtrl", ->
     spyOn(factoryMock, 'saveNew').and.callThrough()
     spyOn(factoryMock, 'update').and.callThrough()
     spyOn(factoryMock, 'remove').and.callThrough()
+    spyOn(factoryMock, 'init')
 
     module "schedulerApp", ($provide) ->
       $provide.value 'Section', factoryMock
@@ -103,7 +105,6 @@ describe "calendarCtrl", ->
 
     calendar = $controller 'calendarCtrl', {$scope: $scope}
 
-
   it "initializes $scope.weekdays", ->
     expect($scope.weekdays).toBeDefined()
     expect($scope.weekdays.length).toBeGreaterThan 0
@@ -111,6 +112,9 @@ describe "calendarCtrl", ->
   it "initializes $scope.hours", ->
     expect($scope.hours).toBeDefined()
     expect($scope.hours.length).toBeGreaterThan 0
+
+  it 'calls Section.init(course_id) while initializing', ->
+    expect(factoryMock.init).toHaveBeenCalled()
 
   it 'calls Section.all() while initializing', ->
     expect(factoryMock.all).toHaveBeenCalled()
