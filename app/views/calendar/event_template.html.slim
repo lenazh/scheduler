@@ -27,4 +27,5 @@ div.event-parent
         input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
       p
         br
-        button[class="btn btn-danger" ng-click="delete($event)"] Delete
+        button[class="btn btn-primary" ng-click="save($event)" ng-show="isGhost"] Save
+        button[class="btn btn-danger" ng-click="delete($event)" ng-show="!isGhost"] Delete

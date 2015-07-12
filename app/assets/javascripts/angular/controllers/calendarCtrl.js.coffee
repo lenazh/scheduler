@@ -22,22 +22,33 @@
         cells[key] = {}
     cells
 
+  addSectionIndexHelper = (section_id, cell_key) ->
+    if (typeof sectionIndex[section_id] == 'undefined')
+      sectionIndex[section_id] = []
+    sectionIndex[section_id].push cell_key
+
+  deleteSectionsHelper = (section_id) ->
+    if (typeof sectionIndex[section_id] == 'undefined')
+      return
+    for key in sectionIndex[section_id]
+      delete cells[key][section_id]
+    sectionIndex[section_id] = []
+
+  deleteGhostSections = () ->
+    deleteSectionsHelper(ghostIndex)
+
   deleteSectionFromCells = (section) ->
-    for key in sectionIndex[section['id']]
-      delete cells[key][section['id']]
-    sectionIndex[section['id']] = []
+    deleteSectionsHelper section['id']
 
   addSectionIntoIndex = (section, key) ->
-    if (typeof sectionIndex[section['id']] == 'undefined')
-      sectionIndex[section['id']] = []
-    sectionIndex[section['id']].push key
+    addSectionIndexHelper(section['id'], key)
 
   addSectionToCells = (rawSection) ->
     section = processSection rawSection
     for weekday in section['weekdays']
-      addSectionToCell getHourKey(section), weekday, section
+      placeSection getHourKey(section), weekday, section
 
-  addSectionToCell = (hour, weekday, section) ->
+  placeSection = (hour, weekday, section) ->
     key = getKey(hour, weekday)
     index = cells[key].length
     addSectionIntoIndex section, key
@@ -84,20 +95,6 @@
     newSection['isValid'] = isSectionValid newSection
     newSection
 
-  newSection = (hour, weekday) ->
-    newSectionId += 1
-    section = {
-      'id': -1,
-      'name': "New Section #{newSectionId}",
-      'room': "-",
-      'weekday': weekday
-      'start_hour': hourKeyToHour(hour),
-      'start_minute': 0,
-      'duration_hours' : 2
-    }
-    Section.saveNew section, (newSection) ->
-      addSectionToCells newSection
-
   getSections = (hour, weekday) ->
     cells[getKey(hour, weekday)]
 
@@ -114,18 +111,38 @@
       section = processSection section
       addSectionToCells section
 
+  saveSection = (section) ->
+    Section.saveNew section, (newSection) ->
+      deleteGhostSections()
+      addSectionToCells newSection
+
+  newGhostSection = (hour, weekday) ->
+    deleteGhostSections()
+    section = {
+      'id': ghostIndex,
+      'name': "New Section",
+      'room': "-",
+      'weekday': weekday
+      'start_hour': hourKeyToHour(hour),
+      'start_minute': 0,
+      'duration_hours' : 2
+    }
+    addSectionToCells section
+    
+
 # Initialize the calendar
   weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
   hours = []
   hours.push hourKey(x) for x in [8..20]
   cells = makeCells()
   sectionIndex = []
+  ghostSectionIndex = []
 
   $scope.hours = hours
   $scope.weekdays = weekdays
   $scope.cells = cells
 
-  newSectionId = 0;
+  ghostIndex = 0
 
   course_id = $routeParams['course_id']
   Section.init(course_id)
@@ -139,8 +156,11 @@
   $scope.getSections = (hour, weekday) ->
     getSections(hour, weekday)
 
-  $scope.newSection = (hour, weekday) ->
-    newSection(hour, weekday)
+  $scope.newGhostSection = (hour, weekday) ->
+    newGhostSection(hour, weekday)
+
+  @saveSection = (section) ->
+    saveSection(section)
 
   @deleteSection = (section) ->
     deleteSection(section)

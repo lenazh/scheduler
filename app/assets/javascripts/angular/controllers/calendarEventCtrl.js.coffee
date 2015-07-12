@@ -14,6 +14,11 @@
     $scope.sectionCalendar.deleteSection($scope.event)
     $event.stopPropagation()
 
+  $scope.save = ($event) ->
+    $scope.sectionCalendar.saveSection($scope.event)
+    $scope.toggleExpand
+    $event.stopPropagation()
+
 # TODO - move this to filters
   $scope.pad = (minutes) ->
     if (minutes < 10)
