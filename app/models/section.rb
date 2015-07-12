@@ -1,4 +1,5 @@
 class Section < ActiveRecord::Base
+
   belongs_to :course
   belongs_to :gsi, class_name: 'User'
   has_many :preferences, dependent: :destroy
@@ -8,12 +9,12 @@ class Section < ActiveRecord::Base
   validates :room, presence: true
 #  validates :lecture, presence: true
   validates :weekday, presence: true
-  validates :name, uniqueness: { scope: :course_id}
+  validates :name, uniqueness: { scope: :course_id, message: "Section name has already been taken"}
   validates :start_hour, presence: true
   validates :start_minute, presence: true
   validates :duration_hours, presence: :true
-  validates :start_hour, inclusion: { in: 0..23 }
-  validates :start_minute, inclusion: { in: 0..59 }
+  validates :start_hour, inclusion: { in: 6..22,  message: "Can't be less than 6 or greater than 22" }
+  validates :start_minute, inclusion: { in: 0..59, message: "Can't be less than 0 or greater than 59" } 
   validate :duration_cant_be_longer_than_10hrs_or_negative
   validate :weekdays_are_valid
 

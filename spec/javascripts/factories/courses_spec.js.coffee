@@ -9,10 +9,7 @@ describe "Courses", ->
 # canned responses defined here
   allCourses = {}
   newCourse = {}
-
-# stub out gon
-  window.gon = {}
-  gon.courses_api_path = resourcePath
+  gon = {}
 
   beforeEach ->
     allCourses = [
@@ -46,6 +43,10 @@ describe "Courses", ->
       "created_at":"2015-06-09T01:08:39.146Z",
       "url":"#{resourceUrl}/4"
     }
+
+    gon = {}
+    gon.courses_api_path = resourcePath
+    window.gon = gon
 
 # Function that checks if the Response object has the same
 # content as the original hash

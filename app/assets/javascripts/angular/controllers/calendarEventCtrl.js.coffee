@@ -1,11 +1,25 @@
 @schedulerModule.controller 'calendarEventCtrl', ['$scope', ($scope) ->
-  update_event = () ->
-    $scope.sectionCalendar.updateSection($scope.event)
+# TODO -- allow the event to be controlled from keyboard
 
   $scope.toggleExpand = ($event) ->
-    return if $scope.isGhost
-    $scope.showEditForm = !$scope.showEditForm
-    update_event() unless $scope.showEditForm
+    if $scope.isGhost
+      $event.stopPropagation()
+      return
+
+    if $scope.showEditForm
+      $scope.sectionCalendar.updateSection(
+        $scope.event
+        -> $scope.showEditForm = !$scope.showEditForm
+      )
+    else
+      $scope.showEditForm = !$scope.showEditForm
+    $event.stopPropagation()
+
+  $scope.update = ($event) ->
+    $scope.sectionCalendar.updateSection(
+      $scope.event
+      ->
+    )
     $event.stopPropagation()
 
   $scope.stopPropagation = ($event) ->
@@ -20,6 +34,10 @@
       $scope.event
       -> $scope.showEditForm = !$scope.showEditForm
     )
+    $event.stopPropagation()
+
+  $scope.cancel = ($event) ->
+    $scope.sectionCalendar.deleteGhost($scope.event)
     $event.stopPropagation()
 
 # TODO - move this to filters

@@ -103,16 +103,14 @@
     Section.remove section, ->
       deleteSectionFromCells section
       
-  updateSection = (section) ->
-    section['weekdays'] = section['weekday'].split /[, ]+/
-    section['isValid'] = isSectionValid section
-    return unless section['isValid']
+  updateSection = (section, successCallback) ->
     Section.update(
       section
       ->
         deleteSectionFromCells section
         section = processSection section
         addSectionToCells section
+        successCallback()
       (error) ->
         section['errors'] = error.data
     )
@@ -127,6 +125,9 @@
       (error) ->
         section['errors'] = error.data
     )
+
+  deleteGhost = (section) ->
+    deleteGhostSections()
 
   newGhostSection = (hour, weekday) ->
     deleteGhostSections()
@@ -146,8 +147,8 @@
 # Initialize the calendar
   weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
   hours = []
-  calendar_start_hour = 8
-  calendar_end_hour = 20
+  calendar_start_hour = gon.calendar_start_hour
+  calendar_end_hour = gon.calendar_end_hour
   hours.push hourKey(x) for x in [calendar_start_hour..calendar_end_hour]
   cells = makeCells()
   sectionIndex = []
@@ -180,8 +181,11 @@
   @deleteSection = (section) ->
     deleteSection(section)
 
-  @updateSection = (section) ->
-    updateSection(section)
+  @deleteGhost = (section) ->
+    deleteGhost(section)
+
+  @updateSection = (section, successCallback) ->
+    updateSection(section, successCallback)
 
   @getStyle = (section) ->
     getStyle(section)

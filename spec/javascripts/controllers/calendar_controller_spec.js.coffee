@@ -4,6 +4,7 @@ describe "calendarCtrl", ->
   calendar = {}
   factoryMock = {}
   fakeResults = {}
+  gon = {}
   newSectionId = 213
   ghostId = 0
 
@@ -97,6 +98,11 @@ describe "calendarCtrl", ->
       remove: (section, successCallback) -> successCallback(section)
     }
 
+    gon = {}
+    gon['calendar_start_hour'] = 6
+    gon['calendar_end_hour'] = 22
+    window.gon = gon
+
     spyOn(factoryMock, 'all').and.callThrough()
     spyOn(factoryMock, 'saveNew').and.callThrough()
     spyOn(factoryMock, 'update').and.callThrough()
@@ -185,7 +191,7 @@ describe "calendarCtrl", ->
       it 'calls the Section factory with correct parameters', ->
         section = $scope.getSections('16:00', 'Friday')[5]
         section['weekday'] = "Monday"
-        calendar.updateSection section
+        calendar.updateSection section, ->
         expect(factoryMock.update).toHaveBeenCalled()
 
 
@@ -195,7 +201,7 @@ describe "calendarCtrl", ->
           expect($scope.getSections('16:00', 'Friday')[5]).toBeDefined()
           section = $scope.getSections('16:00', 'Friday')[5]
           section['weekday'] = "Monday"
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('16:00', 'Monday')[5]).toBeDefined()
           expect($scope.getSections('16:00', 'Friday')[5]).not.toBeDefined()
 
@@ -203,7 +209,7 @@ describe "calendarCtrl", ->
           expect($scope.getSections('16:00', 'Friday')[7]).not.toBeDefined()
           section = $scope.getSections('16:00', 'Thursday')[7]
           section['weekday'] = "Thursday, Friday"
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('16:00', 'Friday')[7]).toBeDefined()
 
         it "the section is given a second weekday, it remains
@@ -212,7 +218,7 @@ describe "calendarCtrl", ->
           expect($scope.getSections('16:00', 'Friday')[5]).toBeDefined()
           section = $scope.getSections('16:00', 'Friday')[5]
           section['weekday'] = "Friday, Monday"
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('16:00', 'Monday')[5]).toBeDefined()
           expect($scope.getSections('16:00', 'Friday')[5]).toBeDefined()
 
@@ -221,7 +227,7 @@ describe "calendarCtrl", ->
           section = $scope.getSections('16:00', 'Friday')[5]
           name = "Kitten Gathering"
           section['name'] = name
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('16:00', 'Friday')[5]['name']).toEqual name
 
         it 'updates the room correctly', ->
@@ -229,7 +235,7 @@ describe "calendarCtrl", ->
           section = $scope.getSections('16:00', 'Friday')[5]
           room = "Cafe Strada"
           section['room'] = room
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('16:00', 'Friday')[5]['room']).toEqual room
 
 
@@ -239,7 +245,7 @@ describe "calendarCtrl", ->
           expect($scope.getSections('12:00', 'Wednesday')[2]).toBeDefined()
           section = $scope.getSections('12:00', 'Monday')[2]
           section['weekday'] = "Monday"
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('12:00', 'Monday')[2]).toBeDefined()
           expect($scope.getSections('12:00', 'Wednesday')[2]).not.toBeDefined()
 
@@ -248,7 +254,7 @@ describe "calendarCtrl", ->
           expect($scope.getSections('12:00', 'Wednesday')[2]).toBeDefined()
           section = $scope.getSections('12:00', 'Monday')[2]
           section['weekday'] = "Monday, Wednesday, Friday"
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('12:00', 'Monday')[2]).toBeDefined()
           expect($scope.getSections('12:00', 'Wednesday')[2]).toBeDefined()
           expect($scope.getSections('12:00', 'Friday')[2]).toBeDefined()
@@ -257,7 +263,7 @@ describe "calendarCtrl", ->
           section = $scope.getSections('12:00', 'Monday')[2]
           name = "Kitten Gathering"
           section['name'] = name
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('12:00', 'Monday')[2]['name']).toEqual name
           expect($scope.getSections('12:00', 'Wednesday')[2]['name']).toEqual name
 
@@ -265,7 +271,7 @@ describe "calendarCtrl", ->
           section = $scope.getSections('12:00', 'Monday')[2]
           room = "Cafe Strada"
           section['room'] = room
-          calendar.updateSection section
+          calendar.updateSection section, ->
           expect($scope.getSections('12:00', 'Monday')[2]['room']).toEqual room
           expect($scope.getSections('12:00', 'Wednesday')[2]['room']).toEqual room
 
@@ -274,62 +280,14 @@ describe "calendarCtrl", ->
       it "updates the CSS correctly when start time changes", ->
         section = $scope.getSections('16:00', 'Friday')[5]
         section['start_minute'] = 30
-        calendar.updateSection section
+        calendar.updateSection section, ->
         expect($scope.getSections('16:00', 'Friday')[5]['style']['top']).toEqual '50%'
 
       it "updates the CSS correctly when duration changes", ->
         section = $scope.getSections('16:00', 'Friday')[5]
         section['duration_hours'] = 1.5
-        calendar.updateSection section
+        calendar.updateSection section, ->
         expect($scope.getSections('16:00', 'Friday')[5]['style']['height']).toEqual '150%'
-
-      describe "marks the section as invalid when", ->
-        section = {}
-        beforeEach ->
-          section = $scope.getSections('16:00', 'Friday')[5]
-        
-        afterEach ->
-          calendar.updateSection section
-          expect($scope.getSections('16:00', 'Friday')[5]['isValid']).toBeFalsy()
-
-        it "weekday is invalid", ->
-          section["weekday"] = "Kittens"
-
-        it "weekday is invalid and an array", ->
-          section["weekday"] = "Monday, Tuesday, Kittens"
-
-        it "start_hour has wrong format", ->
-          section["start_hour"] = "Kittens"
-
-        it "start_hour is negative", ->
-          section["start_hour"] = "-10"
-
-        it "start_hour is greater than 23", ->
-          section["start_hour"] = "63"
-
-        it "start_minute has wrong format", ->
-          section["start_minute"] = "Kittens"
-
-        it "start_minute is negative", ->
-          section["start_minute"] = "-10"
-
-        it "start_minute is greater than 59", ->
-          section["start_minute"] = "63"
-
-        it "duration_hours has wrong format", ->
-          section["duration_hours"] = "Kittens"
-
-        it "duration_hours is negative", ->
-          section["duration_hours"] = "-10"
-
-        it "duration_hours is greater than 10", ->
-          section["duration_hours"] = "63"
-
-        it "start_hour is smaller than the first hour in the calendar", ->
-          section["start_hour"] = "4"
-
-        it "start_hour is greater than the last hour in the calendar", ->
-          section["start_hour"] = "21"
 
   describe "calendar.deleteSection", ->
     it 'calls the Section factory with correct parameters', ->
