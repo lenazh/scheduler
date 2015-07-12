@@ -1,4 +1,4 @@
-@schedulerModule.factory 'Navbar', ['$location', ($location) -> 
+@schedulerModule.factory 'Navbar', ['$location', '$cookies', ($location, $cookies) -> 
   items = [
     {
       title: "My Classes",
@@ -18,6 +18,7 @@
   ]
 
   selected = null
+  title = "8A Physics Berkeley Fall 2015"
 
   deselect = (item) ->
     item.active = "" if item
@@ -41,5 +42,6 @@
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item
+    title: () -> title
   }
 ]
