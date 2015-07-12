@@ -1,4 +1,4 @@
-@schedulerModule.controller 'coursesCtrl', ['$scope', 'Course', ($scope, Course) ->
+@schedulerModule.controller 'coursesCtrl', ['$scope', 'Course', 'Navbar', ($scope, Course, Navbar) ->
 
   @courses = Course.all()
   @courseName = ""
@@ -6,12 +6,19 @@
   @hideAddButton = false
   @hideUpdateButton = true
   @disableEditingAndDeletion = false
+  navbarTitle = Navbar.title()
 
 
   name_is_valid = () ->
     $scope.form.courseName.$valid
 
-  @remove = (course) -> Course.remove course 
+  isDisplayedOnNavbar = (course) ->
+    navbarTitle['id'] == course['id'].toString()
+
+
+  @remove = (course) -> 
+    Course.remove course
+    Navbar.resetCourse() if isDisplayedOnNavbar(course)
 
   @saveNew = () ->
     return unless name_is_valid
@@ -25,6 +32,7 @@
     name = @courseName
     Course.update course, name
     @addForm()
+    Navbar.setCourse(course['id'], name) if isDisplayedOnNavbar(course)
 
 
   @editForm = (course) ->
@@ -44,7 +52,8 @@
 
 
 
-  @select = (course) -> null
+  @select = (course) -> 
+    Navbar.setCourse course['id'], course['name']
 
 
 # The controller will not work w/o this 

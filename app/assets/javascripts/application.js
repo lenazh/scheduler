@@ -16,10 +16,12 @@
 //= require turbolinks
 //= require angular
 //= require angular-route
+//= require angular-cookies
 //= require angular-animate
 //= require angular-resource
 //= require angular-mocks
 //= require_tree .//angular//app
 //= require_tree .//angular//factories
+//= require_tree .//angular//directives
 //= require_tree .//angular//controllers
 //= require_directory ./

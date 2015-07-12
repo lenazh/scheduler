@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-@schedulerModule = angular.module 'schedulerApp', ['ngResource', 'ngRoute']
+@schedulerModule = angular.module 'schedulerApp', ['ngResource', 'ngRoute', 'ngCookies']
 
 # send the cros-site forgery protection token for Rails
 @schedulerModule.config ['$httpProvider', ($httpProvider)-> 
@@ -30,9 +30,7 @@
       controllerAs: 'gsi' 
     }
 
-  $routeProvider.when "/calendar", {
+  $routeProvider.when "/calendar/:course_id", {
       templateUrl: gon.calendar_view_path,
-      controller: 'calendarCtrl',
-      controllerAs: 'calendar' 
     }
 ]

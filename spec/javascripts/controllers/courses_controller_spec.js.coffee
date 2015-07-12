@@ -3,32 +3,42 @@ describe "coursesCtrl", ->
   $controller = {}
   crs = {}
   fakeResults = {}
-  factoryMock = {}
+  courseMock = {}
+  navbarMock = {}
 
 
   beforeEach ->
     fakeResults = [
-      { name: "Course1", user_id: "1"},
-      { name: "Course2", user_id: "1"}
+      { name: "Course1", user_id: "1", id: '1'},
+      { name: "Course2", user_id: "1", id: '2'}
     ]
 
-    factoryMock = {
+    courseMock = {
       init: () -> null
       all: () -> fakeResults,
-      saveNew: (name) -> {name: "New course", user_id: "1"},
-      update: (course, name) -> {name: "Physics 8A", user_id: "1"},
+      saveNew: (name) -> {name: "New course", user_id: "1", id: '3'},
+      update: (course, name) -> {name: "Physics 8A", user_id: "1", id: '1'},
       remove: (course) -> null
     }
 
+    navbarMock = {
+      resetCourse: () -> null
+      setCourse: (id, name) -> null
+      title: () -> {'title': 'Course1', 'id': '2'}
+    }
+
   beforeEach ->  
-    spyOn(factoryMock, 'all').and.callThrough()
-    spyOn(factoryMock, 'saveNew').and.callThrough()
-    spyOn(factoryMock, 'update').and.callThrough()
-    spyOn(factoryMock, 'remove')
-    spyOn(factoryMock, 'init')
+    spyOn(courseMock, 'all').and.callThrough()
+    spyOn(courseMock, 'saveNew').and.callThrough()
+    spyOn(courseMock, 'update').and.callThrough()
+    spyOn(courseMock, 'remove')
+    spyOn(courseMock, 'init')
+    spyOn(navbarMock, 'setCourse')
+    spyOn(navbarMock, 'resetCourse')
 
     module "schedulerApp", ($provide) ->
-      $provide.value 'Course', factoryMock
+      $provide.value 'Course', courseMock
+      $provide.value 'Navbar', navbarMock
       return
 
     inject (_$controller_) ->
@@ -37,7 +47,7 @@ describe "coursesCtrl", ->
     crs = $controller 'coursesCtrl', {$scope: $scope}
 
   it "should call Courses.all() when instantiated", ->
-    expect(factoryMock.all).toHaveBeenCalled()
+    expect(courseMock.all).toHaveBeenCalled()
   
   it "initializes needed variables", ->
     expect(crs.courses).toBeDefined()
@@ -48,36 +58,56 @@ describe "coursesCtrl", ->
     expect(crs.disableEditingAndDeletion).toBe false
     
     
-  it "has method remove(course) that is routed to the model", ->
-    expect(crs.remove).toBeDefined()
-    id = 0
-    courseToRemove = fakeResults[id] 
-    crs.remove(courseToRemove)
-    expect(factoryMock.remove).toHaveBeenCalledWith(courseToRemove)
+  describe "has method remove(course) that", ->
+    it "is defined", ->
+      expect(crs.remove).toBeDefined()
+
+    it "is routed to the model", ->
+      id = 0
+      courseToRemove = fakeResults[id] 
+      crs.remove(courseToRemove)
+      expect(courseMock.remove).toHaveBeenCalledWith(courseToRemove)
+
+    it "resets the Navbar title when the current course is being deleted", ->
+      id = 1
+      courseToRemove = fakeResults[id] 
+      crs.remove(courseToRemove)
+      expect(navbarMock.resetCourse).toHaveBeenCalled()
 
   it "has method saveNew() that is routed to the model", ->
     expect(crs.saveNew).toBeDefined()
     crs.courseName = "New Course"
     $scope.form = {courseName : {$valid : true }}
     crs.saveNew()
-    expect(factoryMock.saveNew).toHaveBeenCalledWith("New Course")
+    expect(courseMock.saveNew).toHaveBeenCalledWith("New Course")
 
 
-  it "has method update(course, params) that is routed to the model", ->
-    expect(crs.update).toBeDefined()
-    id = 0
-    name = "Physics 8A"
-    crs.courseToUpdate = fakeResults[id] 
-    crs.courseName = name
-    crs.update()
-    expect(factoryMock.update).toHaveBeenCalledWith(fakeResults[id], name)
+  describe "has method update(course, params) that ", ->
+    it "is defined", ->
+      expect(crs.update).toBeDefined()
+
+    it "is routed to the model", ->
+      id = 0
+      name = "Physics 8A"
+      crs.courseToUpdate = fakeResults[id] 
+      crs.courseName = name
+      crs.update()
+      expect(courseMock.update).toHaveBeenCalledWith(fakeResults[id], name)
+
+    it "updates the Navbar title when the current course is updates", ->
+      id = 1
+      name = "Physics 8A"
+      crs.courseToUpdate = fakeResults[id] 
+      crs.courseName = name
+      crs.update()
+      expect(navbarMock.setCourse).toHaveBeenCalledWith(fakeResults[id]['id'], name)
 
 
   it "has method select(course) that makes the selected course active", ->
-    course = { name: "Physics 8A", user_id: "1"}
+    course = { name: "Physics 8A", user_id: "1", id: 2}
     expect(crs.select).toBeDefined()
     crs.select(course)
-    pending "Backend for selecting a course is not implemented"
+    expect(navbarMock.setCourse).toHaveBeenCalledWith(2, "Physics 8A")
 
   it "has editForm method that hides 'Add' button, shows 'Update' button and disables other buttons", ->
     crs.editForm(fakeResults[0])

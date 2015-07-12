@@ -1,0 +1,107 @@
+table#schedule {
+    width: 100%;
+    border-collapse: collapse;
+    border-style: hidden;
+    empty-cells: show;
+    font-family: sans-serif;
+}
+
+#schedule td {  
+    box-sizing: border-box;
+    padding: 0px;
+    height: 3em;
+}
+
+#schedule td.event-col {
+    width: 18%;
+    text-align: center;
+}
+
+#schedule .time-col {
+    width: 10%;
+    text-align: center;
+}
+
+
+#schedule td.event-col:empty:hover {
+    border: solid 2px #5C5C8A;
+}
+
+#schedule .event-parent {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+
+    display: table;
+}
+
+#schedule .event {
+    border: outset 1px #666666;
+    background-color: #EFEFEF;
+    border-radius: 5px;
+    margin:0px;
+    padding: 0.2em;
+    font-size: x-small;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    box-sizing: border-box;
+    overflow: hidden; 
+    height: 100%;
+    width: 100%;
+    display: table-cell;
+    z-index: 10;
+}
+
+#schedule .event p {
+    font-size: x-small;
+    padding: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.event-table {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    display: table-cell;
+}
+
+#schedule .ghost {
+    opacity: 0.5;
+    display: none;
+    height: 200%;
+    z-index: 100;
+}
+
+#schedule .event:hover {
+    box-shadow:  0 0 3px;
+}
+
+#schedule button {
+    margin: 1em;
+}
+
+#schedule label {
+    font-size: small;
+}
+
+#schedule form {
+    margin: 1em;
+}
+
+#schedule .section-error {
+    color: red;
+}
+
+/* 
+    100% = 1 hour
+
+    set top and height atributes to position
+    the beginning and end of the event, e.g:
+
+    top: 25%; <-- starts at 15 minutes 
+    height: 200%; <-- two hours long 
+
+*/

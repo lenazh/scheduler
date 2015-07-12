@@ -7,7 +7,7 @@ shared_examples "a JSON index view:" do
   let (:model_symbol) { model_string.to_sym}
   let (:models_symbol) { model_string.pluralize.to_sym}
   let (:another_model_symbol) { "another_#{model_string}".to_sym}
-  let (:mock_attributes) {[attributes_for(model_symbol), attributes_for(another_model_symbol)]}
+  let (:mock_attributes) { [attributes_for(model_symbol), attributes_for(another_model_symbol)] }
 
   before(:each) do
     assign(models_symbol, mock_attributes.map { |x| stub_model(model_class, x)})

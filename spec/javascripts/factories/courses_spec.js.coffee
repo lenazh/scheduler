@@ -9,6 +9,7 @@ describe "Courses", ->
 # canned responses defined here
   allCourses = {}
   newCourse = {}
+  gon = {}
 
   beforeEach ->
     allCourses = [
@@ -43,6 +44,10 @@ describe "Courses", ->
       "url":"#{resourceUrl}/4"
     }
 
+    gon = {}
+    gon.courses_api_path = resourcePath
+    window.gon = gon
+
 # Function that checks if the Response object has the same
 # content as the original hash
   expectToMatch = (response, original) ->
@@ -57,9 +62,6 @@ describe "Courses", ->
     $httpBackend.flush()
     allCoursesResources
 
-# stub out gon
-  window.gon = {}
-  gon.courses_api_path = resourcePath
 
 # initialize the dependencies and get the objects
   beforeEach module('schedulerApp')

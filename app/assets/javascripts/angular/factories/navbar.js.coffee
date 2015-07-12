@@ -1,23 +1,49 @@
-@schedulerModule.factory 'Navbar', ['$location', ($location) -> 
+@schedulerModule.factory 'Navbar', ['$location', '$cookies', ($location, $cookies) -> 
+  cookie_title = 'course_title'
+  cookie_id = 'course_id'
+  defaultTitle = "(please select a course to edit the calendar)"
+
+  title = {}
+  title['title'] = $cookies.get cookie_title
+  title['title'] ||= defaultTitle
+  title['id'] = $cookies.get cookie_id
+
+  selected = null
+
+
   items = [
     {
       title: "My Classes",
       active: "",
-      href: "#courses"
+      href: "#courses",
+      isCalendar: false
     },
     {
       title: "GSIs",
       active: "",
-      href: "#gsi"
+      href: "#gsi",
+      isCalendar: false
     },
     {
       title: "Section calendar",
       active: "",
-      href: "#calendar"
+      href: "#calendar/",
+      isCalendar: true
     }
   ]
 
-  selected = null
+
+  setCourse = (id, name) ->
+    $cookies.put cookie_title, name
+    $cookies.put cookie_id, id
+    title['title'] = name
+    title['id'] = $cookies.get cookie_id
+
+  resetCourse = () ->
+    $cookies.remove cookie_title
+    $cookies.remove cookie_id
+    title['title'] = defaultTitle
+    title['id'] = null
 
   deselect = (item) ->
     item.active = "" if item
@@ -41,5 +67,8 @@
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item
+    title: () -> title
+    setCourse: (id, name) -> setCourse id, name
+    resetCourse: () -> resetCourse()
   }
 ]
