@@ -1,31 +1,37 @@
 @schedulerModule.factory 'Navbar', ['$location', '$cookies', ($location, $cookies) -> 
-  items = [
-    {
-      title: "My Classes",
-      active: "",
-      href: "#courses"
-    },
-    {
-      title: "GSIs",
-      active: "",
-      href: "#gsi"
-    },
-    {
-      title: "Section calendar",
-      active: "",
-      href: "#calendar"
-    }
-  ]
-
-  selected = null
-  defaultTitle = "(please select a course to edit the calendar)"
-
   cookie_title = 'course_title'
   cookie_id = 'course_id'
+  defaultTitle = "(please select a course to edit the calendar)"
+
   title = {}
   title['title'] = $cookies.get cookie_title
   title['title'] ||= defaultTitle
   title['id'] = $cookies.get cookie_id
+
+  selected = null
+
+
+  items = [
+    {
+      title: "My Classes",
+      active: "",
+      href: "#courses",
+      isCalendar: false
+    },
+    {
+      title: "GSIs",
+      active: "",
+      href: "#gsi",
+      isCalendar: false
+    },
+    {
+      title: "Section calendar",
+      active: "",
+      href: "#calendar/",
+      isCalendar: true
+    }
+  ]
+
 
   setCourse = (id, name) ->
     $cookies.put cookie_title, name

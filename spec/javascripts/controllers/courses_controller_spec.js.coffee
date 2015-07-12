@@ -9,22 +9,22 @@ describe "coursesCtrl", ->
 
   beforeEach ->
     fakeResults = [
-      { name: "Course1", user_id: "1", id: 1},
-      { name: "Course2", user_id: "1", id: 2}
+      { name: "Course1", user_id: "1", id: '1'},
+      { name: "Course2", user_id: "1", id: '2'}
     ]
 
     courseMock = {
       init: () -> null
       all: () -> fakeResults,
-      saveNew: (name) -> {name: "New course", user_id: "1", id: 3},
-      update: (course, name) -> {name: "Physics 8A", user_id: "1", id: 1},
+      saveNew: (name) -> {name: "New course", user_id: "1", id: '3'},
+      update: (course, name) -> {name: "Physics 8A", user_id: "1", id: '1'},
       remove: (course) -> null
     }
 
     navbarMock = {
       resetCourse: () -> null
       setCourse: (id, name) -> null
-      title: () -> {'title': 'Course1', 'id': 2}
+      title: () -> {'title': 'Course1', 'id': '2'}
     }
 
   beforeEach ->  
