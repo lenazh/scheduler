@@ -30,7 +30,7 @@
       controllerAs: 'gsi' 
     }
 
-  $routeProvider.when "/calendar", {
+  $routeProvider.when "/calendar/:course_id", {
       templateUrl: gon.calendar_view_path,
     }
 ]

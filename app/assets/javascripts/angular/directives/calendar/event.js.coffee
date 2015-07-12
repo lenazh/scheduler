@@ -9,8 +9,6 @@
     controller: 'calendarEventCtrl',
     link: (scope, element, attrs, sectionCalendar) ->
       scope.sectionCalendar = sectionCalendar
-      scope.styleEdit = {height: 'auto', width: 'auto', 'z-index': '200'}
-      scope.styleView = scope.event.style
-      scope.eventStyle = scope.styleView
+      scope.editStyle = {height: 'auto', width: 'auto', 'z-index': '200'}
       scope.showEditForm = false
   }

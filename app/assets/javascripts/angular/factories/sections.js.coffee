@@ -3,12 +3,12 @@
   
   buildParams = (section) ->
     {
-      'section[name]': section['name'],
-      'section[start_hour]': section['start_hour'],
-      'section[start_minute]': section['start_minute'],
-      'section[duration_hours]': section['duration_hours'],
-      'section[weekday]': section['weekday'],
-      'section[room]': section['room']
+      'name': section['name'],
+      'start_hour': section['start_hour'],
+      'start_minute': section['start_minute'],
+      'duration_hours': section['duration_hours'],
+      'weekday': section['weekday'],
+      'room': section['room']
     }
 
   {

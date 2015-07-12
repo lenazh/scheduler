@@ -6,7 +6,7 @@ class Section < ActiveRecord::Base
 
   validates :name, presence: true
   validates :room, presence: true
-  validates :lecture, presence: true
+#  validates :lecture, presence: true
   validates :weekday, presence: true
   validates :name, uniqueness: { scope: :course_id}
   validates :start_hour, presence: true

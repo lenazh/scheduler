@@ -1,24 +1,31 @@
 div.event-parent
-  div.event ng-style="eventStyle" ng-click="toggleExpand($event)"
-    div ng-show="!showEditForm"
+  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-click="toggleExpand($event)" ng-show="!showEditForm"
+    div
       b ng-bind="event.name"
       p Room: {{event.room}}
-      p Time: {{event.start}} -- {{event.end}}
+      p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
+      p Duration: {{event.duration_hours}} hours
 
-    form.form-inline[name="form" ng-show="showEditForm" novalidate]
+  div.event ng-style="editStyle" ng-click="toggleExpand($event)" ng-show="showEditForm"
+    form.form-inline[name="form" novalidate]
       p
         label for="name" Section
         input.form-control[type="text" required ng-model="event.name" name="name" ng-click="stopPropagation($event)"]
       p
-        label for="start" Start
-        input.form-control[type="text" required ng-model="event.start" name="start" ng-click="stopPropagation($event)"]
+        label for="start_hour" Begins at (hour)
+        input.form-control[type="text" required ng-model="event.start_hour" name="start_hour" ng-click="stopPropagation($event)"]
       p
-        label for="end" End
-        input.form-control[type="text" required ng-model="event.end" name="end" ng-click="stopPropagation($event)"]
+        label for="start_minute" Begins at (minute)
+        input.form-control[type="text" required ng-model="event.start_minute" name="start_minute" ng-click="stopPropagation($event)"]
+      p
+        label for="duration_hours" Duration (hours)
+        input.form-control[type="text" required ng-model="event.duration_hours" name="duration_hours" ng-click="stopPropagation($event)"]
+      p
+        label for="Weekday" Weekday
+        input.form-control[type="text" placeholder="Weekday" ng-trim="true" ng-model="event.weekday" name="Weekday" ng-click="stopPropagation($event)"]
       p
         label for="Room" Room
         input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
       p
         br
-        button[class="btn btn-primary" ng-click="update($event)"] Update
-        button[class="btn btn-danger" ng-click="delete($event)"] X
+        button[class="btn btn-danger" ng-click="delete($event)"] Delete

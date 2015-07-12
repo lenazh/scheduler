@@ -1,4 +1,4 @@
-@schedulerModule.controller 'calendarCtrl',  ['$scope', 'Section', ($scope, Section) ->
+@schedulerModule.controller 'calendarCtrl',  ['$scope', '$routeParams', 'Section', ($scope, $routeParams, Section) ->
 
 # Private functions
   getKey = (hour, weekday) ->
@@ -85,9 +85,10 @@
     newSection
 
   newSection = (hour, weekday) ->
+    newSectionId += 1
     section = {
       'id': -1,
-      'name': "New Section",
+      'name': "New Section #{newSectionId}",
       'room': "-",
       'weekday': weekday
       'start_hour': hourKeyToHour(hour),
@@ -110,6 +111,7 @@
     return unless section['isValid']
     Section.update section, ->
       deleteSectionFromCells section
+      section = processSection section
       addSectionToCells section
 
 # Initialize the calendar
@@ -123,7 +125,9 @@
   $scope.weekdays = weekdays
   $scope.cells = cells
 
-  course_id = 1 # fixme
+  newSectionId = 0;
+
+  course_id = $routeParams['course_id']
   Section.init(course_id)
   Section.all (all) ->
     for section in all
@@ -138,11 +142,14 @@
   $scope.newSection = (hour, weekday) ->
     newSection(hour, weekday)
 
-  @deleteSection = (event) ->
-    deleteSection(event)
+  @deleteSection = (section) ->
+    deleteSection(section)
 
-  @updateSection = (event) ->
-    updateSection(event)
+  @updateSection = (section) ->
+    updateSection(section)
+
+  @getStyle = (section) ->
+    getStyle(section)
 
   return
 ]
