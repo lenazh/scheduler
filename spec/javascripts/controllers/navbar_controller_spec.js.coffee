@@ -25,12 +25,14 @@ describe "navbarCtrl", ->
     items: () -> fakeItems,
     select: (item) -> null,
     deselect: (item) -> null
-  }
+    title: () -> "Selected course"
+  } 
 
   beforeEach ->  
     spyOn(factoryMock, 'items').and.callThrough()
     spyOn(factoryMock, 'select').and.callThrough()
     spyOn(factoryMock, 'deselect').and.callThrough()
+    spyOn(factoryMock, 'title').and.callThrough()
 
 
   beforeEach ->
@@ -46,6 +48,9 @@ describe "navbarCtrl", ->
     expect(factoryMock.items).toHaveBeenCalled()
     expect(navbar.items.length).toBeGreaterThan 0
     expect(navbar.items).toEqual fakeItems
+
+  it "should request a title from the factory while initializing", ->
+    expect(factoryMock.title).toHaveBeenCalled()
 
   it "should have a title", ->
     expect(navbar.title).toBeDefined()

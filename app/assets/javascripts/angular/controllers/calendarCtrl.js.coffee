@@ -128,6 +128,7 @@
       'duration_hours' : 2
     }
     addSectionToCells section
+    section
     
 
 # Initialize the calendar
