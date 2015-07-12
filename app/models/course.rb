@@ -3,6 +3,5 @@ class Course < ActiveRecord::Base
   has_many :sections, dependent: :destroy
   has_many :employments, dependent: :destroy
   has_many :gsis, through: :employments, class_name: 'User'
-
   validates :name, presence: true
 end

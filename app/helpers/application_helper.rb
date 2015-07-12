@@ -3,8 +3,7 @@ module ApplicationHelper
   def gon_variables
     {
       courses_api_path: courses_path,
-      sections_api_path: sections_path,
-      gsis_api_path: "none",
+      users_api_path: users_path,
 
       courses_view_path: courses_view_path,
       calendar_view_path: calendar_view_path,

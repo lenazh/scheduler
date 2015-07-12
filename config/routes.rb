@@ -25,8 +25,9 @@ Rails.application.routes.draw do
   get 'event_template.html' => 'calendar#event_template'
 
   scope "api" do
-    resources :courses, :except => [:new, :edit], :defaults => { :format => :json }
-    resources :sections, :except => [:new, :edit], :defaults => { :format => :json }
+    resources :courses, :except => [:new, :edit], :defaults => { :format => :json } do
+      resources :sections, :except => [:new, :edit], :defaults => { :format => :json }
+    end
     resources :users, :except => [:new, :edit], :defaults => { :format => :json }
   end
 

@@ -3,12 +3,12 @@
   
   buildParams = (section) ->
     {
-      'section[name]': section[name],
-      'section[start_hour]': section[start_hour],
-      'section[start_minute]': section[start_minute],
-      'section[duration_hours]': section[duration_hours],
-      'section[weekday]': section[weekday],
-      'section[room]': section[room]
+      'section[name]': section['name'],
+      'section[start_hour]': section['start_hour'],
+      'section[start_minute]': section['start_minute'],
+      'section[duration_hours]': section['duration_hours'],
+      'section[weekday]': section['weekday'],
+      'section[room]': section['room']
     }
 
   {
@@ -30,7 +30,7 @@
       section.$update(buildParams(section), -> callback section)
       
     remove: (section, callback) ->
-      section.$remove(callback)
+      section.$remove -> callback(section)
 
     all: (callback) -> 
       all = sectionResource.query -> callback(all)

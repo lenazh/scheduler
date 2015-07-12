@@ -94,10 +94,8 @@
       'start_minute': 0,
       'duration_hours' : 2
     }
-    Section.saveNew section, ->
-      # update the section ID here
-      section = processSection section
-      addSectionToCell hour, weekday, section
+    Section.saveNew section, (newSection) ->
+      addSectionToCells newSection
 
   getSections = (hour, weekday) ->
     cells[getKey(hour, weekday)]

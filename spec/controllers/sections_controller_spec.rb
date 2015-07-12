@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SectionsController do
     # name of the model for this RESTful resource
     let(:model_class) { Section }
+    let(:parent) { create(:course) }
 
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in

@@ -14,7 +14,7 @@ describe "Sections", ->
 
 # canned responses defined here
   allFakeResources = {}
-  created = {}
+  createdResource = {}
   callback = {}
 # Makes the call that returns all existing courses
   GetAllResources = ->
@@ -114,7 +114,7 @@ describe "Sections", ->
       id = resource['id']
       $httpBackend.expectDELETE("#{resourcePath}/#{id}")
         .respond(204, '')
-      Resource.remove resource
+      Resource.remove resource, callback
       $httpBackend.flush()
 
     it "sends a DELETE request to the correct route", ->
@@ -125,7 +125,7 @@ describe "Sections", ->
 
   describe "saveNew(resource)", ->
     saveNewResource = (resource) ->
-      $httpBackend.expectPOST(resourcePath).respond(201, created)
+      $httpBackend.expectPOST(resourcePath).respond(201, createdResource)
       Resource.saveNew resource, callback
       $httpBackend.flush()
 

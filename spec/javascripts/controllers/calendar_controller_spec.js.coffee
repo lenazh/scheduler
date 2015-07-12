@@ -4,6 +4,7 @@ describe "calendarCtrl", ->
   calendar = {}
   factoryMock = {}
   fakeResults = {}
+  newSectionId = 213
 
   beforeEach ->
     fakeResults = [
@@ -85,9 +86,12 @@ describe "calendarCtrl", ->
         callback(fakeResults)
         fakeResults
       ,
-      saveNew: (section, callback) -> callback(),
-      update: (section, callback) -> callback(),
-      remove: (section, callback) -> callback()
+      saveNew: (section, callback) -> 
+        section['id'] = newSectionId
+        callback(section)
+      ,
+      update: (section, callback) -> callback(section),
+      remove: (section, callback) -> callback(section)
     }
 
     spyOn(factoryMock, 'all').and.callThrough()
@@ -344,20 +348,20 @@ describe "calendarCtrl", ->
   
   describe "$scope.newSection(hour, weekday)", ->
     beforeEach ->
-      $scope.newSection "14:00", "Monday"
+      $scope.newSection "14:00", "Monday, Wednesday"
 
     it 'calls the Section factory with correct parameters', ->
       expect(factoryMock.saveNew).toHaveBeenCalled()
 
     it "populates the cells corresponding to the hour and weekday", ->
-      expect($scope.getSections('14:00', 'Monday')[0]['name']).toMatch /New/
-      expect($scope.getSections('14:00', 'Wednesday')[0]['name']).toMatch /New/
+      expect($scope.getSections('14:00', 'Monday')[newSectionId]['name']).toMatch /New/
+      expect($scope.getSections('14:00', 'Wednesday')[newSectionId]['name']).toMatch /New/
 
     it "sets correct CSS attributes on the sections", ->
-      expect($scope.getSections('14:00', 'Monday')[0]['style']['top']).toEqual '0%'
-      expect($scope.getSections('14:00', 'Wednesday')[0]['style']['top']).toEqual '0%'
-      expect($scope.getSections('14:00', 'Monday')[0]['style']['height']).toEqual '200%'
-      expect($scope.getSections('14:00', 'Wednesday')[0]['style']['height']).toEqual '200%'
+      expect($scope.getSections('14:00', 'Monday')[newSectionId]['style']['top']).toEqual '0%'
+      expect($scope.getSections('14:00', 'Wednesday')[newSectionId]['style']['top']).toEqual '0%'
+      expect($scope.getSections('14:00', 'Monday')[newSectionId]['style']['height']).toEqual '200%'
+      expect($scope.getSections('14:00', 'Wednesday')[newSectionId]['style']['height']).toEqual '200%'
       
 
   describe "$scope.getSections(hour, weekday)", ->
