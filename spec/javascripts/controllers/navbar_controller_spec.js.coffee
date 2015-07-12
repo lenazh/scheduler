@@ -24,7 +24,7 @@ describe "navbarCtrl", ->
   factoryMock = {
     items: () -> fakeItems,
     select: (item) -> null,
-    deselect: (item) -> null
+    deselect: (item) -> null,
     title: () -> "Selected course"
   } 
 

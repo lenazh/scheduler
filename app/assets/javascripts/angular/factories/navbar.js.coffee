@@ -18,7 +18,26 @@
   ]
 
   selected = null
-  title = "8A Physics Berkeley Fall 2015"
+  defaultTitle = "(please select a course to edit the calendar)"
+
+  cookie_title = 'course_title'
+  cookie_id = 'course_id'
+  title = {}
+  title['title'] = $cookies.get cookie_title
+  title['title'] ||= defaultTitle
+  title['id'] = $cookies.get cookie_id
+
+  setCourse = (id, name) ->
+    $cookies.put cookie_title, name
+    $cookies.put cookie_id, id
+    title['title'] = name
+    title['id'] = $cookies.get cookie_id
+
+  resetCourse = () ->
+    $cookies.remove cookie_title
+    $cookies.remove cookie_id
+    title['title'] = defaultTitle
+    title['id'] = null
 
   deselect = (item) ->
     item.active = "" if item
@@ -43,5 +62,7 @@
     select: (item) -> select item
     deselect: (item) -> deselect item
     title: () -> title
+    setCourse: (id, name) -> setCourse id, name
+    resetCourse: () -> resetCourse()
   }
 ]
