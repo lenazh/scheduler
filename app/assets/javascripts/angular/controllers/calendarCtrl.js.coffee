@@ -69,7 +69,7 @@
 
   startHourValid = (section) ->
     start_hour = section['start_hour']
-    isWithin start_hour, 0, 23
+    isWithin start_hour, calendar_start_hour, calendar_end_hour 
     
   startMinuteValid = (section) ->
     start_minute = section['start_minute']
@@ -93,6 +93,7 @@
     newSection['weekdays'] = newSection['weekday'].split /[, ]+/
     newSection['style'] = getStyle newSection
     newSection['isValid'] = isSectionValid newSection
+    newSection['errors'] = {}
     newSection
 
   getSections = (hour, weekday) ->
@@ -106,15 +107,26 @@
     section['weekdays'] = section['weekday'].split /[, ]+/
     section['isValid'] = isSectionValid section
     return unless section['isValid']
-    Section.update section, ->
-      deleteSectionFromCells section
-      section = processSection section
-      addSectionToCells section
+    Section.update(
+      section
+      ->
+        deleteSectionFromCells section
+        section = processSection section
+        addSectionToCells section
+      (error) ->
+        section['errors'] = error.data
+    )
 
-  saveSection = (section) ->
-    Section.saveNew section, (newSection) ->
-      deleteGhostSections()
-      addSectionToCells newSection
+  saveSection = (section, successCallback) ->
+    Section.saveNew(
+      section
+      (newSection) ->
+        deleteGhostSections()
+        addSectionToCells newSection
+        successCallback()
+      (error) ->
+        section['errors'] = error.data
+    )
 
   newGhostSection = (hour, weekday) ->
     deleteGhostSections()
@@ -134,7 +146,9 @@
 # Initialize the calendar
   weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
   hours = []
-  hours.push hourKey(x) for x in [8..20]
+  calendar_start_hour = 8
+  calendar_end_hour = 20
+  hours.push hourKey(x) for x in [calendar_start_hour..calendar_end_hour]
   cells = makeCells()
   sectionIndex = []
   ghostSectionIndex = []
@@ -160,8 +174,8 @@
   $scope.newGhostSection = (hour, weekday) ->
     newGhostSection(hour, weekday)
 
-  @saveSection = (section) ->
-    saveSection(section)
+  @saveSection = (section, successCallback) ->
+    saveSection(section, successCallback)
 
   @deleteSection = (section) ->
     deleteSection(section)

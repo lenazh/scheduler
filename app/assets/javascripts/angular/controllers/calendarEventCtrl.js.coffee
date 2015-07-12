@@ -3,6 +3,7 @@
     $scope.sectionCalendar.updateSection($scope.event)
 
   $scope.toggleExpand = ($event) ->
+    return if $scope.isGhost
     $scope.showEditForm = !$scope.showEditForm
     update_event() unless $scope.showEditForm
     $event.stopPropagation()
@@ -15,8 +16,10 @@
     $event.stopPropagation()
 
   $scope.save = ($event) ->
-    $scope.sectionCalendar.saveSection($scope.event)
-    $scope.toggleExpand
+    $scope.sectionCalendar.saveSection(
+      $scope.event
+      -> $scope.showEditForm = !$scope.showEditForm
+    )
     $event.stopPropagation()
 
 # TODO - move this to filters

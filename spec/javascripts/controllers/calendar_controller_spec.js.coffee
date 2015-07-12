@@ -83,16 +83,18 @@ describe "calendarCtrl", ->
 
     factoryMock = {
       init: (course_id) ->
-      all: (callback) -> 
-        callback(fakeResults)
+      all: (successCallback) -> 
+        successCallback(fakeResults)
         fakeResults
       ,
-      saveNew: (section, callback) -> 
+      saveNew: (section, successCallback, errorCallback) -> 
         section['id'] = newSectionId
-        callback(section)
+        successCallback(section)
       ,
-      update: (section, callback) -> callback(section),
-      remove: (section, callback) -> callback(section)
+      update: (section, successCallback, errorCallback) -> 
+        successCallback(section)
+      ,
+      remove: (section, successCallback) -> successCallback(section)
     }
 
     spyOn(factoryMock, 'all').and.callThrough()
@@ -323,7 +325,11 @@ describe "calendarCtrl", ->
         it "duration_hours is greater than 10", ->
           section["duration_hours"] = "63"
 
+        it "start_hour is smaller than the first hour in the calendar", ->
+          section["start_hour"] = "4"
 
+        it "start_hour is greater than the last hour in the calendar", ->
+          section["start_hour"] = "21"
 
   describe "calendar.deleteSection", ->
     it 'calls the Section factory with correct parameters', ->
@@ -349,8 +355,14 @@ describe "calendarCtrl", ->
   describe "calendar.saveSection(section)", ->
     it 'calls the correct method on the Section factory', ->
       section = $scope.newGhostSection "14:00", "Monday, Wednesday"
-      calendar.saveSection(section)
+      calendar.saveSection(section, ->)
       expect(factoryMock.saveNew).toHaveBeenCalled()
+
+    it 'calls the provided success callback', ->
+      section = $scope.newGhostSection "14:00", "Monday, Wednesday"
+      spy = jasmine.createSpy('spy')
+      calendar.saveSection(section, spy)
+      expect(spy).toHaveBeenCalled()
 
   describe "$scope.newGhostSection(hour, weekday)", ->
     beforeEach ->

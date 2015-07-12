@@ -15,6 +15,7 @@ class Section < ActiveRecord::Base
   validates :start_hour, inclusion: { in: 0..23 }
   validates :start_minute, inclusion: { in: 0..59 }
   validate :duration_cant_be_longer_than_10hrs_or_negative
+  validate :weekdays_are_valid
 
   def duration_cant_be_longer_than_10hrs_or_negative
     if (duration_hours > 10) || (duration_hours < 0)
@@ -22,5 +23,18 @@ class Section < ActiveRecord::Base
     end
   end
 
+  def weekdays_are_valid
+    weekdays = weekday.split /[ ;,]+/
+    weekdays.each { |weekday| is_weekday_valid(weekday) }
+  end
+
+  private
+
+  def is_weekday_valid(weekday)
+    valid_weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    unless valid_weekdays.include? weekday
+      errors.add :weekday, "#{weekday} is not a valid weekday"
+    end
+  end
 
 end

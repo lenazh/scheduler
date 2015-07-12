@@ -22,17 +22,24 @@
           'post': headers: {'Content-Type': 'application/json'}
         }
 
-    saveNew: (section, callback) ->
+    saveNew: (section, success, error) ->
       newSection = new sectionResource buildParams(section)
-      newSection.$save -> callback(newSection)
+      newSection.$save(
+        -> success(newSection)
+        (e) -> error(e)
+      )
 
-    update: (section, callback) ->
-      section.$update(buildParams(section), -> callback section)
+    update: (section, success, error) ->
+      section.$update( 
+        buildParams(section) 
+        -> success section
+        (e) -> error(e)
+      )
       
-    remove: (section, callback) ->
-      section.$remove -> callback(section)
+    remove: (section, success) ->
+      section.$remove -> success(section)
 
-    all: (callback) -> 
-      all = sectionResource.query -> callback(all)
+    all: (success) -> 
+      all = sectionResource.query -> success(all)
   }
 ]

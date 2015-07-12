@@ -15,13 +15,14 @@ describe "Sections", ->
 # canned responses defined here
   allFakeResources = {}
   createdResource = {}
-  callback = {}
+  successCallback = {}
+  errorCallback = {}
 # Makes the call that returns all existing courses
   GetAllResources = ->
     $httpBackend.expectGET(resourcePath).respond(200, allFakeResources)
-    allResources = Resource.all(callback)
+    allResources = Resource.all(successCallback)
     $httpBackend.flush()
-    expect(callback).toHaveBeenCalled()
+    expect(successCallback).toHaveBeenCalled()
     allResources
 
   beforeEach ->
@@ -77,7 +78,8 @@ describe "Sections", ->
       "url":"#{resourceUrl}/4"
     }
 
-    callback = jasmine.createSpy('callback')
+    successCallback = jasmine.createSpy('successCallback')
+    errorCallback = jasmine.createSpy('errorCallback')
 
 # Function that checks if the Response object has the same
 # content as the original hash
@@ -100,39 +102,39 @@ describe "Sections", ->
 
 
 
-  describe "all(callback)", ->
-    it "returns the list of all resources and calls the callback", ->
+  describe "all(successCallback)", ->
+    it "returns the list of all resources and calls the successCallback", ->
       $httpBackend.expectGET(resourcePath).respond(200, allFakeResources)
-      resources = Resource.all(callback)
+      resources = Resource.all(successCallback)
       $httpBackend.flush()
-      expect(callback).toHaveBeenCalled()
+      expect(successCallback).toHaveBeenCalled()
       for resource, id in resources
         expectToMatch resource, allFakeResources[id]
 
-  describe "remove(resource, callback)", ->
+  describe "remove(resource, successCallback)", ->
     removeCourse = (resource) ->
       id = resource['id']
       $httpBackend.expectDELETE("#{resourcePath}/#{id}")
         .respond(204, '')
-      Resource.remove resource, callback
+      Resource.remove resource, successCallback
       $httpBackend.flush()
 
     it "sends a DELETE request to the correct route", ->
       resources = GetAllResources()
-      removeCourse resources[2], callback
-      expect(callback).toHaveBeenCalled()
+      removeCourse resources[2], successCallback
+      expect(successCallback).toHaveBeenCalled()
 
 
   describe "saveNew(resource)", ->
     saveNewResource = (resource) ->
       $httpBackend.expectPOST(resourcePath).respond(201, createdResource)
-      Resource.saveNew resource, callback
+      Resource.saveNew resource, successCallback
       $httpBackend.flush()
 
     it "sends a POST request to the correct route", ->
       courses = GetAllResources()
       saveNewResource createdResource
-      expect(callback).toHaveBeenCalled()
+      expect(successCallback).toHaveBeenCalled()
 
 
   describe "update(resource)", ->
@@ -142,13 +144,13 @@ describe "Sections", ->
       updatedResource = angular.copy(allFakeResources[id-1])
       updatedResource['name'] = newName
       $httpBackend.expectPUT().respond(200, updatedResource)
-      Resource.update resource, callback
+      Resource.update resource, successCallback
       $httpBackend.flush()
 
     it "sends a PUT request to the correct route", ->
       resources = GetAllResources()
       updateResource resources[2], newName
-      expect(callback).toHaveBeenCalled()
+      expect(successCallback).toHaveBeenCalled()
 
 
 

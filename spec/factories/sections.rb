@@ -5,7 +5,7 @@ FactoryGirl.define do
     start_minute 0
     duration_hours 2
     gsi_id 0
-    weekday 5
+    weekday "Wednesday"
     room "115 LeConte"
     lecture "1"
     factory :invalid_section do
