@@ -1,5 +1,5 @@
+# Set gon variables for JavaScript for every controller
 module ApplicationHelper
-
   def gon_variables
     {
       courses_api_path: courses_path,
@@ -18,5 +18,4 @@ module ApplicationHelper
   def set_gon_variables
     gon.push gon_variables
   end
-
 end

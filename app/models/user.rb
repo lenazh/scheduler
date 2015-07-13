@@ -1,3 +1,4 @@
+# User represents a GSI or a Head GSI
 class User < ActiveRecord::Base
   has_many :courses, dependent: :nullify
   has_many :employments, dependent: :destroy
@@ -7,5 +8,5 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true
-  validates :email, format: {with: /[\w\.%+-]+@[\w\.-]+\.[\w\D]{2,4}/}
+  validates :email, format: { with: /[\w\.%+-]+@[\w\.-]+\.[\w\D]{2,4}/ }
 end

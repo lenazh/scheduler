@@ -4,5 +4,4 @@ FactoryGirl.define do
     section_id 0
     preference 0.5
   end
-
 end
