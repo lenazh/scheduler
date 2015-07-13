@@ -4,5 +4,4 @@ FactoryGirl.define do
     course_id 0
     hours_per_week 20
   end
-
 end

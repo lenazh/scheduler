@@ -1,3 +1,6 @@
+# Tests that the JSON responses (show and index views)
+# contain all the fields they are supposed to, and the
+# data in these fields matches the expected values
 module JsonFormatHelper
   def attributes_match(result)
     if result.kind_of?(Array)
@@ -7,9 +10,15 @@ module JsonFormatHelper
     end
   end
 
-private
-  def is_float(var); true if Float(var) rescue false; end
-  def is_integer(var); true if Integer(var) rescue false; end
+  private
+
+  def float?(var)
+    true if Float(var) rescue false
+  end
+
+  def integer?(var)
+    true if Integer(var) rescue false
+  end
 
   def match_as_floats(actual, expected)
     expected_float = expected.to_f
@@ -24,14 +33,13 @@ private
   end
 
   def expect_to_match(actual, expected)
-    if is_integer(expected)
+    if integer?(expected)
       match_as_integers(actual, expected)
-    elsif is_float(expected)
+    elsif float?(expected)
       match_as_floats(actual, expected)
     else
-      expect(expected).to eq actual  
+      expect(expected).to eq actual
     end
-
   end
 
   def match_array(result)

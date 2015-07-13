@@ -1,0 +1,7 @@
+FileName:
+  Description: 'Use snake_case for source file names.'
+  Enabled: false
+
+Eval:
+  Description: 'The use of eval represents a serious security risk.'
+  Enabled: false

@@ -1,22 +1,22 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe MainController do
-  describe "routing" do
+  describe 'routing' do
 
-    it "routes to #index" do
-      get("/").should route_to("main#index")
+    it 'routes to #index' do
+      get('/').should route_to('main#index')
     end
 
-    it "routes to #gsi" do
-      get("/gsi").should route_to("main#gsi")
+    it 'routes to #gsi' do
+      get('/gsi').should route_to('main#gsi')
     end
 
-    it "routes to #preferences" do
-      get("/preferences").should route_to("main#preferences")
+    it 'routes to #preferences' do
+      get('/preferences').should route_to('main#preferences')
     end
 
-    it "routes to #calendar" do
-      get("/calendar").should route_to("main#calendar")
+    it 'routes to #calendar' do
+      get('/calendar').should route_to('main#calendar')
     end
 
   end
