@@ -4,3 +4,4 @@
 
 # 8A Physics GSI scheduling project
 
+Heroku deployment: http://stormy-tor-2654.herokuapp.com/
