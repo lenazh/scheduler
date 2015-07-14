@@ -3,10 +3,10 @@
   cookie_id = 'course_id'
   defaultTitle = "(please select a course to edit the calendar)"
 
-  title = {}
-  title['title'] = $cookies.get cookie_title
-  title['title'] ||= defaultTitle
-  title['id'] = $cookies.get cookie_id
+  course = {}
+  course['title'] = $cookies.get cookie_title
+  course['title'] ||= defaultTitle
+  course['id'] = $cookies.get cookie_id
 
   selected = null
 
@@ -15,20 +15,35 @@
     {
       title: "My Classes",
       active: "",
-      href: "#courses",
-      isCalendar: false
+      href: () ->
+        "#courses"
+      selectable: () -> true
     },
     {
       title: "GSIs",
       active: "",
-      href: "#gsi",
-      isCalendar: false
+      href: () ->
+        return "" unless course['id']
+        "#courses/#{course['id']}/gsi"
+      # it doesn't work with a tetrary operator
+      selectable: () ->
+        if course['id']
+          return true
+        else
+          return false
     },
     {
       title: "Section calendar",
       active: "",
-      href: "#calendar/",
-      isCalendar: true
+      href: () ->
+        return "" unless course['id']
+        "#calendar/#{course['id']}"
+      # it doesn't work with a tetrary operator
+      selectable: () ->
+        if course['id']
+          return true
+        else
+          return false
     }
   ]
 
@@ -36,19 +51,20 @@
   setCourse = (id, name) ->
     $cookies.put cookie_title, name
     $cookies.put cookie_id, id
-    title['title'] = name
-    title['id'] = $cookies.get cookie_id
+    course['title'] = name
+    course['id'] = $cookies.get cookie_id
 
   resetCourse = () ->
     $cookies.remove cookie_title
     $cookies.remove cookie_id
-    title['title'] = defaultTitle
-    title['id'] = null
+    course['title'] = defaultTitle
+    course['id'] = null
 
   deselect = (item) ->
     item.active = "" if item
 
   select = (item) ->
+    return unless item.selectable()
     item.active = "active"
     deselect selected 
     selected = item
@@ -56,7 +72,7 @@
   selectCurrentItem = ->
     location = $location.path().substring(1)
     for item in items
-      if item.href.substring(1) == location
+      if item.href().substring(1) == location
         select item
         return
 
@@ -67,7 +83,7 @@
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item
-    title: () -> title
+    course: () -> course
     setCourse: (id, name) -> setCourse id, name
     resetCourse: () -> resetCourse()
   }

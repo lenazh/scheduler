@@ -1,6 +1,6 @@
 @schedulerModule.controller 'navbarCtrl',  [ 'Navbar', (Navbar) ->
 
-  @title = Navbar.title()
+  @course = Navbar.course()
 
   @items = Navbar.items()
 

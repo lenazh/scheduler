@@ -7,17 +7,17 @@ describe "navbarCtrl", ->
     {
       title: "Menu Item 1",
       active: '',
-      href: "#item1"
+      href: () -> "#item1"
     },
     {
       title: "Menu Item 2",
       active: '',
-      href: "#item2"
+      href: () -> "#item2"
     }
     {
       title: "Menu Item 3",
       active: '',
-      href: "#item3"
+      href: () -> "#item3"
     }
   ]
 
@@ -25,14 +25,17 @@ describe "navbarCtrl", ->
     items: () -> fakeItems,
     select: (item) -> null,
     deselect: (item) -> null,
-    title: () -> "Selected course"
+    course: () -> {
+      'title': "Selected course",
+      'id': 1
+    }
   } 
 
   beforeEach ->  
     spyOn(factoryMock, 'items').and.callThrough()
     spyOn(factoryMock, 'select').and.callThrough()
     spyOn(factoryMock, 'deselect').and.callThrough()
-    spyOn(factoryMock, 'title').and.callThrough()
+    spyOn(factoryMock, 'course').and.callThrough()
 
 
   beforeEach ->
@@ -50,10 +53,11 @@ describe "navbarCtrl", ->
     expect(navbar.items).toEqual fakeItems
 
   it "should request a title from the factory while initializing", ->
-    expect(factoryMock.title).toHaveBeenCalled()
+    expect(factoryMock.course).toHaveBeenCalled()
 
-  it "should have a title", ->
-    expect(navbar.title).toBeDefined()
+  it "should have a course that it receives from the factory", ->
+    expect(navbar.course).toBeDefined()
+    expect(navbar.course).toEqual factoryMock.course()
 
   it "should have a select method that routes to Navbar factory", ->
     expect(navbar.select).toBeDefined()

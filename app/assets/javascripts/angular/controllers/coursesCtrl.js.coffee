@@ -6,15 +6,14 @@
   @hideAddButton = false
   @hideUpdateButton = true
   @disableEditingAndDeletion = false
-  navbarTitle = Navbar.title()
+  navbarCourse = Navbar.course()
 
 
   name_is_valid = () ->
     $scope.form.courseName.$valid
 
   isDisplayedOnNavbar = (course) ->
-    navbarTitle['id'] == course['id'].toString()
-
+    navbarCourse['id'] == course['id'].toString()
 
   @remove = (course) -> 
     Course.remove course

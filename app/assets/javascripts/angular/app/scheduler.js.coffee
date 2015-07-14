@@ -24,7 +24,7 @@
       controllerAs: 'crs' 
     }
 
-  $routeProvider.when "/gsi", {
+  $routeProvider.when "/courses/:course_id/gsi", {
       templateUrl: gon.gsi_view_path,
       controller: 'gsiCtrl',
       controllerAs: 'gsi' 

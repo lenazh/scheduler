@@ -6,8 +6,8 @@ nav[class="navbar navbar-default" ng-controller="navbarCtrl as navbar"]
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand ng-bind="navbar.title['title']"
+      a.navbar-brand ng-bind="navbar.course['title']"
     div#navbar class="navbar-collapse collapse"
       ul class="nav navbar-nav" ng-repeat="item in navbar.items"
         li[ng-class="item.active"]
-          a ng-href="{{item.href + (item.isCalendar ? navbar.title['id'] : '')}}" ng-click="navbar.select(item)" {{ item.title }}
+          a ng-href="{{item.href()}}" ng-click="navbar.select(item)" {{ item.title }}
