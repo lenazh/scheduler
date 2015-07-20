@@ -8,7 +8,7 @@ shared_examples 'a JSON show view:' do
   let(:mock_attributes) { attributes_for model_symbol }
 
   before(:each) do
-    assign(model_symbol, stub_model(model_class, mock_attributes))
+    assign(variable_to_assign, stub_model(model_class, mock_attributes))
   end
 
   it 'renders attributes' do
