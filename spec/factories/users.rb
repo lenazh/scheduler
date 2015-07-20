@@ -3,17 +3,18 @@ FactoryGirl.define do
     name 'Darth Vader'
     email 'vader@gmail.com'
 
-    factory :updated_valid_user do
+    factory :updated_valid_user, class: User do
       email 'vader@deathstar.mil'
     end
+  end
 
-    factory :invalid_user do
-      email ' '
-    end
+  factory :invalid_user, class: User do
+    name 'Twinky'
+    email ' '
+  end
 
-    factory :another_user do
-      name 'Sponge Bob Square Pants'
-      email 'sbsp@nickelodeon.com'
-    end
+  factory :another_user, class: User do
+    name 'Sponge Bob Square Pants'
+    email 'sbsp@nickelodeon.com'
   end
 end
