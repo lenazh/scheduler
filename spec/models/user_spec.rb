@@ -24,6 +24,14 @@ describe User do
       it { should_not be_valid }
     end
 
+    describe 'email is taken' do
+      before(:each) do
+        FactoryGirl.create(:user, email: 'cat@gmail.com')
+      end
+      subject { build(:user, email: 'cat@gmail.com') }
+      it { should_not be_valid }
+    end
+
     describe 'email has invalid format' do
       subject { build(:user, email: 'ghavcn') }
       it { should_not be_valid }

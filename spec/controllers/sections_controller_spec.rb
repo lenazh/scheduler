@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SectionsController do
   # name of the model for this RESTful resource
   let(:factory) { :section }
-  let(:url_params) { { course_id: "course.id"} }
+  let(:url_params) { { course_id: 'course.id' } }
   let(:url_params_factory) { { course_id: :course } }
 
   # This should return the minimal set of values that should be in

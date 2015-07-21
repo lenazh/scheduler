@@ -8,5 +8,8 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
   validates :email, presence: true
+  validates :email, uniqueness: true
   validates :email, format: { with: /[\w\.%+-]+@[\w\.-]+\.[\w\D]{2,4}/ }
+
+  attr_accessor :hours_per_week
 end

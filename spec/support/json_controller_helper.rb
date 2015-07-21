@@ -104,7 +104,8 @@ shared_examples 'a JSON resource controller:' do
         model.class.any_instance.should_receive(:update)
           .with(updated_valid_attributes.stringify_keys)
         put :update,
-            request_params(model, 
+            request_params(
+              model,
               id: model.to_param,
               assigned_variable => updated_valid_attributes),
             valid_session
@@ -112,7 +113,8 @@ shared_examples 'a JSON resource controller:' do
 
       it 'assigns the requested model as @model' do
         put :update,
-            request_params(model, 
+            request_params(
+              model,
               id: model.to_param,
               assigned_variable => valid_attributes),
             valid_session
@@ -121,7 +123,8 @@ shared_examples 'a JSON resource controller:' do
 
       it 'returns success code' do
         put :update,
-            request_params(model, 
+            request_params(
+              model,
               id: model.to_param,
               assigned_variable => valid_attributes),
             valid_session
@@ -134,7 +137,8 @@ shared_examples 'a JSON resource controller:' do
         # Trigger the behavior that occurs when invalid params are submitted
         model.class.any_instance.stub(:save).and_return(false)
         put :update,
-            request_params(model, 
+            request_params(
+              model,
               id: model.to_param,
               assigned_variable => updated_invalid_attributes),
             valid_session
@@ -158,9 +162,13 @@ shared_examples 'a JSON resource controller:' do
   describe 'DELETE destroy' do
     it 'destroys the requested model' do
       # force the let() execution outside of expect block
-      model_in_db = model
+      model
       expect do
-        delete :destroy, request_params(model, id: model.to_param), valid_session
+        delete :destroy,
+               request_params(
+                model,
+                id: model.to_param),
+               valid_session
       end.to change(model.class, :count).by(-1)
     end
 
@@ -185,11 +193,23 @@ private
     return hash unless need_url_params?
 
     if model
-      url_params.each { |param, accessor| hash[param] = eval("model.#{accessor}") }
+      populate_based_on_model(model, hash)
     else
-      url_params_factory.each { |param, factory| hash[param] = FactoryGirl.create(factory) }
+      populate_based_on_factory(hash)
     end
+  end
 
+  def populate_based_on_model(model, hash = {})
+    url_params.each do |param, accessor|
+      hash[param] = eval("model.#{accessor}")
+    end
+    hash
+  end
+
+  def populate_based_on_factory(hash = {})
+    url_params_factory.each do |param, factory|
+      hash[param] = FactoryGirl.create(factory)
+    end
     hash
   end
 end
