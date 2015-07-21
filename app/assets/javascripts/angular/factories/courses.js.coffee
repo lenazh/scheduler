@@ -29,12 +29,17 @@
     update: (course, name) ->
       id = all.indexOf course    
       return if id == -1
-      courseResource.update({'course[name]': name}, course)
-      update_list(id, name)
+      courseResource.update(
+        {'course[name]': name},
+        course,
+        -> update_list(id, name)
+      )
         
     remove: (course) ->
-      courseResource.remove({id: course.id})
-      remove_from_list(course)
+      courseResource.remove(
+        {id: course.id},
+        -> remove_from_list(course)
+      )
 
     all: () -> all
   }

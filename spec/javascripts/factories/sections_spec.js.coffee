@@ -9,8 +9,8 @@ describe "Sections", ->
   resourceUrl = "#{hostPath}#{resourcePath}"
 
 # stub out gon
-  window.gon = {}
-  gon.courses_api_path = coursesPath
+  gon = {}
+
 
 # canned responses defined here
   allFakeResources = {}
@@ -80,6 +80,10 @@ describe "Sections", ->
 
     successCallback = jasmine.createSpy('successCallback')
     errorCallback = jasmine.createSpy('errorCallback')
+
+    gon = {}
+    gon.courses_api_path = coursesPath
+    window.gon = gon
 
 # Function that checks if the Response object has the same
 # content as the original hash
