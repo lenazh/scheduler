@@ -10,6 +10,17 @@
 
   selected = null
 
+  isCourseSelected = ->
+    if course['id']
+      return true
+    else
+      return false
+
+  ifCourseSelected = (href) ->
+    if isCourseSelected()
+      return href
+    else
+      return ""
 
   items = [
     {
@@ -22,28 +33,14 @@
     {
       title: "GSIs",
       active: "",
-      href: () ->
-        return "" unless course['id']
-        "#courses/#{course['id']}/gsi"
-      # it doesn't work with a tetrary operator
-      selectable: () ->
-        if course['id']
-          return true
-        else
-          return false
+      href: () -> ifCourseSelected "#courses/#{course['id']}/gsi"
+      selectable: () -> isCourseSelected()
     },
     {
       title: "Section calendar",
       active: "",
-      href: () ->
-        return "" unless course['id']
-        "#calendar/#{course['id']}"
-      # it doesn't work with a tetrary operator
-      selectable: () ->
-        if course['id']
-          return true
-        else
-          return false
+      href: () -> ifCourseSelected "#calendar/#{course['id']}"
+      selectable: () -> isCourseSelected()
     }
   ]
 
