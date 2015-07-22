@@ -23,8 +23,13 @@ FactoryGirl.define do
   end
 
   factory :gsi, class: User do
-    name 'Barney The Dinosaur'
     email
+
+    after(:build) do |user|
+      # name is assigned here because it's unpermitted parameter
+      # for gsi controller
+      user.name = 'Barney The Dinosaur'
+    end
 
     after(:create) do |user|
       course = create(:course)
