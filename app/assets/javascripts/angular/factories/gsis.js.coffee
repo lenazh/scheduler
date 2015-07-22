@@ -17,7 +17,6 @@
 
   buildParams = (params) ->
     {
-      'gsi[name]': params['name'],
       'gsi[email]': params['email'],
       'gsi[hours_per_week]': params['hours_per_week']
     }

@@ -1,5 +1,7 @@
-@schedulerModule.controller 'gsiCtrl',  ['$scope', 'Gsi', ($scope, Gsi) ->
+@schedulerModule.controller 'gsiCtrl', ['$scope', '$routeParams', 'Gsi', ($scope, $routeParams, Gsi) ->
 
+  course_id = $routeParams['course_id']
+  Gsi.init(course_id)
   @gsis = Gsi.all()
   @email = ''
   @hoursPerWeek = ''
@@ -18,17 +20,19 @@
   @saveNew = () ->
     return unless form_is_valid
     Gsi.saveNew {
-        'name': '-', 
         'email': @email,
         'hours_per_week': @hoursPerWeek
       }
-    @email = ""
+    @email = ''
 
   @update = () ->
     return unless form_is_valid
     gsi = @gsiToUpdate
-    name = @email
-    Gsi.update gsi, name
+    params = {
+      'email': @email
+      'hours_per_week': @hoursPerWeek
+    }
+    Gsi.update gsi, params
     @addForm()
 
   @editForm = (gsi) ->
@@ -36,17 +40,14 @@
     @hideUpdateButton = false
     @disableEditingAndDeletion = true
     @gsiToUpdate = gsi
-    @email = gsi.name
-
-
+    @email = gsi.email
+    @hoursPerWeek = gsi.hours_per_week
 
   @addForm = () ->
     @hideAddButton = false
     @hideUpdateButton = true
     @disableEditingAndDeletion = false
-    @email = ""
-
-
+    @email = ''
 
 
 # The controller will not work w/o this 

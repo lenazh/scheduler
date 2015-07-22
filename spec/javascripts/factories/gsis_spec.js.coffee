@@ -56,7 +56,7 @@ describe "Gsi", ->
     gon = {}
     gon.courses_api_path = coursesPath
     window.gon = gon
-    fields = ['id', 'name', 'email', 'hours_per_week']
+    fields = ['id', 'email', 'hours_per_week']
 
 # Function that checks if the Response object has the same
 # content as the original hash
@@ -131,7 +131,6 @@ describe "Gsi", ->
   describe "update(resource, params)", ->
     beforeEach ->
       params = {
-        'name': 'GlaDOS',
         'email': 'root@aperture-science.com',
         'hours_per_week': 168
       }
