@@ -28,16 +28,16 @@ div.row
         
 
       tr
-        td colspan="3" 
-          input.form-control[type="text" placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.email" name="email"]
+        td
+        td
+          input.form-control[placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.email" name="email"]
 
-          input.form-control[type="text" placeholder="Hours per week..." required type="number" ng-trim="true" ng-model="gsiCtrl.hoursPerWeek" name="hours_per_week"]
+        td
+          input.form-control[placeholder="Hours per week..." required type="number" ng-trim="true" ng-model="gsiCtrl.hoursPerWeek" name="hours_per_week"]
 
           button[class="btn btn-defauls" ng-click="gsiCtrl.addForm()" ng-hide="gsiCtrl.hideUpdateButton"] Cancel
 
         td class="text-right" colspan="2"          
-          button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="form.email.$invalid || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
+          button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="!gsiCtrl.form_is_valid() || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
 
-          button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="form.email.$invalid" ng-hide="gsiCtrl.hideUpdateButton"] Update
-
-          
+          button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="!gsiCtrl.form_is_valid()" ng-hide="gsiCtrl.hideUpdateButton"] Update

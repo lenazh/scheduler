@@ -17,7 +17,7 @@
 
   buildParams = (params) ->
     {
-      'gsi[email]': params['email'],
+      'email': params['email'],
       'gsi[hours_per_week]': params['hours_per_week']
     }
 
@@ -35,8 +35,9 @@
 
     saveNew: (params) ->
       newGsi = new resource(buildParams(params))
-      newGsi.$save()
-      append_to_list(newGsi)
+      newGsi.$save(
+        -> append_to_list(newGsi)
+      )
 
     update: (gsi, params) ->
       id = all.indexOf gsi    

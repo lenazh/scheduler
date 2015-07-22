@@ -4,10 +4,8 @@
 class GsisController < ApplicationController
   respond_to :json
   before_filter :assign_model
-  before_filter :create, only: [:create]
-  after_filter :update_nested, only: [:update]
-  after_filter :assign_nested_index, only: [:index]
-  after_filter :assign_nested_show, only: [:show]
+
+  include JsonControllerHelper
 
 # retreives the parent model and the association from the DB
   def assign_model
@@ -16,22 +14,28 @@ class GsisController < ApplicationController
   end
 
 # make the nested attributes available to the index view
-  def assign_nested_index
+  def index
+    super
     @gsis.each do |gsi|
       gsi.hours_per_week = hours_per_week(gsi)
     end
   end
 
 # make the nested attributes available to the show view
-  def assign_nested_show
+  def show
+    super
     @gsi.hours_per_week = hours_per_week(@gsi)
   end
 
 # update the nested attributes
-  def update_nested
-    return unless @gsi.valid?
-    return unless employment(@gsi)
-    update_employment if new_hours_per_week_assigned
+  def update
+    super
+    return unless new_hours_per_week_assigned
+    if employment(@gsi)
+      update_employment
+    else
+      hire_gsi(params[:gsi][:hours_per_week])
+    end
   end
 
 # create the model if such user does not exist
@@ -53,8 +57,6 @@ class GsisController < ApplicationController
     [:email]
   end
 
-  include JsonControllerHelper
-
   private
 
 # returns Employment join model of @gsi and @course
@@ -72,6 +74,7 @@ class GsisController < ApplicationController
 
 # Returns current hours per week the gsi works
   def hours_per_week(gsi)
+    employment(gsi).hours_per_week
     hours = employment(gsi) ? employment(gsi).hours_per_week : 0
     hours ||= 0
   end
@@ -83,6 +86,7 @@ class GsisController < ApplicationController
 
 # Creates the employment for the new or existing @gsi
   def hire_gsi(hours_per_week)
+    hours_per_week ||= 0
     @course.gsis << @gsi
     employment(@gsi).hours_per_week = hours_per_week || 0
     employment(@gsi).save!

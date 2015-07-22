@@ -35,6 +35,9 @@ FactoryGirl.define do
       course = create(:course)
       user.courses_to_teach << course
       user.sections << create(:section, course: course)
+      employment = user.employments.first
+      employment.hours_per_week = 20
+      employment.save!
     end
 
     factory :updated_valid_gsi, class: User do

@@ -10,7 +10,7 @@
   @hideUpdateButton = true
   @disableEditingAndDeletion = false
 
-  form_is_valid = () ->
+  @form_is_valid = () ->
     form = $scope.form
     form.email.$valid && form.hours_per_week.$valid
 
@@ -18,7 +18,7 @@
     Gsi.remove gsi
 
   @saveNew = () ->
-    return unless form_is_valid
+    return unless @form_is_valid
     Gsi.saveNew {
         'email': @email,
         'hours_per_week': @hoursPerWeek
@@ -26,7 +26,7 @@
     @email = ''
 
   @update = () ->
-    return unless form_is_valid
+    return unless @form_is_valid
     gsi = @gsiToUpdate
     params = {
       'email': @email
