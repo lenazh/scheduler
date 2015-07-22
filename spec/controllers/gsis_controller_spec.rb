@@ -24,11 +24,11 @@ describe GsisController do
   let(:gsi) { create(:user) }
 
   describe 'GET show' do
-    it 'sets @gsi.hours_per_week variable' do
+    it 'sets @hours_per_week variable' do
       get :show,
           { id: gsi.id, course_id: course.id, format: :json },
           valid_session
-      expect(assigns(:gsi).hours_per_week).to eq hours_per_week
+      expect(assigns(:hours_per_week)).to eq hours_per_week
     end
   end
 
@@ -49,6 +49,17 @@ describe GsisController do
           valid_session
       gsi_db = User.find(gsi.id)
       expect(gsi_db.employments.first.hours_per_week).to eq 77
+    end
+
+    it 'sets @hours_per_week variable if parameter is present' do
+      put :update,
+          { id: gsi.id,
+            course_id: course.id,
+            gsi: { hours_per_week: 77 },
+            format: :json },
+          valid_session
+      gsi_db = User.find(gsi.id)
+      expect(assigns(:hours_per_week)).to eq 77
     end
 
     it "doesn't reset hours_per_week if the parameter is missing" do

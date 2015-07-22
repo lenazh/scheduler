@@ -107,8 +107,6 @@ class GsisController < ApplicationController
 
 # sanitizes new hours per week
   def new_hours_per_week
-    puts "params[:gsi][:hours_per_week] = #{params[:gsi][:hours_per_week]}"
-    puts "params[:gsi][:hours_per_week].to_i = #{params[:gsi][:hours_per_week].to_i}"
     params[:gsi][:hours_per_week].to_i || 0 
   end
 end

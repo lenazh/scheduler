@@ -8,8 +8,8 @@ describe 'gsis/show' do
 
   it 'has hours_per_week assigned' do
     gsi = create(:gsi)
-    gsi.hours_per_week = 42
     assign(:gsi, gsi)
+    assign(:hours_per_week, 42)
     render
     result = JSON.parse rendered
     expect(result['hours_per_week']).to eq 42
