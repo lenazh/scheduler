@@ -31,8 +31,7 @@ class GsisController < ApplicationController
   def update_nested
     return unless @gsi.valid?
     return unless employment(@gsi)
-    return unless params[:gsi][:hours_per_week]
-    employment(@gsi).hours_per_week = params[:gsi][:hours_per_week]
+    employment(@gsi).hours_per_week = assigned_hours_per_week
     employment(@gsi).save!
   end
 
@@ -44,6 +43,7 @@ class GsisController < ApplicationController
 
     if @gsi.persisted?
       @course.gsis << @gsi
+      update_nested
       render :show, status: :created, location: @gsi
     else
       render json: @gsi.errors, status: :unprocessable_entity
@@ -66,11 +66,23 @@ class GsisController < ApplicationController
     nil
   end
 
+# Returns current hours per week the gsi works
   def hours_per_week(gsi)
-    employment(gsi) ? employment(gsi).hours_per_week : 0
+    hours = employment(gsi) ? employment(gsi).hours_per_week : 0
+    hours ||= 0
   end
 
+# Returns the permitted assign parameters on gsi model
   def gsi_params
     params.require(:gsi).permit(*permitted_parameters)
+  end
+
+# Returns how many hours per week we want to set for this gsi
+  def assigned_hours_per_week
+    if defined?(params[:gsi][:hours_per_week]) != nil
+      params[:gsi][:hours_per_week]
+    else
+      0
+    end
   end
 end

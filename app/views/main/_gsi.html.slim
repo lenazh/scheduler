@@ -1,1 +1,43 @@
-div this.content: {{ gsi.content }}
+div.page-header
+  h1 GSI roaster
+
+div.row  
+  form.form-inline[name="form" novalidate]  
+    table[class="table table-striped"]
+      thead 
+      tr
+        th Name
+        th Email
+        th Hours/week
+        th
+        th
+        th
+      tr ng-repeat="gsi in gsiCtrl.gsis"
+        td ng-bind="gsi.name" 
+        td ng-bind="gsi.email"
+        td ng-bind="gsi.hours_per_week"
+
+        td.text-right 
+          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] Edit
+
+        td.text-right 
+          button[class="btn btn-default" ng-click="gsiCtrl.invite(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] Re-send invitation
+
+        td.text-right 
+          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] X
+        
+
+      tr
+        td colspan="3" 
+          input.form-control[type="text" placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.email" name="email"]
+
+          input.form-control[type="text" placeholder="Hours per week..." required type="number" ng-trim="true" ng-model="gsiCtrl.hoursPerWeek" name="hours_per_week"]
+
+          button[class="btn btn-defauls" ng-click="gsiCtrl.addForm()" ng-hide="gsiCtrl.hideUpdateButton"] Cancel
+
+        td class="text-right" colspan="2"          
+          button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="form.email.$invalid || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
+
+          button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="form.email.$invalid" ng-hide="gsiCtrl.hideUpdateButton"] Update
+
+          
