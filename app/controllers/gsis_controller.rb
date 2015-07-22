@@ -24,17 +24,18 @@ class GsisController < ApplicationController
 # make the nested attributes available to the show view
   def show
     super
-    @gsi.hours_per_week = hours_per_week(@gsi)
+    @hours_per_week = hours_per_week(@gsi)
   end
 
 # update the nested attributes
   def update
+    @hours_per_week = new_hours_per_week if new_hours_per_week_assigned
     super
     return unless new_hours_per_week_assigned
     if employment(@gsi)
       update_employment
     else
-      hire_gsi(params[:gsi][:hours_per_week])
+      hire_gsi(new_hours_per_week)
     end
   end
 
@@ -46,7 +47,8 @@ class GsisController < ApplicationController
     end
 
     if @gsi.persisted?
-      hire_gsi(params[:gsi][:hours_per_week])
+      hire_gsi(new_hours_per_week)
+      @hours_per_week = new_hours_per_week
       render :show, status: :created, location: @gsi
     else
       render json: @gsi.errors, status: :unprocessable_entity
@@ -99,7 +101,14 @@ class GsisController < ApplicationController
 
 #updates how many hours per week the @gsi works
   def update_employment
-    employment(@gsi).hours_per_week = params[:gsi][:hours_per_week]
+    employment(@gsi).hours_per_week = new_hours_per_week
     employment(@gsi).save!
+  end
+
+# sanitizes new hours per week
+  def new_hours_per_week
+    puts "params[:gsi][:hours_per_week] = #{params[:gsi][:hours_per_week]}"
+    puts "params[:gsi][:hours_per_week].to_i = #{params[:gsi][:hours_per_week].to_i}"
+    params[:gsi][:hours_per_week].to_i || 0 
   end
 end

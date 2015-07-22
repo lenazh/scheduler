@@ -11,15 +11,7 @@
     all.push gsi
 
   update_list = (id, gsi) ->
-    fields = ['name', 'email', 'hours_per_week']
-    for field in fields
-      all[id][field] = gsi[field]
-
-  buildParams = (params) ->
-    {
-      'email': params['email'],
-      'gsi[hours_per_week]': params['hours_per_week']
-    }
+    all[id] = gsi
 
 # expose the interface
   {
@@ -34,7 +26,10 @@
         }
 
     saveNew: (params) ->
-      newGsi = new resource(buildParams(params))
+      newGsi = new resource(
+        'email': params['email'],
+        'hours_per_week': params['hours_per_week']
+      )
       newGsi.$save(
         -> append_to_list(newGsi)
       )
@@ -43,9 +38,12 @@
       id = all.indexOf gsi    
       return if id == -1
       resource.update(
-        buildParams(params),
+        {
+          'gsi[email]': params['email'],
+          'gsi[hours_per_week]': params['hours_per_week']
+        },
         gsi,
-        -> update_list(id, params)
+        (updated) -> update_list(id, updated)
       )
         
     remove: (gsi) ->

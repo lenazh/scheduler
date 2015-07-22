@@ -44,6 +44,8 @@
     }
   ]
 
+  isSelected = (item) ->
+    item.active != ''
 
   setCourse = (id, name) ->
     $cookies.put cookie_title, name
@@ -62,6 +64,7 @@
 
   select = (item) ->
     return unless item.selectable()
+    return if isSelected(item)
     item.active = "active"
     deselect selected 
     selected = item

@@ -48,6 +48,7 @@
     @hideUpdateButton = true
     @disableEditingAndDeletion = false
     @email = ''
+    @hoursPerWeek = ''
 
 
 # The controller will not work w/o this 
