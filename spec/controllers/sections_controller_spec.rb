@@ -11,5 +11,9 @@ describe SectionsController do
   # in CoursesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before(:each) do
+    sign_in create(:user)
+  end
+
   it_behaves_like 'a JSON resource controller:'
 end

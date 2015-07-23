@@ -43,6 +43,10 @@ class GsisController < ApplicationController
   def create
     @gsi = User.find_or_create_by(email: gsi_params[:email]) do |gsi|
       gsi.name = '-'
+      password = Devise.friendly_token.first(password_length)
+      gsi.password = password
+      gsi.password_confirmation = password
+      # TODO email the user here
       # we don't know the name before the GSI logs in for the 1st time
     end
 

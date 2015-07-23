@@ -14,6 +14,6 @@ shared_examples 'a JSON show view:' do
   it 'renders attributes' do
     render
     result = JSON.parse rendered
-    attributes_match result
+    attributes_match result, mock_attributes
   end
 end

@@ -6,6 +6,8 @@ FactoryGirl.define do
   factory :user do
     name 'Darth Vader'
     email
+    password 'password'
+    password_confirmation 'password'
 
     factory :updated_valid_user, class: User do
       email 'vader@deathstar.mil'
@@ -29,6 +31,8 @@ FactoryGirl.define do
       # name is assigned here because it's unpermitted parameter
       # for gsi controller
       user.name = 'Barney The Dinosaur'
+      user.password = 'password'
+      user.password_confirmation = 'password'
     end
 
     after(:create) do |user|

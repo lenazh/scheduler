@@ -4,6 +4,7 @@ require 'helpers/json_format_helper'
 describe 'gsis/index' do
   let(:model_class) { User }
   let(:variable_to_assign) { :gsis }
+  let(:expected_fields) { %w(id name email) }
 
   before(:each) do
     assign(:course, stub_model(Course, attributes_for(:course)))

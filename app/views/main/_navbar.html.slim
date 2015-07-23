@@ -11,3 +11,9 @@ nav[class="navbar navbar-default" ng-controller="navbarCtrl as navbar"]
       ul class="nav navbar-nav" ng-repeat="item in navbar.items"
         li[ng-class="item.active"]
           a ng-href="{{item.href()}}" ng-click="navbar.select(item)" {{ item.title }}
+
+      ul class="nav navbar-nav"
+        li
+          = link_to 'Profile', edit_user_registration_path
+        li
+          = link_to 'Sign out', destroy_user_session_path, method: :delete

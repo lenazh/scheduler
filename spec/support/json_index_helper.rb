@@ -18,6 +18,6 @@ shared_examples 'a JSON index view:' do
   it 'renders a list of courses' do
     render
     result = JSON.parse rendered
-    attributes_match result
+    attributes_match result, mock_attributes
   end
 end

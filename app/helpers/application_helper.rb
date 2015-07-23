@@ -18,4 +18,8 @@ module ApplicationHelper
   def set_gon_variables
     gon.push gon_variables
   end
+
+  def password_length
+    8
+  end
 end

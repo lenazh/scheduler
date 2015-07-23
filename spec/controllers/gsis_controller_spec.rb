@@ -22,6 +22,10 @@ describe GsisController do
   let(:hours_per_week) { 66 }
   let(:gsi) { create(:user) }
 
+  before(:each) do
+    sign_in create(:user)
+  end
+
   describe 'GET show' do
     it 'sets @hours_per_week variable' do
       get :show,
