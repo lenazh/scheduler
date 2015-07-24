@@ -11,8 +11,6 @@
 </head>
 <body role="document" ng-app="schedulerApp">
 
-<%= render partial: 'main/navbar' %>
-
 <div class="container" role="main">
 
   <% if notice %>
@@ -24,7 +22,9 @@
     <div class="alert alert-danger"><%= alert %></div>
   <% end %>
 
-  <%= yield %>
+  <div class="panel panel-default">
+    <%= yield %>
+  </div>
 
 </div>
 

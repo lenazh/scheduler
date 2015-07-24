@@ -11,7 +11,9 @@ module ApplicationHelper
       courses_view_path: courses_view_path,
       calendar_view_path: calendar_view_path,
       gsi_view_path: gsi_view_path,
-      preferences_view_path: preferences_view_path
+      preferences_view_path: preferences_view_path,
+      edit_user_registration_path: edit_user_registration_path,
+      destroy_user_session_path: destroy_user_session_path
     }
   end
 

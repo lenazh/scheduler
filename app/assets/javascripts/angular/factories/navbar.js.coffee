@@ -26,8 +26,7 @@
     {
       title: "My Classes",
       active: "",
-      href: () ->
-        "#courses"
+      href: () -> "#courses"
       selectable: () -> true
     },
     {
