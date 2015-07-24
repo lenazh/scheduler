@@ -16,4 +16,8 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /[\w\.%+-]+@[\w\.-]+\.[\w\D]{2,4}/ }
 
   attr_accessor :hours_per_week
+
+  def signed_in_before
+    (sign_in_count || 0) > 0
+  end
 end
