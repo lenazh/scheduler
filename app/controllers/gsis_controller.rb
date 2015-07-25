@@ -182,6 +182,7 @@ class GsisController < ApplicationController
 
 # send an email to the user if their password changed
   def notify_user(gsi)
-    GsiMailer.enrollment(@course, gsi).deliver if gsi.password
+    # Maybe I shouldn't mail things out just yet..
+    # GsiMailer.enrollment(@course, gsi).deliver if gsi.password
   end
 end
