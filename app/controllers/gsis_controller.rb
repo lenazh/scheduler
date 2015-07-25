@@ -168,6 +168,7 @@ class GsisController < ApplicationController
       hire(new_gsi, hours_per_week(@gsi))
       fire(old_gsi)
       @gsi = new_gsi
+      @gsi.hours_per_week = hours_per_week(@gsi)
     else
       render json: @gsi.errors, status: :unprocessable_entity
     end
