@@ -3,6 +3,9 @@ require 'helpers/json_format_helper'
 
 describe 'courses/index' do
   let(:model_class) { Course }
+  let(:variable_to_assign) { :courses }
+  let(:expected_fields) { %w(id name created_at) }
+
   it_behaves_like 'a JSON index view:'
 
   it 'reports creation date for each course' do

@@ -4,7 +4,7 @@ class SectionsController < ApplicationController
   before_filter :assign_model
 
   def assign_model
-    @course = Course.includes(:sections).find(params[:course_id])
+    @course = Course.find(params[:course_id])
     @model = @course.sections
   end
 

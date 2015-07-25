@@ -6,4 +6,13 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   before_filter :set_gon_variables
+  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_filter :authenticate_user!
+
+  private
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) << :name
+    devise_parameter_sanitizer.for(:account_update) << :name
+  end
 end

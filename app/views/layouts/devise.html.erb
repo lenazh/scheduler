@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scheduler</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= Gon::Base.render_data({}) %>
+  <%= csrf_meta_tags %>
+</head>
+<body role="document" ng-app="schedulerApp">
+
+<div class="container" role="main">
+
+  <% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+  <% end %>
+
+
+  <% if alert %>
+    <div class="alert alert-danger"><%= alert %></div>
+  <% end %>
+
+  <div class="panel panel-default">
+    <%= yield %>
+  </div>
+
+</div>
+
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+</body>
+</html>

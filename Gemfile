@@ -40,7 +40,8 @@ gem 'slim-rails'
 # Use AngularJS for the frontend
 gem "angularjs-rails"
 
-gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "devise"
 
 # Use twitter bootstrap CSS
 gem "twitter-bootstrap-rails"

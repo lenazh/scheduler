@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Teaching #{@course.name}
+
+  body
+    p Dear #{@gsi.name},
+
+    p #{@head_gsi.name} invites you to teach #{@course.name}. Please let him/her know which sections you can make at:
+    
+    a href="#{@hostname}"
+        | #{@hostname}
+
+    p Use this password to sign in the first time: #{@password}
+
+    p 
+      | Thank you,
+      br
+      | GSI Scheduler

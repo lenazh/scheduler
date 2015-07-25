@@ -1,19 +1,61 @@
 FactoryGirl.define do
+  sequence :email do |n|
+    "person#{n}@gmail.com"
+  end
+
   factory :user do
     name 'Darth Vader'
-    email 'vader@gmail.com'
+    email
+    password 'password'
+    password_confirmation 'password'
 
-    factory :updated_valid_user do
+    factory :updated_valid_user, class: User do
       email 'vader@deathstar.mil'
     end
+  end
 
-    factory :invalid_user do
+  factory :invalid_user, class: User do
+    name 'Twinky'
+    email ' '
+  end
+
+  factory :another_user, class: User do
+    name 'Sponge Bob Square Pants'
+    email
+  end
+
+  factory :gsi, class: User do
+    email
+
+    after(:build) do |user|
+      # name is assigned here because it's unpermitted parameter
+      # for gsi controller
+      user.name = 'Barney The Dinosaur'
+      user.password = 'password'
+      user.password_confirmation = 'password'
+    end
+
+    after(:create) do |user|
+      course = create(:course)
+      user.courses_to_teach << course
+      user.sections << create(:section, course: course)
+      employment = user.employments.first
+      employment.hours_per_week = 20
+      employment.save!
+    end
+
+    factory :updated_valid_gsi, class: User do
+      email
+    end
+
+    factory :invalid_gsi, class: User do
+      name 'Twinky'
       email ' '
     end
 
-    factory :another_user do
+    factory :another_gsi, class: User do
       name 'Sponge Bob Square Pants'
-      email 'sbsp@nickelodeon.com'
+      email
     end
   end
 end

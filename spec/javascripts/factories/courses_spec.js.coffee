@@ -51,9 +51,9 @@ describe "Courses", ->
 # Function that checks if the Response object has the same
 # content as the original hash
   expectToMatch = (response, original) ->
-    expect(response['id']).toEqual(original['id'])
-    expect(response['name']).toEqual(original['name'])
-    expect(response['user_id']).toEqual(original['user_id'])
+    fields = ['id', 'name', 'user_id']
+    for field in fields
+      expect(response[field]).toEqual(original[field])
 
 # Makes the call that returns all existing courses
   getAllCourses = ->
@@ -82,7 +82,7 @@ describe "Courses", ->
       expectToMatch course, allCourses[id]
 
   describe "remove(course)", ->
-    removeCourse = (course, id) ->
+    removeCourse = (course) ->
       id = course['id']
       $httpBackend.expectDELETE("#{resourcePath}/#{id}")
         .respond(204, '')

@@ -24,7 +24,7 @@ describe "coursesCtrl", ->
     navbarMock = {
       resetCourse: () -> null
       setCourse: (id, name) -> null
-      title: () -> {'title': 'Course1', 'id': '2'}
+      course: () -> {'title': 'Course1', 'id': '2'}
     }
 
   beforeEach ->  
@@ -35,6 +35,7 @@ describe "coursesCtrl", ->
     spyOn(courseMock, 'init')
     spyOn(navbarMock, 'setCourse')
     spyOn(navbarMock, 'resetCourse')
+    spyOn(navbarMock, 'course').and.callThrough()
 
     module "schedulerApp", ($provide) ->
       $provide.value 'Course', courseMock
@@ -46,8 +47,11 @@ describe "coursesCtrl", ->
 
     crs = $controller 'coursesCtrl', {$scope: $scope}
 
-  it "should call Courses.all() when instantiated", ->
+  it "calls Courses.all() while initializing", ->
     expect(courseMock.all).toHaveBeenCalled()
+
+  it "calls Navbar.course() while initializing", ->
+    expect(navbarMock.course).toHaveBeenCalled()
   
   it "initializes needed variables", ->
     expect(crs.courses).toBeDefined()

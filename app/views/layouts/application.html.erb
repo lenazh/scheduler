@@ -11,7 +11,22 @@
 </head>
 <body role="document" ng-app="schedulerApp">
 
-<%= yield %>
+<%= render partial: 'main/navbar' %>
+
+<div class="container" role="main">
+
+  <% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+  <% end %>
+
+
+  <% if alert %>
+    <div class="alert alert-danger"><%= alert %></div>
+  <% end %>
+
+  <%= yield %>
+
+</div>
 
 <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </body>

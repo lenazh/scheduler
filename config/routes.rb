@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
   
   # View that serves the one-page app
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
   scope "api" do
     resources :courses, :except => [:new, :edit], :defaults => { :format => :json } do
       resources :sections, :except => [:new, :edit], :defaults => { :format => :json }
+      resources :gsis, :except => [:new, :edit], :defaults => { :format => :json }
     end
     resources :users, :except => [:new, :edit], :defaults => { :format => :json }
   end
