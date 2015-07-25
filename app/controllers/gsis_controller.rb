@@ -69,14 +69,14 @@ class GsisController < ApplicationController
 
 # Find an existing GSI or creates a new one
   def find_or_create_by(email)
-    User.find_or_create_by(email: email) do |gsi|
+    gsi = User.find_or_create_by(email: email) do |gsi|
       gsi.name = '-'
       password = Devise.friendly_token.first(password_length)
       gsi.password = password
       gsi.password_confirmation = password
-      # TODO email the user here
-      # we don't know the name before the GSI logs in for the 1st time
     end
+    notify_user(gsi)
+    gsi
   end
 
 
@@ -178,5 +178,10 @@ class GsisController < ApplicationController
     unless @gsi.update(model_params)
       render json: @gsi.errors, status: :unprocessable_entity
     end
+  end
+
+# send an email to the user if their password changed
+  def notify_user(gsi)
+    GsiMailer.enrollment(@course, gsi).deliver if gsi.password
   end
 end

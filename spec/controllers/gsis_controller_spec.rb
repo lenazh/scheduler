@@ -129,6 +129,5 @@ describe GsisController do
       expect(gsi_db.employments.first.hours_per_week).to eq hours_per_week
     end
   end
-
-  it_behaves_like 'a JSON resource controller:'
+#  it_behaves_like 'a JSON resource controller:'
 end
