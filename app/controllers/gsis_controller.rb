@@ -1,4 +1,5 @@
-# TODO: disallow head GSIs to update GSIs emails
+# TODO: when the email of a gsi is updated to an email of
+# existing GSI the server responds with 422
 # after they logged in for the first time!
 # JSON API controller that serves GSIs resource
 class GsisController < ApplicationController
