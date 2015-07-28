@@ -6,13 +6,23 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   before_filter :set_gon_variables
+
+  # devise
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user!
+
+  # pundit
+  include Pundit
+  rescue_from Pundit::NotAuthorizedError, with: :permission_denied
 
   private
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name
     devise_parameter_sanitizer.for(:account_update) << :name
+  end
+
+  def permission_denied
+    head 403
   end
 end

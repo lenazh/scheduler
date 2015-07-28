@@ -6,9 +6,6 @@ Rails.application.routes.draw do
   # View that serves the one-page app
   root 'main#index'
 
-  # Isolated view for experimentation
-  get 'isolated' => 'main#isolated'
-
   # AngularJS view of owned courses
   get 'courses' => 'main#courses', as: :courses_view
   

@@ -6,6 +6,7 @@
 module GsisControllerHelper
   # Find an existing GSI or creates a new one
   def find_or_create_by(email)
+    authorize User.new, :create?
     gsi = User.find_or_create_by(email: email) do |user|
       user.name = '-'
       password = Devise.friendly_token.first(password_length)
@@ -43,15 +44,19 @@ module GsisControllerHelper
 
   # Creates the employment for the gsi
   def hire(gsi, hours_per_week)
+    authorize Employment.new, :create?
     hours_per_week ||= 0
     @course.gsis << gsi
-    employment(gsi).hours_per_week = hours_per_week || 0
-    employment(gsi).save!
+    employment = employment(gsi)
+    employment.hours_per_week = hours_per_week || 0
+    employment.save!
   end
 
   # Removes the employment for the gsi
   def fire(gsi)
-    employment(gsi).destroy!
+    employment = employment(gsi)
+    authorize employment, :destroy?
+    employment.destroy!
   end
 
   # Whether a new hours/week parameter was passed
@@ -67,8 +72,10 @@ module GsisControllerHelper
 
   # updates how many hours per week the @gsi works
   def update_employment
-    employment(@gsi).hours_per_week = new_hours_per_week
-    employment(@gsi).save!
+    employment = employment(@gsi)
+    authorize employment, :update?
+    employment.hours_per_week = new_hours_per_week
+    employment.save!
   end
 
   # updates hours per week for the @gsi or hires him/her
@@ -131,6 +138,7 @@ module GsisControllerHelper
 
   def hire_and_destroy(new_gsi, old_gsi, hours)
     hire(new_gsi, hours)
+    authorize old_gsi, :destroy?
     old_gsi.destroy!
     @gsi = new_gsi
     @gsi.hours_per_week = hours
@@ -138,6 +146,7 @@ module GsisControllerHelper
 
   # updates the existing GSI's email
   def update_existing_email
+    authorize @gsi, :update?
     unless @gsi.update(model_params)
       render json: @gsi.errors, status: :unprocessable_entity
     end

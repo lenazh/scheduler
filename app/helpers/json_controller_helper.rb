@@ -15,7 +15,9 @@ module JsonControllerHelper
   # POST /model
   # POST /model.json
   def create
-    self.singular = @model.new(model_params)
+    new_model = @model.new(model_params)
+    authorize new_model
+    self.singular = new_model
     if singular.save
       render :show, status: :created, location: singular
     else
@@ -46,7 +48,9 @@ module JsonControllerHelper
 
   # Use callbacks to share common setup or constraints between actions.
   def fetch_by_id
-    self.singular = @model.find(params[:id])
+    model = @model.find(params[:id])
+    authorize model
+    self.singular = model
   end
 
   # Returns the variable for the view that the retrieved model was assigned to

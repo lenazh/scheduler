@@ -2,8 +2,6 @@
 class MainController < ApplicationController
   def index; end
 
-  def isolated; end
-
   def courses
     render partial: action_name
   end
