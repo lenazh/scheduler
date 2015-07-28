@@ -65,6 +65,4 @@ module JsonFormatHelper
   def message(actual, expected, key)
     "#{key} does not match, expected: #{expected}, got: #{actual}"
   end
-
-
 end

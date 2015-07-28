@@ -1,5 +1,8 @@
+# Preview of the enrollment email with fake users
 class GsiMailerPreview < ActionMailer::Preview
   # I don't know how to access Rspec mocks from here
+  # Fake user that knows just enough methods to render
+  # an email
   class FakeUser
     attr_accessor :name
     def initialize(name)
@@ -7,7 +10,7 @@ class GsiMailerPreview < ActionMailer::Preview
     end
 
     def email
-      "#{name.split(/ /).last.downcase()}@example.com"
+      "#{name.split(/ /).last.downcase}@example.com"
     end
 
     def password
@@ -15,6 +18,8 @@ class GsiMailerPreview < ActionMailer::Preview
     end
   end
 
+  # Fake course that knows just enough methods to render
+  # an email
   class FakeCourse
     attr_accessor :name, :user
     def initialize(name, owner)
