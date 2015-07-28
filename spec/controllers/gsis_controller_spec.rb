@@ -94,20 +94,54 @@ describe GsisController do
 
   describe 'update' do
     describe 'if email is changed' do
-      it "creates a new GSI if the updated gsi signed in before" do
-        gsi.sign_in_count = 1
-        gsi.save!
-        expect { update_gsi({ email: 'Burney@gmail.com' }) }
-          .to change(User, :count).by(1)
+      let(:email) { 'burney@gmail.com' }
+
+      def update_and_check_if_hired(email, gsi_amount_change)
+        expect { update_gsi({ email: email }) }
+          .to change(User, :count).by(gsi_amount_change)
+        new_gsi = User.find_by email: email
+        expect(new_gsi.employments.first.course_id).to eq course.id
+        expect(assigns(:gsi).hours_per_week).to eq(hours_per_week)
       end
 
-      it 'updates the existing GSI if he never signed in' do
-        gsi.sign_in_count = 0
-        gsi.save!
-        expect { update_gsi({ email: 'Burney@gmail.com' }) }
-          .to change(User, :count).by(0)
-        gsi.reload
-        expect(gsi.email).to eq('burney@gmail.com')
+      describe 'if the updated GSI signed in before' do
+        before(:each) do
+          gsi.sign_in_count = 1
+          gsi.save!
+        end
+
+        describe "if the new GSI doesn't exist" do
+          it "creates the new GSI without deleting the old one" do
+            update_and_check_if_hired(email, 1)
+          end
+        end
+
+        describe "if the new GSI exists" do
+          it 'enrolls the new GSI without deleting the old one' do
+            create(:user, email: email)
+            update_and_check_if_hired(email, 0)
+          end
+        end
+      end
+
+      describe 'if the updated GSI never signed in before' do
+        before(:each) do
+          gsi.sign_in_count = 0
+          gsi.save!
+        end
+
+        describe "if the new GSI doesn't exist" do
+          it "creates the new GSI and deletes the old one" do
+            update_and_check_if_hired(email, 0)
+          end
+        end
+
+        describe "if the new GSI exists" do
+          it "enrolls the new GSI and deletes the old one" do
+            create(:user, email: email)
+            update_and_check_if_hired(email, -1)
+          end
+        end
       end
     end
 
