@@ -19,6 +19,7 @@ describe GsisController do
     gsi
   end
   let(:course) { gsi.courses_to_teach.first }
+  let(:another_course) { create(:course) }
   let(:course_owner) { course.user }
   let(:employment) { gsi.employments.first }
 
@@ -64,12 +65,25 @@ describe GsisController do
         gsi.save!
       end
 
-      it 'destroys the GSI' do
-        expect { delete_gsi }.to change(User, :count).by(-1)
-      end
-
       it "destroys the GSI's appointment" do
         expect { delete_gsi }.to change(Employment, :count).by(-1)
+      end
+
+      describe 'if the GSI has other appointments' do
+        before(:each) do
+          gsi.courses_to_teach << another_course
+          gsi.save!
+        end
+        
+        it "doesn't destroy the GSI" do
+          expect { delete_gsi }.to change(User, :count).by(0)
+        end
+      end
+
+      describe "if the GSI doesn't have other appointments" do
+        it 'destroys the GSI' do
+          expect { delete_gsi }.to change(User, :count).by(-1)
+        end
       end
     end
 
@@ -127,16 +141,38 @@ describe GsisController do
           gsi.save!
         end
 
-        describe "if the new GSI doesn't exist" do
-          it 'creates the new GSI and deletes the old one' do
-            update_and_check_if_hired(email, 0)
+        describe 'if the updated GSI has other appointments' do
+          before(:each) do
+            gsi.courses_to_teach << another_course
+            gsi.save!
+          end
+
+          describe "if the new GSI doesn't exist" do
+            it 'creates the new GSI witout deleting the old one' do
+              update_and_check_if_hired(email, 1)
+            end
+          end
+
+          describe 'if the new GSI exists' do
+            it 'enrolls the new GSI without deleting the old one' do
+              create(:user, email: email)
+              update_and_check_if_hired(email, 0)
+            end
           end
         end
 
-        describe 'if the new GSI exists' do
-          it 'enrolls the new GSI and deletes the old one' do
-            create(:user, email: email)
-            update_and_check_if_hired(email, -1)
+        describe "if the updated GSI doesn't have other appointments" do
+          describe "if the new GSI doesn't exist" do
+            it 'creates the new GSI and deletes the old one' do
+              update_and_check_if_hired(email, 0)
+            end
+          end
+
+          describe 'if the new GSI exists' do
+            it 'enrolls the new GSI and deletes the old one' do
+              create(:user, email: email)
+              update_and_check_if_hired(email, -1)
+            end
           end
         end
       end
