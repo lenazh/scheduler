@@ -149,8 +149,8 @@ module GsisControllerHelper
   end
 
   # send an email to the user if their password changed
-  def notify_user(gsi)
+  def notify_user(_gsi)
     # Maybe I shouldn't mail things out just yet..
-    # GsiMailer.enrollment(@course, gsi).deliver if gsi.password
+    # GsiMailer.enrollment(@course, _gsi).deliver if gsi.password
   end
 end
