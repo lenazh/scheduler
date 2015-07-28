@@ -5,13 +5,13 @@ class GsisController < ApplicationController
 
   include JsonControllerHelper
 
-# retreives the parent model and the association from the DB
+  # retreives the parent model and the association from the DB
   def assign_model
     @course = Course.find(params[:course_id])
     @model = @course.gsis.eager_load(:employments)
   end
 
-# make the nested attributes available to the index view
+  # make the nested attributes available to the index view
   def index
     super
     @gsis.each do |gsi|
@@ -19,13 +19,13 @@ class GsisController < ApplicationController
     end
   end
 
-# make the nested attributes available to the show view
+  # make the nested attributes available to the show view
   def show
     super
     @gsi.hours_per_week = hours_per_week(@gsi)
   end
 
-# update with the nested attributes
+  # update with the nested attributes
   def update
     @gsi = fetch_by_id
     @gsi.hours_per_week = new_hours_per_week || hours_per_week(@gsi)
@@ -34,7 +34,7 @@ class GsisController < ApplicationController
     render :show, status: :ok, location: @gsi unless performed?
   end
 
-# create the model if such user does not exist
+  # create the model if such user does not exist
   def create
     @gsi = find_or_create_by(gsi_params[:email])
     @gsi.hours_per_week = new_hours_per_week
@@ -47,8 +47,8 @@ class GsisController < ApplicationController
     end
   end
 
-# destroy the model if the user never signed in before
-# and has no other appointments
+  # destroy the model if the user never signed in before
+  # and has no other appointments
   def destroy
     fetch_by_id
     if @gsi.signed_in_before || other_appointments?(@gsi)
@@ -59,7 +59,7 @@ class GsisController < ApplicationController
     head :no_content
   end
 
-# which model parameters is the controller allowed to update
+  # which model parameters is the controller allowed to update
   def permitted_parameters
     [:email]
   end
