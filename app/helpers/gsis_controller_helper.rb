@@ -3,7 +3,6 @@
 # maybe User or Gsi << User or something like that
 # This logic needs a major redesign
 # employment(gsi) has possible DoS issues
-
 module GsisControllerHelper
 # Find an existing GSI or creates a new one
   def find_or_create_by(email)
@@ -90,7 +89,7 @@ module GsisControllerHelper
 # updates email for an existing user or creates a new one
 # if the @gsi has logged in before or has other appointments
   def update_email
-    if @gsi.signed_in_before || has_other_appointments(@gsi)
+    if @gsi.signed_in_before || other_appointments?(@gsi)
       fire_old_gsi_hire_new_gsi
     else
       destroy_old_gsi_hire_new_gsi
@@ -145,7 +144,7 @@ module GsisControllerHelper
   end
 
 # checks if the GSI has appointments other than this one
-  def has_other_appointments(gsi)
+  def other_appointments?(gsi)
     gsi.appointments_count > 1
   end
 

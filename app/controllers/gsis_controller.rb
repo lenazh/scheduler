@@ -38,7 +38,7 @@ class GsisController < ApplicationController
   def create
     @gsi = find_or_create_by(gsi_params[:email])
     @gsi.hours_per_week = new_hours_per_week
-    
+
     if @gsi.persisted?
       hire(@gsi, new_hours_per_week)
       render :show, status: :created, location: @gsi
@@ -51,7 +51,7 @@ class GsisController < ApplicationController
 # and has no other appointments
   def destroy
     fetch_by_id
-    if @gsi.signed_in_before || has_other_appointments(@gsi)
+    if @gsi.signed_in_before || other_appointments?(@gsi)
       fire(@gsi)
     else
       @gsi.destroy!

@@ -53,9 +53,9 @@ describe User do
   end
 
   describe 'appointments_count' do
-    let (:course1) { create(:course) }
-    let (:course2) { create(:course) }
-    let (:user) { create(:user) }
+    let(:course1) { create(:course) }
+    let(:course2) { create(:course) }
+    let(:user) { create(:user) }
 
     it 'returns 0 if the person has no appointments' do
       expect(user.appointments_count).to eq 0

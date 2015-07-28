@@ -24,6 +24,6 @@ class User < ActiveRecord::Base
 
   # returns how many appointments this person has
   def appointments_count
-    Employment.where("user_id = ?", id).count
+    Employment.where('user_id = ?', id).count
   end
 end

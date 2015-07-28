@@ -74,7 +74,7 @@ describe GsisController do
           gsi.courses_to_teach << another_course
           gsi.save!
         end
-        
+
         it "doesn't destroy the GSI" do
           expect { delete_gsi }.to change(User, :count).by(0)
         end
