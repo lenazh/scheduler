@@ -12,7 +12,6 @@ describe User do
     its(:courses) { should respond_to :[] }
   end
 
-
   describe 'is invalid if' do
     describe 'name is empty' do
       subject { build(:user, name: ' ') }
@@ -50,6 +49,6 @@ describe User do
       user.sign_in_count = 0
       user.save!
       expect(user.signed_in_before).to be false
-    end    
+    end
   end
 end

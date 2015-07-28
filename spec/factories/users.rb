@@ -37,11 +37,14 @@ FactoryGirl.define do
 
     after(:create) do |user|
       course = create(:course)
+      owner = create(:user)
+      course.user = owner
       user.courses_to_teach << course
       user.sections << create(:section, course: course)
       employment = user.employments.first
       employment.hours_per_week = 20
       employment.save!
+      course.save!
     end
 
     factory :updated_valid_gsi, class: User do

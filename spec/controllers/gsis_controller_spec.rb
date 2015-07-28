@@ -31,12 +31,11 @@ describe GsisController do
         valid_session
   end
 
-  def delete_gsi()
+  def delete_gsi
     delete :destroy,
            { id: gsi.id, course_id: course.id, format: :json },
            valid_session
   end
-
 
   before(:each) do
     sign_in create(:user)
@@ -47,7 +46,6 @@ describe GsisController do
       get :show,
           { id: gsi.id, course_id: course.id, format: :json },
           valid_session
-      gsi = assigns(:gsi)
       expect(assigns(:gsi).hours_per_week).to eq hours_per_week
     end
   end
@@ -66,13 +64,13 @@ describe GsisController do
         gsi.save!
       end
 
-      it "destroys the GSI" do
-        expect{ delete_gsi }.to change(User, :count).by(-1)
+      it 'destroys the GSI' do
+        expect { delete_gsi }.to change(User, :count).by(-1)
       end
 
       it "destroys the GSI's appointment" do
-        expect{ delete_gsi }.to change(Employment, :count).by(-1)
-      end      
+        expect { delete_gsi }.to change(Employment, :count).by(-1)
+      end
     end
 
     describe 'GSI who have signed in before' do
@@ -81,50 +79,82 @@ describe GsisController do
         gsi.save!
       end
 
-      it "doesn't destroy the GSI who signed in before" do      
-        expect{ delete_gsi }.to change(User, :count).by(0)     
+      it "doesn't destroy the GSI who signed in before" do
+        expect { delete_gsi }.to change(User, :count).by(0)
       end
 
       it "destroys the GSI's appointment" do
-        expect{ delete_gsi }.to change(Employment, :count).by(-1)
+        expect { delete_gsi }.to change(Employment, :count).by(-1)
       end
     end
   end
 
-
   describe 'update' do
     describe 'if email is changed' do
-      it "creates a new GSI if the updated gsi signed in before" do
-        gsi.sign_in_count = 1
-        gsi.save!
-        expect { update_gsi({ email: 'Burney@gmail.com' }) }
-          .to change(User, :count).by(1)
+      let(:email) { 'burney@gmail.com' }
+
+      def update_and_check_if_hired(email, gsi_amount_change)
+        expect { update_gsi(email: email) }
+          .to change(User, :count).by(gsi_amount_change)
+        new_gsi = User.find_by email: email
+        expect(new_gsi.employments.first.course_id).to eq course.id
+        expect(assigns(:gsi).hours_per_week).to eq(hours_per_week)
       end
 
-      it 'updates the existing GSI if he never signed in' do
-        gsi.sign_in_count = 0
-        gsi.save!
-        expect { update_gsi({ email: 'Burney@gmail.com' }) }
-          .to change(User, :count).by(0)
-        gsi.reload
-        expect(gsi.email).to eq('burney@gmail.com')
+      describe 'if the updated GSI signed in before' do
+        before(:each) do
+          gsi.sign_in_count = 1
+          gsi.save!
+        end
+
+        describe "if the new GSI doesn't exist" do
+          it 'creates the new GSI without deleting the old one' do
+            update_and_check_if_hired(email, 1)
+          end
+        end
+
+        describe 'if the new GSI exists' do
+          it 'enrolls the new GSI without deleting the old one' do
+            create(:user, email: email)
+            update_and_check_if_hired(email, 0)
+          end
+        end
+      end
+
+      describe 'if the updated GSI never signed in before' do
+        before(:each) do
+          gsi.sign_in_count = 0
+          gsi.save!
+        end
+
+        describe "if the new GSI doesn't exist" do
+          it 'creates the new GSI and deletes the old one' do
+            update_and_check_if_hired(email, 0)
+          end
+        end
+
+        describe 'if the new GSI exists' do
+          it 'enrolls the new GSI and deletes the old one' do
+            create(:user, email: email)
+            update_and_check_if_hired(email, -1)
+          end
+        end
       end
     end
 
     it 'updates hours_per_week if the parameter is present' do
-      update_gsi({ hours_per_week: 77 })
+      update_gsi(hours_per_week: 77)
       gsi_db = User.find(gsi.id)
       expect(gsi_db.employments.first.hours_per_week).to eq 77
     end
 
     it 'sets @gsi.hours_per_week variable if parameter is present' do
-      update_gsi({ hours_per_week: 77 })
-      gsi_db = User.find(gsi.id)
+      update_gsi(hours_per_week: 77)
       expect(assigns(:gsi).hours_per_week).to eq 77
     end
 
     it "doesn't reset hours_per_week if the parameter is missing" do
-      update_gsi({ email: 'Burney@gmail.com' })
+      update_gsi(email: 'Burney@gmail.com')
       gsi_db = User.find(gsi.id)
       expect(gsi_db.employments.first.hours_per_week).to eq hours_per_week
     end

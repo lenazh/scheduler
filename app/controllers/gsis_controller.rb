@@ -1,6 +1,5 @@
-# TODO: when the email of a gsi is updated to an email of
-# existing GSI the server responds with 422
-# after they logged in for the first time!
+# TODO: refactoring - most of this logic should be in a model
+# maybe Gsi << User or something like that
 # JSON API controller that serves GSIs resource
 class GsisController < ApplicationController
   respond_to :json
@@ -70,16 +69,15 @@ class GsisController < ApplicationController
 
 # Find an existing GSI or creates a new one
   def find_or_create_by(email)
-    gsi = User.find_or_create_by(email: email) do |gsi|
-      gsi.name = '-'
+    gsi = User.find_or_create_by(email: email) do |user|
+      user.name = '-'
       password = Devise.friendly_token.first(password_length)
-      gsi.password = password
-      gsi.password_confirmation = password
+      user.password = password
+      user.password_confirmation = password
     end
     notify_user(gsi)
     gsi
   end
-
 
 # returns Employment join model of @gsi and @course
 # the point of iterating manually is to not make additional
@@ -98,7 +96,7 @@ class GsisController < ApplicationController
   def hours_per_week(gsi)
     employment(gsi).hours_per_week
     hours = employment(gsi) ? employment(gsi).hours_per_week : 0
-    hours ||= 0
+    hours || 0
   end
 
 # Returns the permitted assign parameters on gsi model
@@ -130,7 +128,7 @@ class GsisController < ApplicationController
     new_email && (new_email != @gsi.email)
   end
 
-#updates how many hours per week the @gsi works
+# updates how many hours per week the @gsi works
   def update_employment
     employment(@gsi).hours_per_week = new_hours_per_week
     employment(@gsi).save!
@@ -147,7 +145,8 @@ class GsisController < ApplicationController
 
 # sanitizes new hours per week
   def new_hours_per_week
-    params[:gsi][:hours_per_week].to_i || 0 
+    return nil unless params[:gsi][:hours_per_week]
+    params[:gsi][:hours_per_week].to_i || 0
   end
 
 # updates email for an existing user or creates a new one
@@ -156,7 +155,7 @@ class GsisController < ApplicationController
     if @gsi.signed_in_before
       fire_old_gsi_hire_new_gsi
     else
-      update_existing
+      destroy_old_gsi_hire_new_gsi
     end
   end
 
@@ -166,17 +165,42 @@ class GsisController < ApplicationController
     old_gsi = @gsi
     new_gsi = find_or_create_by(params[:gsi][:email])
     if new_gsi.persisted?
-      hire(new_gsi, hours_per_week(@gsi))
-      fire(old_gsi)
-      @gsi = new_gsi
-      @gsi.hours_per_week = hours_per_week(@gsi)
+      hours = hours_per_week(old_gsi)
+      hire_and_fire(new_gsi, old_gsi, hours)
     else
       render json: @gsi.errors, status: :unprocessable_entity
     end
   end
 
+  def hire_and_fire(new_gsi, old_gsi, hours)
+    hire(new_gsi, hours)
+    fire(old_gsi)
+    @gsi = new_gsi
+    @gsi.hours_per_week = hours
+  end
+
+# destroy the old GSI and hire a new one by email
+# for the same number of hours/week
+  def destroy_old_gsi_hire_new_gsi
+    old_gsi = @gsi
+    new_gsi = User.find_by(email: params[:gsi][:email])
+    if new_gsi
+      hours = hours_per_week(old_gsi)
+      hire_and_destroy(new_gsi, old_gsi, hours)
+    else
+      update_existing_email
+    end
+  end
+
+  def hire_and_destroy(new_gsi, old_gsi, hours)
+    hire(new_gsi, hours)
+    old_gsi.destroy!
+    @gsi = new_gsi
+    @gsi.hours_per_week = hours
+  end
+
 # updates the existing GSI's email
-  def update_existing
+  def update_existing_email
     unless @gsi.update(model_params)
       render json: @gsi.errors, status: :unprocessable_entity
     end
