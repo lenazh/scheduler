@@ -30,5 +30,4 @@ module ApplicationHelper
   def calendar_parameters
     { calendar_start_hour: 6, calendar_end_hour: 22 }
   end
-
 end

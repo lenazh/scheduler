@@ -1,6 +1,5 @@
 # This mailer sends out the newly generated passwords
 # for GSIs that have been just enrolled into a class
-
 class GsiMailer < ActionMailer::Base
   default from: 'zhivun@gmail.com'
 

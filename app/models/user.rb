@@ -17,7 +17,13 @@ class User < ActiveRecord::Base
 
   attr_accessor :hours_per_week
 
+  # returns true if this person ever signed in and false otherwise
   def signed_in_before
     (sign_in_count || 0) > 0
+  end
+
+  # returns how many appointments this person has
+  def appointments_count
+    Employment.where('user_id = ?', id).count
   end
 end
