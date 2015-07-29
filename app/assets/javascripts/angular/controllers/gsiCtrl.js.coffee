@@ -1,7 +1,34 @@
-@schedulerModule.controller 'gsiCtrl', ['$scope', '$routeParams', 'Gsi', ($scope, $routeParams, Gsi) ->
+class GsiFormController extends schedulerApp.FormController
+  $scope = {}
+  $routeParams = {}
+  Gsi = {}
 
+  email: ''
+  hoursPerWeek: ''
+
+  constructor: (_$scope_, $routeParams, Gsi) ->
+    super Gsi, ['email', 'hours_per_week']
+    course_id = $routeParams['course_id']
+    Gsi.init(course_id)
+    @all = Gsi.all()
+    @email = @fields.email
+    @hours_per_week = @fields.hours_per_week
+    $scope = _$scope_
+
+  form_is_valid: () ->
+    form = $scope.form
+    form.email.$valid && form.hours_per_week.$valid
+
+  saveNew: () ->
+    super
+    @hours_per_week = 20
+
+schedulerApp.GsiFormController = GsiFormController
+
+@schedulerModule.controller 'gsiCtrl', ['$scope', '$routeParams', 'Gsi', ($scope, $routeParams, Gsi) ->
   course_id = $routeParams['course_id']
   Gsi.init(course_id)
+  
   @gsis = Gsi.all()
   @email = ''
   @hoursPerWeek = ''
