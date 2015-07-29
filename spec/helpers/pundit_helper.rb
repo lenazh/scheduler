@@ -1,3 +1,5 @@
+# Stubs out the Pundit policies for controller tests so
+# that they are not coupled with the authorization tests
 module PunditHelper
   def stub_policy(policy)
     policy.any_instance.stub(:show?) { true }

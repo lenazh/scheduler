@@ -1,3 +1,4 @@
+# Access policies for User/Gsi resource
 class UserPolicy < ApplicationPolicy
   def create?
     true

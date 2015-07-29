@@ -1,3 +1,4 @@
+# Access policies for Employment resource
 class EmploymentPolicy < ApplicationPolicy
   def user_owns_record?
     course = @record.course

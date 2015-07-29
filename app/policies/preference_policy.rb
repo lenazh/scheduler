@@ -1,3 +1,4 @@
+# Access policies for Preference resource
 class PreferencePolicy < ApplicationPolicy
   def user_owns_record?
     section = @record.section

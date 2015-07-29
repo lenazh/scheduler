@@ -1,8 +1,10 @@
+# Default access policies for all resources, except the
+# controlllers that serve static pages
 class ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
-    raise Pundit::NotAuthorizedError, 'Must be logged in' unless user
+    fail Pundit::NotAuthorizedError, 'Must be logged in' unless user
     @user = user
     @record = record
   end
@@ -39,6 +41,7 @@ class ApplicationPolicy
     Pundit.policy_scope!(user, record.class)
   end
 
+  # returns scope for the @user
   class Scope
     attr_reader :user, :scope
 
