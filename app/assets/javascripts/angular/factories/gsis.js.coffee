@@ -2,7 +2,7 @@
   list = {}
   {
     init: (course_id) ->
-      list = new ResourceList(
+      list = new schedulerApp.ResourceList(
         $resource, "#{gon.courses_api_path}/#{course_id}/gsis/:id", 'gsi')
     saveNew: (params) -> list.saveNew(params)
     update: (gsi, params) -> list.update(gsi, params)        

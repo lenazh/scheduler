@@ -1,4 +1,4 @@
-class window.ResourceList
+class ResourceList
   resourceLink = {}
   all = []
   fields = []
@@ -59,3 +59,5 @@ class window.ResourceList
   all: () ->
     all = resourceLink.query()
     all
+
+schedulerApp.ResourceList = ResourceList

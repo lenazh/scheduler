@@ -83,7 +83,8 @@ describe "ResourceList", ->
       $resource = $injector.get '$resource'
       return
   beforeEach ->
-    list = new ResourceList($resource, resourcePath + '/:id', resourceName)
+    list = new schedulerApp.ResourceList(
+      $resource, resourcePath + '/:id', resourceName)
 
   it "has method all() that returns the list of all resources", ->
     $httpBackend.expectGET(resourcePath).respond(200, allResources)
