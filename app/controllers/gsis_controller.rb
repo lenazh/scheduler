@@ -2,13 +2,15 @@
 class GsisController < ApplicationController
   respond_to :json
   before_filter :assign_model
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   include JsonControllerHelper
 
   # retreives the parent model and the association from the DB
   def assign_model
-    @course = Course.find(params[:course_id])
-    @model = @course.gsis.eager_load(:employments)
+    @course = policy_scope(Course).find(params[:course_id])
+    @model = policy_scope(@course.gsis).eager_load(:employments)
   end
 
   # make the nested attributes available to the index view

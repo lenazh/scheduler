@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'helpers/pundit_helper'
 
 describe GsisController do
   # name of the model for this RESTful resource
@@ -38,8 +39,13 @@ describe GsisController do
            valid_session
   end
 
+  include PunditHelper
+
   before(:each) do
     sign_in create(:user)
+    CoursePolicy::Scope.any_instance.stub(:resolve) { Course.all }
+    stub_policy(UserPolicy)
+    stub_policy(EmploymentPolicy)
   end
 
   describe 'GET show' do

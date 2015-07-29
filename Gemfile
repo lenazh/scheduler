@@ -13,7 +13,10 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 
 # Secure configuration
-gem "figaro"
+gem 'figaro'
+
+# Puma webserver
+gem 'puma'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -38,16 +41,18 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'slim-rails'
 
 # Use AngularJS for the frontend
-gem "angularjs-rails"
+gem 'angularjs-rails'
 
-gem "omniauth-google-oauth2"
-gem "devise"
+# Authentication and authorization
+gem 'devise'
+gem 'omniauth-google-oauth2'
+gem 'pundit'
 
 # Use twitter bootstrap CSS
-gem "twitter-bootstrap-rails"
+gem 'twitter-bootstrap-rails'
 
 # Use gon to give JS variables from the controller
-gem 'gon' 
+gem 'gon'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -77,7 +82,7 @@ group :test do
 end
 
 # code coverage code climate
-gem "codeclimate-test-reporter", group: :test
+gem 'codeclimate-test-reporter', group: :test
 
 group :production do
   # Use Postgres as the database for Active Record

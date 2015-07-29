@@ -2,8 +2,9 @@ require 'spec_helper'
 require 'helpers/route_helper'
 
 describe MainController do
+  let(:user) { create(:user) }
   before(:each) do
-    sign_in create(:user)
+    sign_in user
   end
 
   describe 'GET index' do
