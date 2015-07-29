@@ -24,10 +24,11 @@ class window.ResourceList
   # public interface
 
   constructor: ($resource, path, resourceName) ->
-    resourceLink = $resource path, 
-      { id: '@id' }, 
-      { 
-        'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
+    resourceLink = $resource path,
+      { id: '@id' },
+      {
+        'update': { method:'PUT' },
+        'headers': {'Content-Type': 'application/json'},
         'post': headers: {'Content-Type': 'application/json'}
       }
     name = resourceName
@@ -40,7 +41,7 @@ class window.ResourceList
     )
 
   update: (resourceToUpdate, params) ->
-    id = all.indexOf resourceToUpdate  
+    id = all.indexOf resourceToUpdate
     return if id == -1
     resourceLink.update(
       updateParams(params),
@@ -55,6 +56,6 @@ class window.ResourceList
       () -> remove_from_list(resourceToRemove)
     )
 
-  all: () -> 
+  all: () ->
     all = resourceLink.query()
     all
