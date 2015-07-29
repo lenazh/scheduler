@@ -2,27 +2,24 @@ require 'spec_helper'
 
 describe SectionPolicy do
 
-  let(:user) { User.new }
+  let(:user) { create(:user) }
+  let(:section) { create(:section) }
 
   subject { described_class }
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  [:show?, :create?, :update?, :destroy?].each do |permission|
+    permissions permission do
+      describe 'if user owns the record' do
+        it 'grants access' do
+          expect(subject).to permit(section.course.user, section)
+        end
+      end
 
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
+      describe 'if user does not own the record' do
+        it 'denies access' do
+          expect(subject).not_to permit(user, section)
+        end
+      end
+    end
   end
 end

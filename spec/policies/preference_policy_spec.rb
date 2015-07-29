@@ -2,27 +2,62 @@ require 'spec_helper'
 
 describe PreferencePolicy do
 
-  let(:user) { User.new }
+  let(:user) { create(:user) }
+  let(:section) { create(:section) }
+  let(:gsi) do
+    gsi = create(:user, name: 'Snoopy')
+    gsi.courses_to_teach << section.course
+    gsi.preferences << create(:preference,
+                              user_id: gsi.id, section_id: section.id)
+    gsi.save!
+    gsi
+  end
+  let(:course) { section.course }
+  let(:owner) { course.user }
 
   subject { described_class }
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
   permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
+    let(:preference) { build(:preference, section_id: course.id) }
+    describe 'if user enrolled as a gsi in that course' do
+      it 'grants access' do
+        expect(subject).to permit(gsi, preference)
+      end
+    end
+
+    describe 'if user owns the course that the section belongs to' do
+      it 'grants access' do
+        expect(subject).to permit(gsi, preference)
+      end
+    end
+
+    describe "if user doesn't teach the course nor owns it" do
+      it 'denies access' do
+        expect(subject).not_to permit(user, preference)
+      end
+    end
   end
 
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  [:show?, :update?, :destroy?].each do |permission|
+    permissions permission do
+      let(:preference) { gsi.preferences.first }
+      describe 'if user owns the course that the section belongs to' do
+        it 'grants access' do
+          expect(subject).to permit(owner, preference)
+        end
+      end
 
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
+      describe 'if user is the gsi teaching that course' do
+        it 'grants access' do
+          expect(subject).to permit(gsi, preference)
+        end
+      end
+
+      describe "if user doesn't teach the course nor owns it" do
+        it 'denies access' do
+          expect(subject).not_to permit(user, preference)
+        end
+      end
+    end
   end
 end

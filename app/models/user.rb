@@ -26,4 +26,29 @@ class User < ActiveRecord::Base
   def appointments_count
     Employment.where('user_id = ?', id).count
   end
+
+  # returns whether the user is teaching for the course
+  def teaches_course?(course)
+    return false unless course
+    Employment.exists?(['course_id = ? AND user_id = ?', course.id, id])
+  end
+
+  # returns whether the user is teaching the section
+  def teaches_section?(section)
+    return false unless section
+    section.gsi.id == id
+  end
+
+  # returns whether the user is a head gsi for the course
+  def owns_course?(course)
+    return false unless course
+    course.user_id == id
+  end
+
+  # returns whether the user is a head gsi for the course that
+  # includes this section
+  def owns_section?(section)
+    return false unless section
+    owns_course?(section.course)
+  end
 end

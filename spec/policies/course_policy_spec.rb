@@ -8,7 +8,10 @@ describe CoursePolicy do
   subject { described_class }
 
   permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
+    it 'returns all courses owned by that user' do
+      scope = Pundit.policy_scope(course.user, Course)
+      expect(scope.first.id).to eq course.id
+    end
   end
 
   [:show?, :create?, :update?, :destroy?].each do |permission|

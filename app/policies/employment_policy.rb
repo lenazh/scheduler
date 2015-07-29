@@ -1,11 +1,11 @@
 class EmploymentPolicy < ApplicationPolicy
   def user_owns_record?
-    true
+    course = @record.course
+    (@user.id == @record.user_id) || @user.owns_course?(course)
   end
 
-  class Scope < Scope
-    def resolve
-      scope
-    end
+  def create?
+    course = @record.course
+    @user.owns_course?(course)
   end
 end

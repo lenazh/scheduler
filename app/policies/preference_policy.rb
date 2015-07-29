@@ -1,11 +1,12 @@
 class PreferencePolicy < ApplicationPolicy
   def user_owns_record?
-    true
+    section = @record.section
+    course = section.course
+    @user.owns_course?(course) || @record.user_id == @user.id
   end
-  
-  class Scope < Scope
-    def resolve
-      scope
-    end
+
+  def create?
+    course = @record.section.course
+    @user.owns_course?(course) || @user.teaches_course?(course)
   end
 end

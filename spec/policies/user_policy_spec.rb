@@ -2,27 +2,49 @@ require 'spec_helper'
 
 describe UserPolicy do
 
-  let(:user) { User.new }
+  let(:user) { create(:user) }
+  let(:gsi) { create(:gsi) }
+  let(:owner) { gsi.courses_to_teach.first.user }
 
   subject { described_class }
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
+  [:show?, :create?].each do |permission|
+    permissions permission do
+      it 'grants access to anyone' do
+        expect(subject).to permit(user, gsi)
+      end
+    end
   end
 
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  [:update?, :destroy?].each do |permission|
+    permissions permission do
+      describe "if GSI has't signed in and only enrolled in owner's class" do
+        it 'grants access' do
+          expect(subject).to permit(owner, gsi)
+        end
+      end
 
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+      describe 'if gsi logged in before' do
+        it 'denies access' do
+          gsi.sign_in_count = 1
+          gsi.save!
+          expect(subject).not_to permit(owner, gsi)
+        end
+      end
 
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+      describe 'if gsi has multiple enrollments' do
+        it 'denies access' do
+          gsi.courses_to_teach << create(:course)
+          gsi.save!
+          expect(subject).not_to permit(owner, gsi)
+        end
+      end
 
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
+      describe 'if gsi is enrolled in a class not belonging to user' do
+        it 'denies access' do
+          expect(subject).not_to permit(user, gsi)
+        end
+      end
+    end
   end
 end

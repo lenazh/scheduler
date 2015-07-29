@@ -20,7 +20,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    user_owns_record?
   end
 
   def new?

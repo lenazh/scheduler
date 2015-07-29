@@ -45,6 +45,7 @@ describe GsisController do
     sign_in create(:user)
     CoursePolicy::Scope.any_instance.stub(:resolve) { Course.all }
     stub_policy(UserPolicy)
+    stub_policy(EmploymentPolicy)
   end
 
   describe 'GET show' do
