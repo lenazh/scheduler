@@ -29,7 +29,9 @@ class GsisController < ApplicationController
 
   # update with the nested attributes
   def update
-    @gsi = fetch_by_id
+    @gsi = fetch_by_id # has authorize call in it
+    authorize Employment.new course_id: @course.id
+
     @gsi.hours_per_week = new_hours_per_week || hours_per_week(@gsi)
     update_hours_per_week if hours_per_week_updated
     update_email if email_updated
@@ -38,6 +40,9 @@ class GsisController < ApplicationController
 
   # create the model if such user does not exist
   def create
+    authorize User.new email: gsi_params[:email]
+    authorize Employment.new course_id: @course.id
+
     @gsi = find_or_create_by(gsi_params[:email])
     @gsi.hours_per_week = new_hours_per_week
 
@@ -53,6 +58,8 @@ class GsisController < ApplicationController
   # and has no other appointments
   def destroy
     fetch_by_id
+    authorize Employment.new course_id: @course.id
+
     if @gsi.signed_in_before || other_appointments?(@gsi)
       fire(@gsi)
     else

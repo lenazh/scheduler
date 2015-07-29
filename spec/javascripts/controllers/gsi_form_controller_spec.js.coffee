@@ -1,4 +1,4 @@
-describe "gsiCtrl", ->
+describe "GsiFormController", ->
   $scope = {}
   $routeParams = {}
   controller = {}
@@ -64,16 +64,6 @@ describe "gsiCtrl", ->
 
   it "calls Gsi.all() while initializing", ->
     expect(gsiMock.all).toHaveBeenCalled()
-  
-  it 'has @email defined and identical to @fields.email', ->
-    expect(controller.email).toBeDefined()
-    email = 'sidious@deathstar.mil'
-    controller.fields.email = email
-
-  it 'has @hours_per_week defined and identical to @fields.hours_per_week', ->
-    expect(controller.hours_per_week).toBeDefined()
-    hours_per_week = 36
-    controller.fields.hours_per_week = hours_per_week
 
   it 'has @all defined and set to all existing record', ->
     expect(controller.all).toEqual fakeResults
