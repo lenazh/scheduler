@@ -9,6 +9,6 @@ describe CalendarController do
   end
 
   it 'responds to all valid routes' do
-    expect_to_respond_to %w(calendar_template, event_template)
+    expect_to_respond_to %w(calendar_template event_template)
   end
 end
