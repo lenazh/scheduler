@@ -20,6 +20,7 @@
 //= require angular-animate
 //= require angular-resource
 //= require angular-mocks
+//= require_tree .//angular//helpers
 //= require_tree .//angular//app
 //= require_tree .//angular//factories
 //= require_tree .//angular//directives

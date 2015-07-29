@@ -2,7 +2,8 @@
   courseResource = $resource "#{gon.courses_api_path}/:id", 
     { id: '@id' }, 
     { 
-      'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
+      'update': { method:'PUT' }, 
+      'headers': {'Content-Type': 'application/json'},
       'post': headers: {'Content-Type': 'application/json'}
     }
 

@@ -57,7 +57,10 @@ gem 'gon'
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring',        group: :development
+  # Ruby lint
   gem 'rubocop', require: false
+  # CoffeeScript lint
+  gem 'coffeelint'
 end
 
 group :development, :test do
