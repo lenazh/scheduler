@@ -9,6 +9,9 @@
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
 ]
 
+# Hash where all the helper functions are stored
+window.schedulerApp = {}
+
 # routing definitions
 
 @schedulerModule.config ['$routeProvider', ($routeProvider) ->
