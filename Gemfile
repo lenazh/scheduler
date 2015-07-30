@@ -67,6 +67,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'capybara'
+  gem 'capybara-angular'
   gem 'poltergeist'
   gem 'autotest-rails'
 end

@@ -4,7 +4,29 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+
 require 'cucumber/rails'
+require 'rspec/expectations'
+require 'capybara/cucumber'
+require 'capybara/poltergeist'
+
+
+Capybara.default_driver = :poltergeist
+#include Capybara::Angular::DSL
+
+Capybara.register_driver :poltergeist do |app|
+  options = {
+    js_errors: true,
+    timeout: 500,
+    debug: false,
+    phantomjs_options: ['--load-images=no', '--disk-cache=false'],
+    inspector: true
+  }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
+
+
+
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
