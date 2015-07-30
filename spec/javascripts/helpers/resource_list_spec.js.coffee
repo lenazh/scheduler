@@ -114,7 +114,7 @@ describe "ResourceList", ->
       expect(resources[1].id).not.toEqual allResources[1].id
 
   describe "saveNew(gsi)", ->
-    saveNewResource = () ->
+    saveNewResource = ->
       $httpBackend.expectPOST(resourcePath).respond(201, newGsi)
       list.saveNew name
       $httpBackend.flush()

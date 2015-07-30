@@ -6,7 +6,7 @@ describe 'FormController', ->
   beforeEach ->
     fields = ['name', 'age', 'price'] # Pets resource
     resource = {
-      all: () -> null
+      all: -> null
       remove: (resource) -> null
       saveNew: (params) -> null
       update: (resource, params) -> null
