@@ -1,7 +1,6 @@
 class ResourceList
   resourceLink = {}
   all = []
-  fields = []
   name = ''
 
   remove_from_list = (resource) ->
@@ -17,8 +16,8 @@ class ResourceList
 
   updateParams = (params) ->
     result = {}
-    for key in fields
-      result["#{name}[#{key}]"] = Object.keys(params)
+    for key in Object.keys(params)
+      result["#{name}[#{key}]"] = params[key]
     result
 
   # public interface
