@@ -83,7 +83,7 @@ Then(/^I should(n't)? see "(.*?)" section$/) do |negate, name|
   end
 end
 
-Given(/^"(.*?)" class exists and belongs to user$/) do |name|
+Given(/^"(.*?)" class exists$/) do |name|
   create_class name
   @class = name
 end
@@ -93,8 +93,16 @@ When(/^I select this class$/) do
   click_button @class
 end
 
-Then(/^I should see "(.*?)" in navigation bar title$/) do |name|
+Then(/^I should(n't)? see "(.*?)" in navigation bar title$/) do |negate, name|
   with_scope('navbar title') do
-    expect(page).to have_content(name)
+    if negate
+      expect(page).to have_no_content(name)
+    else
+      expect(page).to have_content(name)
+    end
   end
+end
+
+Given /^(?:|I )am on (.+)$/ do |page_name|
+  visit path_to(page_name)
 end

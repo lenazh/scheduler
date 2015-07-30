@@ -9,6 +9,7 @@ Background:
   Given "user" is logged in
   And I am on the root page
 
+
 Scenario: All the menu items are present
   Then I should see "My Classes, GSIs, Schedule, Settings, Sign out" items in menu
 
@@ -20,7 +21,7 @@ Scenario: My classes navigates to the list of the classes I own and the classes 
 
 
 Scenario: Class name appears in navigation bar title when it's selected
-  Given "Kerbology" class exists and belongs to user
+  Given "Kerbology" class exists
   When I select this class
   Then I should see "Kerbology" in navigation bar title
 

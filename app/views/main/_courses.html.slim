@@ -12,14 +12,14 @@ div.page-header
           th
         tr ng-repeat="course in crs.all"
           td 
-            button[class="btn btn-link" ng-click="crs.select(course)"] {{ course.name }} 
+            button[class="btn btn-link" ng-click="crs.select(course)" ng-attr-id="owned-class-{{course.id}}"] {{ course.name }} 
           td ng-bind="course.created_at | date"
 
           td.text-right 
-            button[class="btn btn-default" ng-click="crs.editForm(course)" ng-disabled="crs.disableEditingAndDeletion"] Edit
+            button[class="btn btn-default" ng-click="crs.editForm(course)" ng-disabled="crs.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-edit"] Edit
 
           td.text-right 
-            button[class="btn btn-danger" ng-click="crs.remove(course)" ng-disabled="crs.disableEditingAndDeletion"] X
+            button[class="btn btn-danger" ng-click="crs.remove(course)" ng-disabled="crs.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-delete"] X
           
 
         tr
