@@ -62,8 +62,11 @@ describe "GsiFormController", ->
   it "calls Gsi.init(...) while initializing with the correct course_id", ->
     expect(gsiMock.init).toHaveBeenCalledWith($routeParams['course_id'])
 
-  it "calls Gsi.all() while initializing", ->
-    expect(gsiMock.all).toHaveBeenCalled()
+  it "has 'email' field", ->
+    expect(controller.fields.email).toBeDefined()
+
+  it "has 'hours_per_week' field", ->
+    expect(controller.fields.hours_per_week).toBeDefined()
 
   it 'has @all defined and set to all existing record', ->
     expect(controller.all).toEqual fakeResults

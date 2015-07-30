@@ -9,6 +9,7 @@ class FormController
   disableEditingAndDeletion: false
 
   constructor: (resource, fields) ->
+    @all = resource.all()
     @resource = resource
     for field in fields
       @fields[field] = ''

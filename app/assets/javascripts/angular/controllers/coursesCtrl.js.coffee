@@ -1,63 +1,37 @@
-@schedulerModule.controller 'coursesCtrl', ['$scope', 'Course', 'Navbar', ($scope, Course, Navbar) ->
-
-  @courses = Course.all()
-  @courseName = ""
-
-  @hideAddButton = false
-  @hideUpdateButton = true
-  @disableEditingAndDeletion = false
-  navbarCourse = Navbar.course()
-
-
-  name_is_valid = () ->
-    $scope.form.courseName.$valid
+class CourseFormController extends schedulerApp.FormController
+  $scope = {}
+  Navbar = {}
+  navbarCourse = { 'id': 0, 'title': '(pending...)' }
 
   isDisplayedOnNavbar = (course) ->
     navbarCourse['id'] == course['id'].toString()
 
-  @remove = (course) -> 
-    Course.remove course
+  constructor: (_$scope_, _Navbar_, Course) ->
+    Course.init()
+    super Course, ['name']
+    $scope = _$scope_
+    Navbar = _Navbar_
+    navbarCourse = Navbar.course()
+
+  form_is_valid: () ->
+    $scope.form.name.$valid
+
+  remove: (course) ->
+    super
     Navbar.resetCourse() if isDisplayedOnNavbar(course)
 
-  @saveNew = () ->
-    return unless name_is_valid
-    name = @courseName
-    Course.saveNew(@courseName)
-    @courseName = ""
+  update: () ->
+    return unless @form_is_valid
+    course = @resourceToUpdate
+    Navbar.setCourse(course['id'], @fields.name) if isDisplayedOnNavbar(course)
+    super
 
-  @update = () ->
-    return unless name_is_valid
-    course = @courseToUpdate
-    name = @courseName
-    Course.update course, name
-    @addForm()
-    Navbar.setCourse(course['id'], name) if isDisplayedOnNavbar(course)
-
-
-  @editForm = (course) ->
-    @hideAddButton = true
-    @hideUpdateButton = false
-    @disableEditingAndDeletion = true
-    @courseToUpdate = course
-    @courseName = course.name
-
-
-
-  @addForm = () ->
-    @hideAddButton = false
-    @hideUpdateButton = true
-    @disableEditingAndDeletion = false
-    @courseName = ""
-
-
-
-  @select = (course) -> 
+  select: (course) -> 
     Navbar.setCourse course['id'], course['name']
 
+schedulerApp.CourseFormController = CourseFormController
 
-# The controller will not work w/o this 
-# return statement as the coffescript will
-# try to return the last defined method
-
-  return
+@schedulerModule.controller 'coursesCtrl', 
+  ['$scope', 'Navbar', 'Course', ($scope, Navbar, Course) ->
+    new schedulerApp.CourseFormController($scope, Navbar, Course)
 ]

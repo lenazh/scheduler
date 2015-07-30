@@ -6,16 +6,21 @@ describe 'FormController', ->
   beforeEach ->
     fields = ['name', 'age', 'price'] # Pets resource
     resource = {
+      all: () -> null
       remove: (resource) -> null
       saveNew: (params) -> null
       update: (resource, params) -> null
     }
 
+    spyOn(resource, 'all')
     spyOn(resource, 'remove')
     spyOn(resource, 'saveNew')
     spyOn(resource, 'update')
 
     form = new schedulerApp.FormController(resource, fields)
+
+  it "calls resource.all() while initializing", ->
+    expect(resource.all).toHaveBeenCalled()
 
   it 'sets form.resource to the one provided when instantiated', ->
     expect(form.resource).toBe resource
