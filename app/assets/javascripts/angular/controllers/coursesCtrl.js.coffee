@@ -13,20 +13,20 @@ class CourseFormController extends schedulerApp.FormController
     Navbar = _Navbar_
     navbarCourse = Navbar.course()
 
-  form_is_valid: () ->
+  form_is_valid: ->
     $scope.form.name.$valid
 
   remove: (course) ->
     super
     Navbar.resetCourse() if isDisplayedOnNavbar(course)
 
-  update: () ->
+  update: ->
     return unless @form_is_valid
     course = @resourceToUpdate
     Navbar.setCourse(course['id'], @fields.name) if isDisplayedOnNavbar(course)
     super
 
-  select: (course) -> 
+  select: (course) ->
     Navbar.setCourse course['id'], course['name']
 
 schedulerApp.CourseFormController = CourseFormController

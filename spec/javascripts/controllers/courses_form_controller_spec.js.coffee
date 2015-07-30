@@ -1,4 +1,4 @@
-describe "coursesCtrl", ->
+describe "CourseFormController", ->
   $scope = {}
   controller = {}
   fakeResults = {}
@@ -13,20 +13,20 @@ describe "coursesCtrl", ->
     ]
 
     courseMock = {
-      init: () -> null
-      all: () -> fakeResults,
+      init: -> null
+      all: -> fakeResults,
       saveNew: (params) -> {name: "New course", user_id: "1", id: '3'},
       update: (course, params) -> {name: "Physics 8A", user_id: "1", id: '1'},
       remove: (course) -> null
     }
 
     navbarMock = {
-      resetCourse: () -> null
+      resetCourse: -> null
       setCourse: (id, name) -> null
-      course: () -> {'title': 'Course1', 'id': '2'}
+      course: -> {'title': 'Course1', 'id': '2'}
     }
 
-  beforeEach ->  
+  beforeEach ->
     spyOn(courseMock, 'all').and.callThrough()
     spyOn(courseMock, 'saveNew').and.callThrough()
     spyOn(courseMock, 'update').and.callThrough()
@@ -50,7 +50,7 @@ describe "coursesCtrl", ->
   describe "has method remove(course) that", ->
     it "resets the Navbar title when the current course is being deleted", ->
       id = 1
-      courseToRemove = fakeResults[id] 
+      courseToRemove = fakeResults[id]
       controller.remove(courseToRemove)
       expect(navbarMock.resetCourse).toHaveBeenCalled()
 
@@ -58,7 +58,7 @@ describe "coursesCtrl", ->
     it "updates the Navbar title when the current course is updates", ->
       id = 1
       name = "Physics 8A"
-      controller.resourceToUpdate = fakeResults[id] 
+      controller.resourceToUpdate = fakeResults[id]
       controller.fields.name = name
       controller.update()
       expect(navbarMock.setCourse).toHaveBeenCalledWith(

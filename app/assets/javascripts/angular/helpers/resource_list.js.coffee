@@ -24,11 +24,11 @@ class ResourceList
 
   constructor: ($resource, path, resourceName) ->
     resourceLink = $resource path,
-      { id: '@id' },
+      { 'id': '@id' },
       {
-        'update': { method:'PUT' },
+        'update': { 'method': 'PUT' },
         'headers': {'Content-Type': 'application/json'},
-        'post': headers: {'Content-Type': 'application/json'}
+        'post': 'headers': {'Content-Type': 'application/json'}
       }
     name = resourceName
 

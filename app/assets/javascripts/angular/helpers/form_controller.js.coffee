@@ -17,7 +17,7 @@ class FormController
   form_is_valid: ->
     true
 
-  remove: (resourceToRemove) -> 
+  remove: (resourceToRemove) ->
     @resource.remove resourceToRemove
 
   saveNew: ->
