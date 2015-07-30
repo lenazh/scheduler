@@ -14,18 +14,18 @@ class FormController
     for field in fields
       @fields[field] = ''
 
-  form_is_valid: () ->
+  form_is_valid: ->
     true
 
   remove: (resourceToRemove) -> 
     @resource.remove resourceToRemove
 
-  saveNew: () ->
+  saveNew: ->
     return unless @form_is_valid
     @resource.saveNew @params()
     @emptyFields()
 
-  update: () ->
+  update: ->
     return unless @form_is_valid
     @resource.update @resourceToUpdate, @params()
     @addForm()
@@ -35,19 +35,19 @@ class FormController
     @populateFields(resource)
     @editMode()
 
-  addForm: () ->
+  addForm: ->
     @emptyFields()
     @addMode()
 
   # (imaginary) private methods
 
-  params: () ->
+  params: ->
     result = {}
     for field in Object.keys(@fields)
       result[field] = @fields[field]
     result
 
-  emptyFields: () ->
+  emptyFields: ->
     for field in Object.keys(@fields)
       @fields[field] = ''
 
@@ -55,12 +55,12 @@ class FormController
     for field in Object.keys(@fields)
       @fields[field] = resource[field]
 
-  editMode: () ->
+  editMode: ->
     @hideAddButton = true
     @hideUpdateButton = false
     @disableEditingAndDeletion = true
 
-  addMode: () ->
+  addMode: ->
     @hideAddButton = false
     @hideUpdateButton = true
     @disableEditingAndDeletion = false

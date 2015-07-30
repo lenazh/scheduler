@@ -7,6 +7,6 @@
     saveNew: (params) -> list.saveNew(params)
     update: (course, params) -> list.update(course, params)        
     remove: (course) -> list.remove(course)
-    all: () -> list.all()
+    all: -> list.all()
   }
 ]

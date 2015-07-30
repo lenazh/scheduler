@@ -38,7 +38,8 @@ describe "coursesCtrl", ->
 
     $scope = {}
 
-    controller = new schedulerApp.CourseFormController($scope, navbarMock, courseMock)
+    controller = new schedulerApp.CourseFormController(
+      $scope, navbarMock, courseMock)
 
   it "calls Navbar.course() while initializing", ->
     expect(navbarMock.course).toHaveBeenCalled()
@@ -60,7 +61,8 @@ describe "coursesCtrl", ->
       controller.resourceToUpdate = fakeResults[id] 
       controller.fields.name = name
       controller.update()
-      expect(navbarMock.setCourse).toHaveBeenCalledWith(fakeResults[id]['id'], name)
+      expect(navbarMock.setCourse).toHaveBeenCalledWith(
+        fakeResults[id]['id'], name)
 
   it "has method select(course) that makes the selected course active", ->
     course = { name: "Physics 8A", user_id: "1", id: 2}

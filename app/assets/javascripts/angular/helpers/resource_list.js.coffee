@@ -52,10 +52,10 @@ class ResourceList
   remove: (resourceToRemove) ->
     resourceToRemove.$remove(
       { id: resourceToRemove['id'] },
-      () -> remove_from_list(resourceToRemove)
+      -> remove_from_list(resourceToRemove)
     )
 
-  all: () ->
+  all: ->
     all = resourceLink.query()
     all
 

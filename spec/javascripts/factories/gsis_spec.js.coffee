@@ -1,7 +1,7 @@
 describe "Gsi", ->
   Resource = {}
   list = {}
-  gon = {} 
+  gon = {}
   gon.courses_api_path = ''
   window.gon = gon
   course_id = 1
@@ -23,17 +23,17 @@ describe "Gsi", ->
     expect(list.all).toHaveBeenCalled()
 
   it "has remove() that calls through", ->
-    resourceToRemove = { 'id' : 234 }
+    resourceToRemove = { 'id': 234 }
     Resource.remove(resourceToRemove)
     expect(list.remove).toHaveBeenCalledWith(resourceToRemove)
 
   it "has saveNew(...) that calls through", ->
-    params = { 'name' : 'Toaster', 'email' : 'toaster@example.com' }
+    params = { 'name': 'Toaster', 'email': 'toaster@example.com' }
     Resource.saveNew(params)
     expect(list.saveNew).toHaveBeenCalledWith(params)
 
   it "has update(...) that calls through", ->
-    resourceToUpdate = { 'id' : 234 }
-    params = { 'name' : 'Bread', 'email' : 'roasted@example.com' }
+    resourceToUpdate = { 'id': 234 }
+    params = { 'name': 'Bread', 'email': 'roasted@example.com' }
     Resource.update(resourceToUpdate, params)
     expect(list.update).toHaveBeenCalledWith(resourceToUpdate, params)

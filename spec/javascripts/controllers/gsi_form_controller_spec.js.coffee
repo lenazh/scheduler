@@ -41,7 +41,7 @@ describe "GsiFormController", ->
 
     gsiMock = {
       init: (course_id) -> null
-      all: () -> fakeResults,
+      all: -> fakeResults,
       saveNew: (params) -> fakeNewResult,
       update: (gsi, params) -> fakeUpdateResult,
       remove: (gsi) -> null
@@ -50,14 +50,15 @@ describe "GsiFormController", ->
     $routeParams = { 'course_id': course_id }
     $scope = {}
 
-  beforeEach -> 
+  beforeEach ->
     spyOn(gsiMock, 'all').and.callThrough()
     spyOn(gsiMock, 'saveNew').and.callThrough()
     spyOn(gsiMock, 'update').and.callThrough()
     spyOn(gsiMock, 'remove')
     spyOn(gsiMock, 'init')
 
-    controller = new schedulerApp.GsiFormController($scope, $routeParams, gsiMock)
+    controller = new schedulerApp.GsiFormController(
+      $scope, $routeParams, gsiMock)
 
   it "calls Gsi.init(...) while initializing with the correct course_id", ->
     expect(gsiMock.init).toHaveBeenCalledWith($routeParams['course_id'])
