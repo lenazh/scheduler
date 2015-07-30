@@ -27,14 +27,14 @@ Scenario: Class name appears in navigation bar title when it's selected
 
 
 Scenario: GSIs navigates to the GSI roaster section when a class is selected
-  Given "Kerbology" class exists and belongs to user
+  Given "Kerbology" class exists
   And I select this class
   When I click "GSIs"
   Then I should see "GSI roaster" section
 
 
 Scenario: Schedule navigates to the Schedule section when a class is selected
-  Given "Kerbology" class exists and belongs to user
+  Given "Kerbology" class exists
   And I select this class
   When I click "Schedule"
   Then I should see "Schedule" section
