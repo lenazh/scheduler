@@ -28,15 +28,6 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 # Use Slim for views
 gem 'slim-rails'
 
@@ -51,7 +42,7 @@ gem 'pundit'
 # Use twitter bootstrap CSS
 gem 'twitter-bootstrap-rails'
 
-# Use gon to give JS variables from the controller
+# Use gon to supply JS variables from the controller
 gem 'gon'
 
 group :development do
@@ -76,6 +67,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'capybara'
+  gem 'poltergeist'
   gem 'autotest-rails'
 end
 
