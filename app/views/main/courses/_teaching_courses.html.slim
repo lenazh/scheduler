@@ -1,6 +1,6 @@
 h1#classes-i-teach Classes I teach
 
-div.row ng-controller="AppointmentsCtrl as crs"
+div.row ng-controller="AppointmentsCtrl as appointments"
   form.form-inline[name="form-teaching" novalidate]  
     table[class="table table-striped" id="teaching-classes"]
       thead 
@@ -8,7 +8,7 @@ div.row ng-controller="AppointmentsCtrl as crs"
         th Title
         th Created
 
-      tr ng-repeat="course in crs.all"
+      tr ng-repeat="course in appointments.all"
         td 
-          button[class="btn btn-link" ng-click="crs.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }} 
+          button[class="btn btn-link" ng-click="appointments.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }} 
         td ng-bind="course.created_at | date"

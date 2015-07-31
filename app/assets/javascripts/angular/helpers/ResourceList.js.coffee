@@ -1,62 +1,63 @@
 class ResourceList
-  resourceLink = {}
-  all = []
-  name = ''
+  # "private" methods and fields
+  _resourceLink: {}
+  _all: []
+  _name: ''
 
-  remove_from_list = (resource) ->
-    id = all.indexOf resource
+  _removeFromList: (resource) ->
+    id = @_all.indexOf resource
     return if id == -1
-    all.splice id, 1
+    @_all.splice id, 1
 
-  append_to_list = (resource) ->
-    all.push resource
+  _appendToList: (resource) ->
+    @_all.push resource
 
-  update_list = (id, resource) ->
-    all[id] = resource
+  _updateList: (id, resource) ->
+    @_all[id] = resource
 
-  updateParams = (params) ->
+  _updateParams: (params) ->
     result = {}
     for key in Object.keys(params)
-      result["#{name}[#{key}]"] = params[key]
+      result["#{@_name}[#{key}]"] = params[key]
     result
 
   # public interface
 
   constructor: ($resource, path, resourceName) ->
-    resourceLink = $resource path,
+    @_resourceLink = $resource path,
       { 'id': '@id' },
       {
         'update': { 'method': 'PUT' },
         'headers': {'Content-Type': 'application/json'},
         'post': 'headers': {'Content-Type': 'application/json'}
       }
-    name = resourceName
+    @_name = resourceName
 
 
   saveNew: (params) ->
-    newResource = new resourceLink(params)
+    newResource = new @_resourceLink(params)
     newResource.$save(
-      -> append_to_list(newResource)
+      => @_appendToList(newResource)
     )
 
   update: (resourceToUpdate, params) ->
-    id = all.indexOf resourceToUpdate
+    id = @_all.indexOf resourceToUpdate
     return if id == -1
-    resourceLink.update(
-      updateParams(params),
+    @_resourceLink.update(
+      @_updateParams(params),
       resourceToUpdate,
-      (updatedResource) ->
-        update_list(id, updatedResource)
+      (updatedResource) => @_updateList(id, updatedResource)
     )
       
   remove: (resourceToRemove) ->
     resourceToRemove.$remove(
       { id: resourceToRemove['id'] },
-      -> remove_from_list(resourceToRemove)
+      => @_removeFromList(resourceToRemove)
+
     )
 
   all: ->
-    all = resourceLink.query()
-    all
+    @_all = @_resourceLink.query()
+    @_all
 
 schedulerApp.ResourceList = ResourceList

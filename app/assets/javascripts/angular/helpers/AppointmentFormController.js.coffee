@@ -1,29 +1,34 @@
 class AppointmentFormController extends schedulerApp.FormController
-  scope: {}
-  Navbar = {}
-  navbarCourse = { 'id': 0, 'title': '(pending...)' }
 
-  isDisplayedOnNavbar = (course) ->
-    navbarCourse['id'] == course['id'].toString()
+  # "private" methods and fields
 
-  constructor: (_$scope_, _Navbar_, Resource) ->
+  _$scope: {}
+  _navbar: {}
+  _navbarCourse: { 'id': 0, 'title': '(pending...)' }
+
+  _isDisplayedOnNavbar: (course) ->
+    @_navbarCourse['id'] == course['id'].toString()
+
+  # public methods
+
+  constructor: ($scope, Navbar, Resource) ->
     Resource.init()
     super Resource, ['name']
-    @scope = _$scope_
-    Navbar = _Navbar_
-    navbarCourse = Navbar.course()
+    @_$scope = $scope
+    @_navbar = Navbar
+    @_navbarCourse = @_navbar.course()
 
   remove: (course) ->
     super
-    Navbar.resetCourse() if isDisplayedOnNavbar(course)
+    @_navbar.resetCourse() if @_isDisplayedOnNavbar(course)
 
   update: ->
     return unless @form_is_valid
     course = @resourceToUpdate
-    Navbar.setCourse(course['id'], @fields.name) if isDisplayedOnNavbar(course)
+    @_navbar.setCourse(course['id'], @fields.name) if @_isDisplayedOnNavbar(course)
     super
 
   select: (course) ->
-    Navbar.setCourse course['id'], course['name']
+    @_navbar.setCourse course['id'], course['name']
 
 schedulerApp.AppointmentFormController = AppointmentFormController
