@@ -13,7 +13,7 @@ class GsiFormController extends schedulerApp.FormController
 
 schedulerApp.GsiFormController = GsiFormController
 
-@schedulerModule.controller 'gsiCtrl',
+@schedulerModule.controller 'GsiCtrl',
   ['$scope', '$routeParams', 'Gsi', ($scope, $routeParams, Gsi) ->
     new schedulerApp.GsiFormController($scope, $routeParams, Gsi)
 ]
