@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
   validates :email, format: { with: /[\w\.%+-]+@[\w\.-]+\.[\w\D]{2,4}/ }
 
-  attr_accessor :hours_per_week
 
   # returns true if this person ever signed in and false otherwise
   def signed_in_before

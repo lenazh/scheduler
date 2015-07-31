@@ -1,19 +1,19 @@
-class GsiFormController extends schedulerApp.FormController
+class EmploymentFormController extends schedulerApp.FormController
   $scope = {}
 
-  constructor: (_$scope_, $routeParams, Gsi) ->
+  constructor: (_$scope_, $routeParams, Employment) ->
     course_id = $routeParams['course_id']
-    Gsi.init(course_id)
-    super Gsi, ['email', 'hours_per_week']
+    Employment.init(course_id)
+    super Employment, ['email', 'hours_per_week']
     $scope = _$scope_
 
   form_is_valid: ->
     form = $scope.form
-    form.email.$valid && form.hours_per_week.$valid
+    form.email.$valid && form.hours.$valid
 
-schedulerApp.GsiFormController = GsiFormController
+schedulerApp.EmploymentFormController = EmploymentFormController
 
 @schedulerModule.controller 'GsiCtrl',
-  ['$scope', '$routeParams', 'Gsi', ($scope, $routeParams, Gsi) ->
-    new schedulerApp.GsiFormController($scope, $routeParams, Gsi)
+  ['$scope', '$routeParams', 'Employment', ($scope, $routeParams, Employment) ->
+    new schedulerApp.EmploymentFormController($scope, $routeParams, Employment)
 ]

@@ -3,10 +3,10 @@ class AppointmentsController < ApplicationController
   respond_to :json
   before_filter :assign_model
   after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
 
   def assign_model
-    @model = policy_scope(Employment)
+    @model = EmploymentPolicy::Scope
+      .new(current_user, Employment).resolveAppointments
   end
 
   def create

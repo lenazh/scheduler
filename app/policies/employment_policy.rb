@@ -12,8 +12,12 @@ class EmploymentPolicy < ApplicationPolicy
 
   # Returns all Employments that are part of the course
   class Scope < Scope
-    def resolve
-      scope.where(user_id: @user.id)
+    def resolveEmployments(course)
+      scope.includes(:gsi).where(course_id: course.id)
+    end
+
+    def resolveAppointments
+      scope.includes(:course).where(user_id: @user.id)
     end
   end
 end

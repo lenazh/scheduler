@@ -16,9 +16,9 @@ class ResourceList
     @_all[id] = resource
 
   _updateParams: (params) ->
-    result = {}
+    result = { "#{@_name}": {} }
     for key in Object.keys(params)
-      result["#{@_name}[#{key}]"] = params[key]
+      result["#{@_name}"][key] = params[key]
     result
 
   # public interface
@@ -29,13 +29,12 @@ class ResourceList
       {
         'update': { 'method': 'PUT' },
         'headers': {'Content-Type': 'application/json'},
-        'post': 'headers': {'Content-Type': 'application/json'}
       }
     @_name = resourceName
 
 
   saveNew: (params) ->
-    newResource = new @_resourceLink(params)
+    newResource = new @_resourceLink(@_updateParams(params))
     newResource.$save(
       => @_appendToList(newResource)
     )
@@ -44,9 +43,10 @@ class ResourceList
     id = @_all.indexOf resourceToUpdate
     return if id == -1
     @_resourceLink.update(
+      { 'id': resourceToUpdate.id },
       @_updateParams(params),
-      resourceToUpdate,
       (updatedResource) => @_updateList(id, updatedResource)
+      ->
     )
       
   remove: (resourceToRemove) ->
