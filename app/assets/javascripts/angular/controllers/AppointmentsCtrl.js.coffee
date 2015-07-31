@@ -1,4 +1,4 @@
 @schedulerModule.controller 'AppointmentsCtrl', 
   ['$scope', 'Navbar', 'Appointment', ($scope, Navbar, Appointment) ->
-    new schedulerApp.CourseFormController($scope, Navbar, Course)
+    new schedulerApp.AppointmentFormController($scope, Navbar, Appointment)
 ]

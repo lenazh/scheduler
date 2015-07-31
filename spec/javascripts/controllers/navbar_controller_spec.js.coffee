@@ -1,4 +1,4 @@
-describe "navbarCtrl", ->
+describe "NavbarCtrl", ->
   $scope = {}
   $controller = {}
   navbar = {}
@@ -44,7 +44,7 @@ describe "navbarCtrl", ->
       return
     inject (_$controller_) ->
       $controller = _$controller_
-    navbar = $controller 'navbarCtrl', {$scope: $scope}
+    navbar = $controller 'NavbarCtrl', {$scope: $scope}
 
   it "should initialize a list of menu items from Navbar factory", ->
     expect(navbar.items).toBeDefined()

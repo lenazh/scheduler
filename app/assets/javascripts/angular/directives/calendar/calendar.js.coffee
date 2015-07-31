@@ -2,5 +2,5 @@
   {
     restrict: 'E',
     templateUrl: 'calendar_template.html',
-    controller: 'calendarCtrl'
+    controller: 'CalendarCtrl'
   }

@@ -17,7 +17,7 @@ window.schedulerApp = {}
 @schedulerModule.config ['$routeProvider', ($routeProvider) ->
   $routeProvider.when "/", {
       templateUrl: gon.courses_view_path,
-      controller: 'coursesCtrl',
+      controller: 'CoursesCtrl',
       controllerAs: 'crs' 
     }
 
@@ -27,7 +27,7 @@ window.schedulerApp = {}
 
   $routeProvider.when "/courses/:course_id/gsi", {
       templateUrl: gon.gsi_view_path,
-      controller: 'gsiCtrl',
+      controller: 'GsiCtrl',
       controllerAs: 'gsiCtrl' 
     }
 
