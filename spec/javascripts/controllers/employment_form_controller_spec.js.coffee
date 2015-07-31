@@ -1,4 +1,4 @@
-describe "GsiFormController", ->
+describe "EmploymentFormController", ->
   $scope = {}
   $routeParams = {}
   controller = {}
@@ -57,7 +57,7 @@ describe "GsiFormController", ->
     spyOn(gsiMock, 'remove')
     spyOn(gsiMock, 'init')
 
-    controller = new schedulerApp.GsiFormController(
+    controller = new schedulerApp.EmploymentFormController(
       $scope, $routeParams, gsiMock)
 
   it "calls Gsi.init(...) while initializing with the correct course_id", ->
