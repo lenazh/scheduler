@@ -24,7 +24,7 @@ module ApplicationHelper
   end
 
   def api_paths
-    { courses_api_path: courses_path, users_api_path: users_path }
+    { courses_api_path: courses_path }
   end
 
   def calendar_parameters

@@ -9,4 +9,11 @@ class EmploymentPolicy < ApplicationPolicy
     course = @record.course
     @user.owns_course?(course)
   end
+
+  # Returns all Employments that are part of the course
+  class Scope < Scope
+    def resolve
+      scope.where(user_id: @user.id)
+    end
+  end
 end

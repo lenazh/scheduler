@@ -23,8 +23,6 @@ window.schedulerApp = {}
 
   $routeProvider.when "/courses", {
       templateUrl: gon.courses_view_path,
-      controller: 'coursesCtrl',
-      controllerAs: 'crs' 
     }
 
   $routeProvider.when "/courses/:course_id/gsi", {

@@ -1,0 +1,14 @@
+h1#classes-i-teach Classes I teach
+
+div.row ng-controller="appointmentsCtrl as crs"
+  form.form-inline[name="form" novalidate]  
+    table[class="table table-striped" id="teaching-classes"]
+      thead 
+      tr
+        th Title
+        th Created
+
+      tr ng-repeat="course in crs.all"
+        td 
+          button[class="btn btn-link" ng-click="crs.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }} 
+        td ng-bind="course.created_at | date"
