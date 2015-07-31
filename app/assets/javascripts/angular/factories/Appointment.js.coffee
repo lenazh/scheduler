@@ -1,12 +1,12 @@
 @schedulerModule.factory 'Appointment', ['$resource', ($resource) -> 
   list = {}
   {
-    init: (course_id) ->
+    init: (_unused) ->
       list = new schedulerApp.ResourceList(
-        $resource, "#{gon.courses_api_path}/:id", 'course')
+        $resource, "#{gon.appointments_api_path}/:id", 'appointment')
     saveNew: (params) -> null
-    update: (course, params) -> null
-    remove: (course) -> null
+    update: (appointment, params) -> null
+    remove: (appointment) -> null
     all: -> list.all()
   }
 ]
