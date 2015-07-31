@@ -20,6 +20,10 @@ describe EmploymentsController do
   let(:another_course) { create(:course) }
   let(:course_owner) { course.user }
 
+  def params
+    { id: employment.id, course_id: course.id, format: :json }
+  end
+
   def update_gsi(params)
     put :update,
         { id: employment.id,
@@ -30,9 +34,7 @@ describe EmploymentsController do
   end
 
   def delete_gsi
-    delete :destroy,
-           { id: employment.id, course_id: course.id, format: :json },
-           valid_session
+    delete :destroy, params, valid_session
   end
 
   include PunditHelper
@@ -46,6 +48,11 @@ describe EmploymentsController do
   end
 
   describe 'delete' do
+    it 'returns :no_content code' do
+      delete :destroy, params, valid_session
+      expect(response.response_code).to eq(204)
+    end
+
     describe 'GSI who never signed in before' do
       before(:each) do
         gsi.sign_in_count = 0
@@ -91,19 +98,38 @@ describe EmploymentsController do
   end
 
   describe 'update' do
+    def update_and_check_if_hired(email, gsi_amount_change)
+      expect do
+        update_gsi(email: email, hours_per_week: hours_per_week)
+      end.to change(User, :count).by(gsi_amount_change)
+      new_gsi = User.find_by email: email
+      expect(new_gsi.employments.first.course_id).to eq course.id
+      employment = assigns(:employment)
+      expect(employment.hours_per_week).to eq(hours_per_week)
+      expect(employment.gsi.email).to eq(email)
+    end
+
+    describe 'with invalid email' do
+      it 'returns unprocessable_entity code' do
+        update_gsi(email: 'blah', hours_per_week: 12)
+        expect(response.response_code).to eq(422)
+      end
+    end
+
+    it 'assigns the requested model as @employment' do
+      update_gsi(email: 'space@example.com', hours_per_week: 33)
+      result = assigns(:employment)
+      expect(result.hours_per_week).to eq 33
+      expect(result.gsi.email).to eq 'space@example.com'
+    end
+
+    it 'returns success code' do
+      update_gsi(email: 'space@example.com', hours_per_week: 33)
+      response.should be_success
+    end
+
     describe 'if email is changed' do
       let(:email) { 'burney@gmail.com' }
-
-      def update_and_check_if_hired(email, gsi_amount_change)
-        expect do
-          update_gsi(email: email, hours_per_week: hours_per_week)
-        end.to change(User, :count).by(gsi_amount_change)
-        new_gsi = User.find_by email: email
-        expect(new_gsi.employments.first.course_id).to eq course.id
-        employment = assigns(:employment)
-        expect(employment.hours_per_week).to eq(hours_per_week)
-        expect(employment.gsi.email).to eq(email)
-      end
 
       describe 'if the updated GSI signed in before' do
         before(:each) do
@@ -169,5 +195,18 @@ describe EmploymentsController do
     end
   end
 
-#  it_behaves_like 'a JSON resource controller:'
+  describe 'GET index' do
+    it 'assigns all employments as @employments' do
+      get :index, { course_id: course.id, format: :json }, valid_session
+      assigns(:employments).should eq([employment])
+    end
+  end
+
+  describe 'GET show' do
+    it 'assigns the requested employment as @employment' do
+      get :show, params, valid_session
+      assigns(:employment).should eq(employment)
+    end
+  end
+
 end
