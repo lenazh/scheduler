@@ -18,31 +18,23 @@ describe UserPolicy do
 
   [:update?, :destroy?].each do |permission|
     permissions permission do
-      describe "if GSI has't signed in and only enrolled in owner's class" do
+      describe "if GSI has't logged in and is not teaching anything" do
         it 'grants access' do
-          expect(subject).to permit(owner, gsi)
+          expect(subject).to permit(owner, user)
         end
       end
 
-      describe 'if gsi logged in before' do
+      describe 'if GSI logged in before' do
         it 'denies access' do
-          gsi.sign_in_count = 1
-          gsi.save!
+          user.sign_in_count = 1
+          user.save!
+          expect(subject).not_to permit(owner, user)
+        end
+      end
+
+      describe 'if GSI is teaching a class' do
+        it 'denies access' do
           expect(subject).not_to permit(owner, gsi)
-        end
-      end
-
-      describe 'if gsi has multiple enrollments' do
-        it 'denies access' do
-          gsi.courses_to_teach << create(:course)
-          gsi.save!
-          expect(subject).not_to permit(owner, gsi)
-        end
-      end
-
-      describe 'if gsi is enrolled in a class not belonging to user' do
-        it 'denies access' do
-          expect(subject).not_to permit(user, gsi)
         end
       end
     end

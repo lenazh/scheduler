@@ -26,6 +26,7 @@ class EmploymentsController < ApplicationController
     old_gsi = @employment.gsi
     @employment.hours_per_week = model_params[:hours_per_week]
     save_and_render
+    destroy_if_needed(old_gsi)
   end
 
   def destroy

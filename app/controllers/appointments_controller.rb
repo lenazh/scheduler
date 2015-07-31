@@ -9,20 +9,8 @@ class AppointmentsController < ApplicationController
       .new(current_user, Employment).resolveAppointments
   end
 
-  def create
-    permission_denied
-  end
-
-  def update
-    permission_denied
-  end
-
-  def destroy
-    permission_denied
-  end
-
-# fixes the problem where ActionController::TestCase::Behavior::post
-# tries to access a non-existend URL helper (index and show work just fine :/ )
+  # fixes the problem where ActionController::TestCase::Behavior::post
+  # tries to access a non-existend URL helper (index and show work just fine :/ )
   def section_url(course_id)
     course_appointments_path(course_id)
   end

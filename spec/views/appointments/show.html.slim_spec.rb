@@ -4,7 +4,7 @@ require 'helpers/json_format_helper'
 describe 'appointments/show' do
   let(:course) { stub_model(Course, attributes_for(:course)) }
   let(:user) { stub_model(User, attributes_for(:user)) }
-  let(:appointment) { stub_model(Employment, user: user, course: course) }
+  let(:appointment) { stub_model(Employment, gsi: user, course: course) }
 
   it 'assigns variables correctly' do
     assign(:appointment, appointment)
