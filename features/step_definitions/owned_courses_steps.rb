@@ -4,6 +4,28 @@ def owned_class_id(name)
   end
 end
 
+def create_class(name)
+  click_link 'My Classes'
+  within('#owned-classes') do
+    if page.has_content? name
+      return
+    else
+      fill_in 'name', with: name
+      click_button 'Add'
+    end
+  end
+end
+
+Given(/^"(.*?)" class exists$/) do |name|
+  create_class name
+  @class = name
+end
+
+When(/^I select this class$/) do
+  click_link 'My Classes'
+  click_button @class
+end
+
 Then(/^I should(n't)? see "(.*?)" in owned classes$/) do |negate, name|
   within('#owned-classes') do
     if negate
@@ -14,10 +36,6 @@ Then(/^I should(n't)? see "(.*?)" in owned classes$/) do |negate, name|
   end
 end
 
-Then(/^"(.*?)" button should be disabled$/) do |name|
-  expect(page).to have_button(name, disabled: true)
-end
-
 When(/^I edit this class$/) do
   id = owned_class_id(@class)
   find_button("owned-class-#{id}-edit").click
@@ -26,12 +44,4 @@ end
 When(/^I delete this class$/) do
   id = owned_class_id(@class)
   find_button("owned-class-#{id}-delete").click
-end
-
-When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
-  fill_in(field, :with => value)
-end
-
-When /^(?:|I )press "([^"]*)"$/ do |button|
-  click_button(button)
 end
