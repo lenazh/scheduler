@@ -73,6 +73,12 @@ class GsisController < ApplicationController
     [:email]
   end
 
+  # fixes the problem where ActionController::TestCase::Behavior::post
+  # tries to access a non-existend URL helper (index and show work just fine :/ )
+  # def user_url(course_id)
+  #   course_gsi_path(course_id)
+  # end
+
   private
 
   include GsisControllerHelper

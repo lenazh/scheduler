@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   scope "api" do
     resources :appointments, :only => [:show, :index], :defaults => { :format => :json }
+    resources :users, :except => [:new, :edit], :defaults => { :format => :json }
     resources :courses, :except => [:new, :edit], :defaults => { :format => :json } do
       resources :sections, :except => [:new, :edit], :defaults => { :format => :json }
       resources :gsis, :except => [:new, :edit], :defaults => { :format => :json }

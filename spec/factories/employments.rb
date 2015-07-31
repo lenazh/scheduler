@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :employment do
-    user
+    association :gsi, factory: :user
     course
     hours_per_week 20
 
