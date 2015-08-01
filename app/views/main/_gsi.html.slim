@@ -1,9 +1,9 @@
 div.page-header
-  h1#gsi-roaster GSI roaster
+  h1#gsi-roster-title GSI roster
 
 div.row  
   form.form-inline[name="form" novalidate]  
-    table[class="table table-striped"]
+    table[class="table table-striped" id="gsi-roster"]
       thead 
       tr
         th Name
@@ -13,18 +13,18 @@ div.row
         th
         th
       tr ng-repeat="gsi in gsiCtrl.all"
-        td ng-bind="gsi.name" 
-        td ng-bind="gsi.email"
-        td ng-bind="gsi.hours_per_week"
+        td ng-attr-id="gsi-name-{{gsi.id}}" ng-bind="gsi.name" 
+        td ng-attr-id="gsi-email-{{gsi.id}}" ng-bind="gsi.email"
+        td ng-attr-id="gsi-hours-{{gsi.id}}" ng-bind="gsi.hours_per_week"
 
         td.text-right 
-          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] Edit
+          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit"] Edit
 
         td.text-right 
-          button[class="btn btn-default" ng-click="gsiCtrl.invite(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] Re-send invitation
+          button[class="btn btn-default" ng-click="gsiCtrl.invite(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-resend"] Re-send invitation
 
         td.text-right 
-          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion"] X
+          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete"] X
         
       tr
         td

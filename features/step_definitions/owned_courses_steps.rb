@@ -5,6 +5,7 @@ def owned_class_id(name)
 end
 
 def create_class(name)
+  @class = name
   click_link 'My Classes'
   within('#owned-classes') do
     if page.has_content? name
@@ -18,7 +19,6 @@ end
 
 Given(/^"(.*?)" class exists$/) do |name|
   create_class name
-  @class = name
 end
 
 When(/^I select this class$/) do

@@ -30,7 +30,7 @@ Scenario: GSIs navigates to the GSI roaster section when a class is selected
   Given "Kerbology" class exists
   And I select this class
   When I click "GSIs"
-  Then I should see "GSI roaster" section
+  Then I should see "GSI roster" section
 
 
 Scenario: Schedule navigates to the Schedule section when a class is selected

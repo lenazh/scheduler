@@ -8,7 +8,7 @@ Background:
   Given the web site is set up
   Given "user" is logged in
   Given "Kerbology" class exists and selected
-  And I am on the GSIs page
+  And I click "GSIs"
 
 
 Scenario: Adding a GSI with valid data

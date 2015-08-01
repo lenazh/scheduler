@@ -13,7 +13,7 @@ describe CoursesController do
   include PunditHelper
 
   before(:each) do
-    sign_in create(:user)
+    sign_in model.user
     stub_policy(CoursePolicy)
     CoursePolicy::Scope.any_instance.stub(:resolve) { Course.all }
   end
