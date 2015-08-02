@@ -6,7 +6,7 @@
     },
     require: '^sectionCalendar'
     templateUrl: 'event_template.html',
-    controller: 'calendarEventCtrl',
+    controller: 'CalendarEventCtrl',
     link: (scope, element, attrs, sectionCalendar) ->
       isGhost = () ->
         (scope.event.id == 0)

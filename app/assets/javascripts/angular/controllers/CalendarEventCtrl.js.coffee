@@ -1,4 +1,4 @@
-@schedulerModule.controller 'calendarEventCtrl', ['$scope', ($scope) ->
+@schedulerModule.controller 'CalendarEventCtrl', ['$scope', ($scope) ->
 # TODO -- allow the event to be controlled from keyboard
 
   $scope.toggleExpand = ($event) ->

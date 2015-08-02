@@ -1,4 +1,4 @@
-describe "calendarEventCtrl", ->
+describe "CalendarEventCtrl", ->
   $scope = {}
   $controller = {}
   event = {}
@@ -64,45 +64,49 @@ describe "calendarEventCtrl", ->
     beforeEach ->
       $scope['isGhost'] = false
       $scope['showEditForm'] = false
-      event = $controller 'calendarEventCtrl', {$scope: $scope}
+      event = $controller 'CalendarEventCtrl', {$scope: $scope}
 
     describe "when the form is clicked (toggleExpand(...) is called)", ->
-      it "calls calendarCtrl.updateSection when the form is expanded", ->
-        $scope['showEditForm'] = true
-        $scope.toggleExpand(mouseEventMock)
-        expect(calendarMock.updateSection).toHaveBeenCalledWith(
-          $scope.event, jasmine.any(Function))
+      describe "when the form is expanded", ->
+        beforeEach ->
+          $scope['showEditForm'] = true
 
-      it "doesn't calls calendarCtrl.updateSection when the form is collapsed", ->
-        $scope['showEditForm'] = false
-        $scope.toggleExpand(mouseEventMock)
-        expect(calendarMock.updateSection).not.toHaveBeenCalled()
+        it "calls CalendarCtrl.updateSection", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect(calendarMock.updateSection).toHaveBeenCalledWith(
+            $scope.event, jasmine.any(Function))
 
-      it "expands the form if collapsed", ->
-        $scope['showEditForm'] = false
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe true
+        it "collapses the form if the form is valid", ->
+          isFormValid = true
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe false
 
-      it "collapses the form if expanded and the form is valid", ->
-        $scope['showEditForm'] = true
-        isFormValid = true
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe false
+        it "doesn't collapse if the form is invalid", ->
+          isFormValid = false
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe true
 
-      it "doesn't collapse the form if expanded and the form is invalid", ->
-        $scope['showEditForm'] = true
-        isFormValid = false
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe true
+      describe "when the form is collapsed", ->
+        beforeEach ->
+          $scope['showEditForm'] = false
+
+        it "doesn't calls CalendarCtrl.updateSection", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect(calendarMock.updateSection).not.toHaveBeenCalled()
+
+        it "expands", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe true
+
       
     describe "when the update is clicked (update(...) is called)", ->
-      it "calls calendarCtrl.updateSection", ->
+      it "calls CalendarCtrl.updateSection", ->
         $scope.update(mouseEventMock)
         expect(calendarMock.updateSection).toHaveBeenCalledWith(
           $scope.event, jasmine.any(Function))
 
     describe "when delete is clicked (delete(...) is called)", ->
-      it "calls calendarCtrl.deleteSection", ->
+      it "calls CalendarCtrl.deleteSection", ->
         $scope.delete(mouseEventMock)
         expect(calendarMock.deleteSection).toHaveBeenCalledWith($scope.event)
 
@@ -111,15 +115,15 @@ describe "calendarEventCtrl", ->
     beforeEach ->
       $scope['isGhost'] = true
       $scope['showEditForm'] = true
-      event = $controller 'calendarEventCtrl', {$scope: $scope}
+      event = $controller 'CalendarEventCtrl', {$scope: $scope}
 
     describe "when cancel is clicked (cancel(...) is called)", ->
-      it "calls calendarCtrl.deleteGhost", ->
+      it "calls CalendarCtrl.deleteGhost", ->
         $scope.cancel(mouseEventMock)
         expect(calendarMock.deleteGhost).toHaveBeenCalledWith($scope.event)
 
     describe "when save is clicked (save(...) is called)", ->
-      it "calls calendarCtrl.saveSection", ->
+      it "calls CalendarCtrl.saveSection", ->
         $scope.save(mouseEventMock)
         expect(calendarMock.saveSection).toHaveBeenCalledWith(
           $scope.event, jasmine.any(Function))

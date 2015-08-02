@@ -36,7 +36,7 @@
       selectable: () -> isCourseSelected()
     },
     {
-      title: "Section calendar",
+      title: "Schedule",
       active: "",
       href: () -> ifCourseSelected "#calendar/#{course['id']}"
       selectable: () -> isCourseSelected()

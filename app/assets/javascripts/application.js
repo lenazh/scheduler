@@ -21,7 +21,11 @@
 //= require angular-resource
 //= require angular-mocks
 //= require_tree .//angular//app
-//= require_tree .//angular//helpers
+//= require .//angular//helpers//FormController
+//= require .//angular//helpers//AppointmentFormController
+//= require .//angular//helpers//CourseFormController
+//= require .//angular//helpers//EmploymentFormController
+//= require .//angular//helpers//ResourceList
 //= require_tree .//angular//factories
 //= require_tree .//angular//directives
 //= require_tree .//angular//controllers

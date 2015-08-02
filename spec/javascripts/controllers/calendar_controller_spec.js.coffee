@@ -1,4 +1,4 @@
-describe "calendarCtrl", ->
+describe "CalendarCtrl", ->
   $scope = {}
   $controller = {}
   calendar = {}
@@ -116,7 +116,7 @@ describe "calendarCtrl", ->
     inject (_$controller_) ->
       $controller = _$controller_
 
-    calendar = $controller 'calendarCtrl', {$scope: $scope}
+    calendar = $controller 'CalendarCtrl', {$scope: $scope}
 
   it "initializes $scope.weekdays", ->
     expect($scope.weekdays).toBeDefined()

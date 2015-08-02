@@ -1,4 +1,4 @@
-describe "Gsi", ->
+describe "Employment", ->
   Resource = {}
   list = {}
   gon = {}
@@ -9,8 +9,8 @@ describe "Gsi", ->
 # initialize the dependencies and get the objects
   beforeEach module('schedulerApp')
   beforeEach ->
-    inject (_Gsi_) ->
-      Resource = _Gsi_
+    inject (_Employment_) ->
+      Resource = _Employment_
       list = Resource.init(course_id)
 
       spyOn(list, 'all')

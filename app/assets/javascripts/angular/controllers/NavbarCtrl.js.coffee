@@ -1,4 +1,4 @@
-@schedulerModule.controller 'navbarCtrl',  [ 'Navbar', (Navbar) ->
+@schedulerModule.controller 'NavbarCtrl',  [ 'Navbar', (Navbar) ->
 
   @course = Navbar.course()
 

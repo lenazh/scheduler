@@ -116,7 +116,7 @@ describe "ResourceList", ->
   describe "saveNew(gsi)", ->
     saveNewResource = ->
       $httpBackend.expectPOST(resourcePath).respond(201, newGsi)
-      list.saveNew name
+      list.saveNew newGsi
       $httpBackend.flush()
 
     it "sends a POST request to the correct route", ->

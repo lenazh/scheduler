@@ -5,6 +5,26 @@
 # files.
 
 require 'cucumber/rails'
+require 'rspec/expectations'
+require 'capybara/cucumber'
+require 'capybara/poltergeist'
+
+Capybara.default_driver = :poltergeist
+
+# include Capybara::Angular::DSL
+# had to disable this because of the recurring
+# timeout while waiting for angular (Timeout::Error)
+
+Capybara.register_driver :poltergeist do |app|
+  options = {
+    js_errors: true,
+    timeout: 2000,
+    debug: false,
+    phantomjs_options: ['--load-images=no', '--disk-cache=false'],
+    inspector: true
+  }
+  Capybara::Poltergeist::Driver.new(app, options)
+end
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
@@ -31,7 +51,7 @@ ActionController::Base.allow_rescue = false
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end

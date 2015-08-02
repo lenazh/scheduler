@@ -1,0 +1,1 @@
+json.extract! @appointment.course, :id, :name, :created_at

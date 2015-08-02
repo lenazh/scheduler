@@ -1,4 +1,4 @@
-nav[class="navbar navbar-default" ng-controller="navbarCtrl as navbar"]
+nav[class="navbar navbar-default" ng-controller="NavbarCtrl as navbar"]
   div.container-fluid
     div.navbar-heared
       button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"
@@ -15,5 +15,8 @@ nav[class="navbar navbar-default" ng-controller="navbarCtrl as navbar"]
       ul class="nav navbar-nav"
         li
           = link_to 'Settings', edit_user_registration_path
+        li#sign-out
+          = link_to "Sign out", destroy_user_session_path, method: :delete
         li
-          = link_to 'Sign out', destroy_user_session_path, method: :delete
+          a#user-name
+            = current_user.name
