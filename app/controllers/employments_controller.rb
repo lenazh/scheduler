@@ -52,8 +52,8 @@ class EmploymentsController < ApplicationController
   def save_and_render
     if assign_gsi && @employment.save
       render :show,
-        status: :ok,
-        location: course_employment_url(@course.id, @employment.id)
+             status: :ok,
+             location: course_employment_url(@course.id, @employment.id)
     else
       render json: singular.errors, status: :unprocessable_entity
     end

@@ -1,4 +1,4 @@
-@schedulerModule.factory 'Appointment', ['$resource', ($resource) -> 
+@schedulerModule.factory 'Appointment', ['$resource', ($resource) ->
   list = {}
   {
     init: (_unused) ->

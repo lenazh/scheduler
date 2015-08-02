@@ -1,4 +1,5 @@
-@schedulerModule.controller 'CalendarCtrl',  ['$scope', '$routeParams', 'Section', ($scope, $routeParams, Section) ->
+@schedulerModule.controller 'CalendarCtrl',
+  ['$scope', '$routeParams', 'Section', ($scope, $routeParams, Section) ->
 
 # Private functions
   getKey = (hour, weekday) ->
