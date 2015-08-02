@@ -67,33 +67,37 @@ describe "CalendarEventCtrl", ->
       event = $controller 'CalendarEventCtrl', {$scope: $scope}
 
     describe "when the form is clicked (toggleExpand(...) is called)", ->
-      it "calls CalendarCtrl.updateSection when the form is expanded", ->
-        $scope['showEditForm'] = true
-        $scope.toggleExpand(mouseEventMock)
-        expect(calendarMock.updateSection).toHaveBeenCalledWith(
-          $scope.event, jasmine.any(Function))
+      describe "when the form is expanded", ->
+        beforeEach ->
+          $scope['showEditForm'] = true
 
-      it "doesn't calls CalendarCtrl.updateSection when the form is collapsed", ->
-        $scope['showEditForm'] = false
-        $scope.toggleExpand(mouseEventMock)
-        expect(calendarMock.updateSection).not.toHaveBeenCalled()
+        it "calls CalendarCtrl.updateSection", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect(calendarMock.updateSection).toHaveBeenCalledWith(
+            $scope.event, jasmine.any(Function))
 
-      it "expands the form if collapsed", ->
-        $scope['showEditForm'] = false
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe true
+        it "collapses the form if the form is valid", ->
+          isFormValid = true
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe false
 
-      it "collapses the form if expanded and the form is valid", ->
-        $scope['showEditForm'] = true
-        isFormValid = true
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe false
+        it "doesn't collapse if the form is invalid", ->
+          isFormValid = false
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe true
 
-      it "doesn't collapse the form if expanded and the form is invalid", ->
-        $scope['showEditForm'] = true
-        isFormValid = false
-        $scope.toggleExpand(mouseEventMock)
-        expect($scope.showEditForm).toBe true
+      describe "when the form is collapsed", ->
+        beforeEach ->
+          $scope['showEditForm'] = false
+
+        it "doesn't calls CalendarCtrl.updateSection", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect(calendarMock.updateSection).not.toHaveBeenCalled()
+
+        it "expands", ->
+          $scope.toggleExpand(mouseEventMock)
+          expect($scope.showEditForm).toBe true
+
       
     describe "when the update is clicked (update(...) is called)", ->
       it "calls CalendarCtrl.updateSection", ->

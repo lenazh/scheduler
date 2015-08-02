@@ -11,8 +11,12 @@ describe 'employments/index' do
   let(:course) { stub_model(Course, id: 13) }
   let(:user_1) { stub_model(User, attributes_for(:user)) }
   let(:user_2) { stub_model(User, attributes_for(:user)) }
-  let(:employment_1) { stub_model(Employment, gsi: user_1, course: course, id: 34) }
-  let(:employment_2) { stub_model(Employment, gsi: user_2, course: course, id: 35) }
+  let(:employment_1) do
+    stub_model(Employment, gsi: user_1, course: course, id: 34)
+  end
+  let(:employment_2) do
+    stub_model(Employment, gsi: user_2, course: course, id: 35)
+  end
 
   it 'assigns variables correctly' do
     mocks = [employment_1, employment_2]

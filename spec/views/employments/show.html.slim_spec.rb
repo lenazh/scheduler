@@ -15,5 +15,4 @@ describe 'employments/show' do
     expect(result['email']).to eq user.email
     expect(result['created_at']).to eq employment.created_at
   end
-
 end
