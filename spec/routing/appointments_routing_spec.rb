@@ -3,8 +3,8 @@ require 'spec_helper'
 describe AppointmentsController do
   describe 'routing' do
     it 'routes to #index' do
-      get('/api/appointments')
-        .should route_to('appointments#index', format: :json)
+      get('/api/appointments').
+        should route_to('appointments#index', format: :json)
     end
 
     it 'routes to #show' do

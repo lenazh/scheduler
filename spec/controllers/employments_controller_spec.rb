@@ -6,7 +6,9 @@ describe EmploymentsController do
 
   let(:factory) { :employment }
   let(:url_params) { { course_id: 'course_id', email: 'gsi.email' } }
-  let(:url_params_factory) { { course_id: :course_with_no_owner, email: :user } }
+  let(:url_params_factory) do
+    { course_id: :course_with_no_owner, email: :user }
+  end
 
   # This should return the minimal set of values that should be in
   # the session in order to pass any filters (e.g. authentication) defined
@@ -42,8 +44,8 @@ describe EmploymentsController do
   before(:each) do
     sign_in create(:user)
     CoursePolicy::Scope.any_instance.stub(:resolve) { Course.all }
-    EmploymentPolicy::Scope.any_instance
-      .stub(:resolveEmployments) { Employment.all }
+    EmploymentPolicy::Scope.any_instance.
+      stub(:resolveEmployments) { Employment.all }
     stub_policy(UserPolicy)
     stub_policy(EmploymentPolicy)
   end
