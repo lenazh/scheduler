@@ -22,7 +22,7 @@ describe AppointmentsController do
   before(:each) do
     sign_in user
     stub_policy(EmploymentPolicy)
-    CoursePolicy::Scope.any_instance.stub(:resolveAppointments) { Course.all }
+    CoursePolicy::Scope.any_instance.stub(:resolve_appointments) { Course.all }
   end
 
   describe 'GET index' do

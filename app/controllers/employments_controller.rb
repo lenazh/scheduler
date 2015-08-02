@@ -9,8 +9,8 @@ class EmploymentsController < ApplicationController
   # retreives the parent model and the association from the DB
   def assign_model
     @course = policy_scope(Course).find(params[:course_id])
-    @model = EmploymentPolicy::Scope
-      .new(current_user, Employment).resolveEmployments(@course)
+    @model = EmploymentPolicy::Scope.
+      new(current_user, Employment).resolve_employments(@course)
   end
 
   def create
@@ -51,7 +51,8 @@ class EmploymentsController < ApplicationController
   # saves the record and renders the result status
   def save_and_render
     if assign_gsi && @employment.save
-      render :show, status: :ok,
+      render :show,
+        status: :ok,
         location: course_employment_url(@course.id, @employment.id)
     else
       render json: singular.errors, status: :unprocessable_entity

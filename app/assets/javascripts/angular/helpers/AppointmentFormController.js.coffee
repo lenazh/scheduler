@@ -25,7 +25,8 @@ class AppointmentFormController extends schedulerApp.FormController
   update: ->
     return unless @form_is_valid
     course = @resourceToUpdate
-    @_navbar.setCourse(course['id'], @fields.name) if @_isDisplayedOnNavbar(course)
+    if @_isDisplayedOnNavbar(course)
+      @_navbar.setCourse(course['id'], @fields.name)
     super
 
   select: (course) ->

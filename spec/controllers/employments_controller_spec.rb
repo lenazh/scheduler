@@ -45,7 +45,7 @@ describe EmploymentsController do
     sign_in create(:user)
     CoursePolicy::Scope.any_instance.stub(:resolve) { Course.all }
     EmploymentPolicy::Scope.any_instance.
-      stub(:resolveEmployments) { Employment.all }
+      stub(:resolve_employments) { Employment.all }
     stub_policy(UserPolicy)
     stub_policy(EmploymentPolicy)
   end
