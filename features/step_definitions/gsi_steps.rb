@@ -8,7 +8,7 @@ end
 def create_gsi(email, hours)
   @gsi = {}
   @gsi[:email] = email
-  @gsi[:hours] = hours 
+  @gsi[:hours] = hours
   click_link 'GSIs'
   within('#gsi-roster') do
     if page.has_content? email
@@ -25,7 +25,6 @@ def employment_id(gsi)
     return find('td', text: email)['id'].match(/gsi-email-(\d+)/)[1]
   end
 end
-
 
 Given(/^"(.*?)" class exists and selected$/) do |name|
   create_class name

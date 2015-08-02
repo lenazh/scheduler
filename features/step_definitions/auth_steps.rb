@@ -33,7 +33,6 @@ def sign_up(user)
   click_button 'Sign up'
 end
 
-
 Given(/^the web site is set up$/) do
   # Place additional initialization here if needed
 end
