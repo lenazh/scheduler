@@ -9,6 +9,14 @@ class AppointmentFormController extends schedulerApp.FormController
   _isDisplayedOnNavbar: (course) ->
     @_navbarCourse['id'] == course['id'].toString()
 
+  _updateNavbarTitle: (course, title) ->
+    @_navbar.setCourse {
+      'id': course['id']
+      'title': title
+      'teaching': course['is_teaching']
+      'owner': course['is_owned']
+    }
+
   # public methods
 
   constructor: ($scope, Navbar, Resource) ->
@@ -26,10 +34,10 @@ class AppointmentFormController extends schedulerApp.FormController
     return unless @form_is_valid
     course = @resourceToUpdate
     if @_isDisplayedOnNavbar(course)
-      @_navbar.setCourse(course['id'], @fields.name)
+      @_updateNavbarTitle course, @fields.name
     super
 
   select: (course) ->
-    @_navbar.setCourse course['id'], course['name']
+    @_updateNavbarTitle course, course['name']
 
 schedulerApp.AppointmentFormController = AppointmentFormController

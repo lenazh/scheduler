@@ -5,7 +5,8 @@
   @items = Navbar.items()
 
   @select = (item) ->
-    Navbar.select item 
+    Navbar.select item
+    return
 
   return
 ]
