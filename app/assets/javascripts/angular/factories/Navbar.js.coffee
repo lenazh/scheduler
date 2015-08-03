@@ -21,7 +21,6 @@
     $cookies.put title_cookie, course[title_key]
     $cookies.put teaching_cookie, course[teaching_key]
     $cookies.put owner_cookie, course[owner_key]
-    course
 
   clearCookies = ->
     $cookies.remove id_cookie
@@ -80,7 +79,7 @@
 
   resetCourse = () ->
     clearCookies()
-    course = loadFromCookies()
+    loadFromCookies()
 
   deselect = (item) ->
     item.active = "" if item
@@ -99,6 +98,9 @@
         select item
         return
 
+  getTitle = ->
+    course['title']
+
   selectCurrentItem()
 
 # Expose the interface
@@ -107,6 +109,7 @@
     select: (item) -> select item
     deselect: (item) -> deselect item
     course: () -> course
+    title: () -> getTitle()
     setCourse: (course) -> setCourse course
     resetCourse: () -> resetCourse()
   }

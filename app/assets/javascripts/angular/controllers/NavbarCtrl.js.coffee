@@ -6,7 +6,8 @@
 
   @select = (item) ->
     Navbar.select item
-    return
+
+  @title = -> Navbar.title()
 
   return
 ]
