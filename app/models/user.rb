@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   end
 
   # returns whether the user is teaching for the course
-  def teaches_course?(course)
+  def teaching_course?(course)
     return false unless course
     Employment.exists?(['course_id = ? AND user_id = ?', course.id, id])
   end

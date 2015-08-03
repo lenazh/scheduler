@@ -8,6 +8,6 @@ class PreferencePolicy < ApplicationPolicy
 
   def create?
     course = @record.section.course
-    @user.owns_course?(course) || @user.teaches_course?(course)
+    @user.owns_course?(course) || @user.teaching_course?(course)
   end
 end

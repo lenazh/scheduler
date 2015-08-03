@@ -83,17 +83,17 @@ describe User do
     end
   end
 
-  describe 'teaches_course?(course)' do
+  describe 'teaching_course?(course)' do
     it 'returns true if the use teaches the course' do
-      expect(gsi.teaches_course?(course)).to be true
+      expect(gsi.teaching_course?(course)).to be true
     end
 
     it "returns false if the user doesn't teach the course" do
-      expect(user.teaches_course?(course)).to be false
+      expect(user.teaching_course?(course)).to be false
     end
 
     it 'returns false if the course is nil' do
-      expect(gsi.teaches_course?(nil)).to be false
+      expect(gsi.teaching_course?(nil)).to be false
     end
   end
 
