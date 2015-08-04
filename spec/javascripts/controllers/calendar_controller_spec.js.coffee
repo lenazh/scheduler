@@ -117,6 +117,7 @@ describe "CalendarCtrl", ->
       $controller = _$controller_
 
     calendar = $controller 'CalendarCtrl', {$scope: $scope}
+    $scope.role = 'owner'
 
   it "initializes $scope.weekdays", ->
     expect($scope.weekdays).toBeDefined()
@@ -312,19 +313,19 @@ describe "CalendarCtrl", ->
 
   describe "calendar.saveSection(section)", ->
     it 'calls the correct method on the Section factory', ->
-      section = $scope.newGhostSection "14:00", "Monday, Wednesday"
+      section = $scope.emptyCellOnClick "14:00", "Monday, Wednesday"
       calendar.saveSection(section, ->)
       expect(factoryMock.saveNew).toHaveBeenCalled()
 
     it 'calls the provided success callback', ->
-      section = $scope.newGhostSection "14:00", "Monday, Wednesday"
+      section = $scope.emptyCellOnClick "14:00", "Monday, Wednesday"
       spy = jasmine.createSpy('spy')
       calendar.saveSection(section, spy)
       expect(spy).toHaveBeenCalled()
 
-  describe "$scope.newGhostSection(hour, weekday)", ->
+  describe "$scope.emptyCellOnClick(hour, weekday)", ->
     beforeEach ->
-      $scope.newGhostSection "14:00", "Monday, Wednesday"
+      $scope.emptyCellOnClick "14:00", "Monday, Wednesday"
 
     it "populates the cells corresponding to the hour and weekday", ->
       expect($scope.getSections('14:00', 'Monday')[ghostId]['name']).toMatch /New/

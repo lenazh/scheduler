@@ -200,7 +200,7 @@
 
     $scope.emptyCellOnClick = (hour, weekday) ->
       if $scope.role == 'owner'
-        newGhostSection(hour, weekday)
+        return newGhostSection(hour, weekday)
 
     @saveSection = (section, successCallback) ->
       saveSection(section, successCallback)
