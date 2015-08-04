@@ -6,7 +6,7 @@ class SectionsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
 
   def assign_model
-    @course = policy_scope(Course).find(params[:course_id])
+    @course = Course.find(params[:course_id])
     @model = policy_scope(@course.sections)
   end
 

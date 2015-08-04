@@ -1,5 +1,5 @@
 @schedulerModule.controller 'CalendarCtrl',
-  ['$scope', '$routeParams', 'Section', ($scope, $routeParams, Section) ->
+  ['$scope', '$cookies', 'Section', ($scope, $cookies, Section) ->
 
   # Private functions
     getKey = (hour, weekday) ->
@@ -161,8 +161,33 @@
 
     ghostIndex = 0
 
-    course_id = $routeParams['course_id']
-    Section.init(course_id)
+
+    # Determines the type of events to be displayed
+    isOwner = $cookies.get('course_owner') == 'true'
+    isTeaching = $cookies.get('course_teaching') == 'true'
+    $scope.roles = [
+      {
+        id: 1,
+        value: 'owner',
+        label: 'Sections'
+      },
+      {
+        id: 2,
+        value: 'gsi',
+        label: 'Preferences'
+      }
+    ]
+
+    if isOwner
+      $scope.role = 'owner'
+    else
+      $scope.role = 'gsi'
+
+    $scope.showSwitch = isOwner && isTeaching
+
+    # Populate the calendar with events
+    courseId = $cookies.get 'course_id'
+    Section.init(courseId)
     Section.all (all) ->
       for section in all
         addSectionToCells section
@@ -173,8 +198,9 @@
     $scope.getSections = (hour, weekday) ->
       getSections(hour, weekday)
 
-    $scope.newGhostSection = (hour, weekday) ->
-      newGhostSection(hour, weekday)
+    $scope.emptyCellOnClick = (hour, weekday) ->
+      if $scope.role == 'owner'
+        newGhostSection(hour, weekday)
 
     @saveSection = (section, successCallback) ->
       saveSection(section, successCallback)
