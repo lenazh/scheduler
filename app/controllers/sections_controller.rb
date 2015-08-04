@@ -11,7 +11,7 @@ class SectionsController < ApplicationController
   end
 
 # fixes the problem where ActionController::TestCase::Behavior::post
-# tries to access a non-existend URL helper (index and show work just fine :/ )
+# tries to access a non-existend URL helper
   def section_url(course_id)
     course_sections_path(course_id)
   end
