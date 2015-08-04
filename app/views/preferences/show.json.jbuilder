@@ -1,0 +1,1 @@
+json.extract! @preference, :id, :preference, :created_at

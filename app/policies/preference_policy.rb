@@ -10,4 +10,10 @@ class PreferencePolicy < ApplicationPolicy
     course = @record.section.course
     @user.owns_course?(course) || @user.teaching_course?(course)
   end
+
+  class Scope < Scope
+    def resolve
+      scope.where(user_id: user.id)
+    end
+  end
 end

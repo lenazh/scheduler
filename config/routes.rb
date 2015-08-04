@@ -15,12 +15,11 @@ Rails.application.routes.draw do
   # AngularJS view of GSIs in a course 
   get 'gsi' => 'main#gsi', as: :gsi_view
 
-  # AngularJS view where GSIs set preferences for sections 
-  get 'preferences' => 'main#preferences', as: :preferences_view
 
   # AngularJS templates for the calendar directive
   get 'calendar_template.html' => 'calendar#calendar_template'
   get 'event_template.html' => 'calendar#event_template'
+  get 'preference_template.html' => 'calendar#preference_template'
 
   scope "api" do
     resources :appointments,
@@ -29,6 +28,8 @@ Rails.application.routes.draw do
     resources :courses, except: [:new, :edit], defaults: { format: :json } do
       resources :sections, except: [:new, :edit], defaults: { format: :json }
       resources :employments,
+        except: [:new, :edit], defaults: { format: :json }
+      resources :preferences,
         except: [:new, :edit], defaults: { format: :json }
     end
   end

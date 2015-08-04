@@ -1,0 +1,41 @@
+div.event-parent
+  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)"
+    p
+      b ng-bind="event.name"
+    p
+      b ng-bind="event.weekday"
+    p Room: {{event.room}}
+    p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
+
+  div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)"
+    form.form-inline[name="form" novalidate]
+      p
+        label for="name" Section
+        input.form-control[type="text" required ng-model="event.name" name="name" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.name"
+      p
+        label for="start_hour" Begins at (hour)
+        input.form-control[type="text" required ng-model="event.start_hour" name="start_hour" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.start_hour"
+      p
+        label for="start_minute" Begins at (minute)
+        input.form-control[type="text" required ng-model="event.start_minute" name="start_minute" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.start_minute"
+      p
+        label for="duration_hours" Duration (hours)
+        input.form-control[type="text" required ng-model="event.duration_hours" name="duration_hours" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.duration_hours"
+      p
+        label for="Weekday" Weekdays
+        input.form-control[type="text" placeholder="Weekday" ng-trim="true" ng-model="event.weekday" name="Weekday" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.weekday"
+      p
+        label for="Room" Room
+        input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
+        span.section-error ng-bind="event.errors.room"
+      p
+        br
+        button[class="btn btn-primary" ng-click="save($event)" ng-show="isGhost"] Save
+        button[class="btn btn-default" ng-click="cancel($event)" ng-show="isGhost"] Cancel
+        button[class="btn btn-default" ng-click="update($event)" ng-show="!isGhost"] Save
+        button[class="btn btn-danger" ng-click="delete($event)" ng-show="!isGhost"] Delete
