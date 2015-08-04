@@ -98,8 +98,6 @@
         select item
         return
 
-  getTitle = ->
-    course['title']
 
   selectCurrentItem()
 
@@ -109,7 +107,8 @@
     select: (item) -> select item
     deselect: (item) -> deselect item
     course: () -> course
-    title: () -> getTitle()
+    title: () -> course['title']
+    courseId: () -> course['id']
     setCourse: (course) -> setCourse course
     resetCourse: () -> resetCourse()
   }

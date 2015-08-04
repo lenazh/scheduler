@@ -7,7 +7,7 @@ class AppointmentFormController extends schedulerApp.FormController
   _navbarCourse: { 'id': 0, 'title': '(pending...)' }
 
   _isDisplayedOnNavbar: (course) ->
-    @_navbarCourse['id'] == course['id'].toString()
+    @_navbar.courseId() == course['id'].toString()
 
   _updateNavbarTitle: (course, title) ->
     @_navbar.setCourse {
