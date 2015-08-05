@@ -50,4 +50,15 @@ class User < ActiveRecord::Base
     return false unless section
     owns_course?(section.course)
   end
+
+  # returns how many hours per week does the GSI teach the course
+  # assumes that the Employments of Course have been eagerly loaded before
+  def hours(course)
+    course.employments.each do |employment|
+      if id == employment.user_id
+        return employment.hours_per_week
+      end
+    end
+    0
+  end
 end

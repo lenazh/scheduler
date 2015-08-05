@@ -5,7 +5,7 @@ class SectionsController < ApplicationController
   after_action :verify_authorized, except: :index
 
   def assign_model
-    @course = Course.includes(:sections).find(params[:course_id])
+    @course = Course.includes(:sections, :employments).find(params[:course_id])
     @model = @course.sections.includes(:preferences, :potential_gsis)
   end
 
