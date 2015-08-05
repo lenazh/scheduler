@@ -36,4 +36,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Disable concurrency so that the runtime
+  # circular dependency error does not come up
+  config.allow_concurrency = false
 end
