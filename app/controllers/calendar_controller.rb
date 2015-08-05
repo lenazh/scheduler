@@ -7,4 +7,8 @@ class CalendarController < ApplicationController
   def event_template
     render layout: false
   end
+
+  def preference_template
+    render layout: false
+  end
 end

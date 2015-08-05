@@ -10,10 +10,6 @@ describe MainController do
       get('/gsi').should route_to('main#gsi')
     end
 
-    it 'routes to #preferences' do
-      get('/preferences').should route_to('main#preferences')
-    end
-
     it 'routes to #calendar' do
       get('/calendar').should route_to('main#calendar')
     end

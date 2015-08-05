@@ -57,19 +57,33 @@ describe "navbarFactory", ->
     course = Navbar.course()
     expect(course['title']).toEqual jasmine.any(String)
 
-  it "has Navbar.setCourse(id, name) that sets the course as the current", ->
-    Navbar.setCourse(fakeId, fakeTitle)
+  it "has Navbar.setCourse(course) that sets the course as the current", ->
+    course = {
+      'id': fakeId
+      'title': fakeTitle
+      'teaching': true
+      'owner': false
+    }
+
+    Navbar.setCourse(course)
     course = Navbar.course()
-    expect(course['title']).toEqual("Fake Course")
+    expect(course['id']).toEqual fakeId
+    expect(course['title']).toEqual fakeTitle
+    expect(course['teaching']).toBe true
+    expect(course['owner']).toBe false
     expect($cookies.put).toHaveBeenCalledWith('course_id', fakeId)
     expect($cookies.put).toHaveBeenCalledWith('course_title', fakeTitle)
+    expect($cookies.put).toHaveBeenCalledWith('course_teaching', true)
+    expect($cookies.put).toHaveBeenCalledWith('course_owner', false)
 
   it "has Navbar.resetCourse() that sets the current course to blank", ->
     Navbar.resetCourse()
     expect($cookies.remove).toHaveBeenCalledWith('course_id')
     expect($cookies.remove).toHaveBeenCalledWith('course_title')
+    expect($cookies.remove).toHaveBeenCalledWith('course_teaching')
+    expect($cookies.remove).toHaveBeenCalledWith('course_owner')
     course = Navbar.course()
+    expect(course['id']).not.toBeDefined()
     expect(course['title']).toMatch(/select/i)
-    expect(course['id']).toEqual null
-
-
+    expect(course['teaching']).toBe false
+    expect(course['owner']).toBe false

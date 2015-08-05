@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723181840) do
+ActiveRecord::Schema.define(version: 20150804194939) do
 
   create_table "courses", force: true do |t|
     t.string   "name"
@@ -36,9 +36,9 @@ ActiveRecord::Schema.define(version: 20150723181840) do
   create_table "preferences", force: true do |t|
     t.integer  "user_id"
     t.integer  "section_id"
-    t.integer  "preference"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "preference", precision: 6, scale: 3
   end
 
   add_index "preferences", ["section_id"], name: "index_preferences_on_section_id"

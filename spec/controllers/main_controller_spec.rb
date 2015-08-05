@@ -14,7 +14,7 @@ describe MainController do
   include RouteHelper
 
   it 'responds to all valid routes' do
-    expect_to_respond_to %w(index courses gsi preferences calendar)
+    expect_to_respond_to %w(index courses gsi calendar)
   end
 
 end

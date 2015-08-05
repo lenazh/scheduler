@@ -8,8 +8,20 @@ describe "CourseFormController", ->
 
   beforeEach ->
     fakeResults = [
-      { name: "Course1", user_id: "1", id: '1'},
-      { name: "Course2", user_id: "1", id: '2'}
+      {
+        id: '1',
+        name: "Course1",
+        user_id: "1",
+        'is_teaching': false,
+        'is_owned': true
+      },
+      {
+        id: '2',
+        name: "Course2",
+        user_id: "1",
+        'is_teaching': false,
+        'is_owned': true
+      }
     ]
 
     courseMock = {
@@ -24,6 +36,8 @@ describe "CourseFormController", ->
       resetCourse: -> null
       setCourse: (id, name) -> null
       course: -> {'title': 'Course1', 'id': '2'}
+      title: -> 'title'
+      courseId: -> '2'
     }
 
   beforeEach ->
@@ -61,11 +75,28 @@ describe "CourseFormController", ->
       controller.resourceToUpdate = fakeResults[id]
       controller.fields.name = name
       controller.update()
-      expect(navbarMock.setCourse).toHaveBeenCalledWith(
-        fakeResults[id]['id'], name)
+      expect(navbarMock.setCourse).toHaveBeenCalledWith {
+        'id': fakeResults[id]['id']
+        'title': name
+        'teaching': false
+        'owner': true
+      }
 
   it "has method select(course) that makes the selected course active", ->
-    course = { name: "Physics 8A", user_id: "1", id: 2}
+    fakeTitle = "Physics 8A"
+    fakeId = 2
+    course = {
+      id: fakeId,
+      name: fakeTitle,
+      user_id: "1",
+      'is_teaching': false
+      'is_owned': true
+    }
     expect(controller.select).toBeDefined()
     controller.select(course)
-    expect(navbarMock.setCourse).toHaveBeenCalledWith(2, "Physics 8A")
+    expect(navbarMock.setCourse).toHaveBeenCalledWith {
+      'id': fakeId
+      'title': fakeTitle
+      'teaching': false
+      'owner': true
+    }

@@ -1,17 +1,44 @@
 @schedulerModule.factory 'Navbar', ['$location', '$cookies', ($location, $cookies) -> 
-  cookie_title = 'course_title'
-  cookie_id = 'course_id'
-  defaultTitle = "(please select a course to edit the calendar)"
+  id_key = 'id'
+  title_key = 'title'
+  teaching_key = 'teaching'
+  owner_key = 'owner'
+
+  id_cookie = 'course_id'
+  title_cookie = 'course_title'
+  teaching_cookie = 'course_teaching'
+  owner_cookie = 'course_owner'
+
+  loadFromCookies = ->
+    course[id_key] = $cookies.get id_cookie
+    course[title_key] = $cookies.get title_cookie
+    course[teaching_key] = $cookies.get teaching_cookie
+    course[owner_key] = $cookies.get owner_cookie
+    courseDefaults()
+
+  saveToCookies = ->
+    $cookies.put id_cookie, course[id_key]
+    $cookies.put title_cookie, course[title_key]
+    $cookies.put teaching_cookie, course[teaching_key]
+    $cookies.put owner_cookie, course[owner_key]
+
+  clearCookies = ->
+    $cookies.remove id_cookie
+    $cookies.remove title_cookie
+    $cookies.remove owner_cookie
+    $cookies.remove teaching_cookie
+
+  courseDefaults = ->
+    course[title_key] ||= "(please select a course to edit the calendar)"
+    course[teaching_key] ||= false
+    course[owner_key] ||= false
 
   course = {}
-  course['title'] = $cookies.get cookie_title
-  course['title'] ||= defaultTitle
-  course['id'] = $cookies.get cookie_id
-
+  loadFromCookies()
   selected = null
 
   isCourseSelected = ->
-    if course['id']
+    if course[id_key]
       return true
     else
       return false
@@ -26,37 +53,33 @@
     {
       title: "My Classes",
       active: "",
-      href: () -> "#courses"
-      selectable: () -> true
+      href: -> "#courses"
+      selectable: -> true
     },
     {
       title: "GSIs",
       active: "",
-      href: () -> ifCourseSelected "#courses/#{course['id']}/gsi"
-      selectable: () -> isCourseSelected()
+      href: -> ifCourseSelected "#courses/#{course['id']}/gsi"
+      selectable: -> isCourseSelected()
     },
     {
       title: "Schedule",
       active: "",
-      href: () -> ifCourseSelected "#calendar/#{course['id']}"
-      selectable: () -> isCourseSelected()
+      href: -> ifCourseSelected "#calendar/#{course['id']}"
+      selectable: -> isCourseSelected()
     }
   ]
 
   isSelected = (item) ->
     item.active != ''
 
-  setCourse = (id, name) ->
-    $cookies.put cookie_title, name
-    $cookies.put cookie_id, id
-    course['title'] = name
-    course['id'] = $cookies.get cookie_id
+  setCourse = (_course_) ->
+    course = _course_
+    saveToCookies()
 
-  resetCourse = () ->
-    $cookies.remove cookie_title
-    $cookies.remove cookie_id
-    course['title'] = defaultTitle
-    course['id'] = null
+  resetCourse = ->
+    clearCookies()
+    loadFromCookies()
 
   deselect = (item) ->
     item.active = "" if item
@@ -75,6 +98,7 @@
         select item
         return
 
+
   selectCurrentItem()
 
 # Expose the interface
@@ -82,8 +106,10 @@
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item
-    course: () -> course
-    setCourse: (id, name) -> setCourse id, name
-    resetCourse: () -> resetCourse()
+    course: -> course
+    title: -> course['title']
+    courseId: -> course['id']
+    setCourse: (course) -> setCourse course
+    resetCourse: -> resetCourse()
   }
 ]

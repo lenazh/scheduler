@@ -1,7 +1,19 @@
 FactoryGirl.define do
   factory :preference do
-    user_id 0
-    section_id 0
+    user
+    section
     preference 0.5
+
+    factory :updated_valid_preference, class: Preference do
+      preference 0.3
+    end
+
+    factory :another_preference, class: Preference do
+      preference 1
+    end
+
+    factory :invalid_preference, class: Preference do
+      preference -1
+    end
   end
 end

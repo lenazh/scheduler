@@ -6,12 +6,12 @@ class SectionsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
 
   def assign_model
-    @course = policy_scope(Course).find(params[:course_id])
+    @course = Course.find(params[:course_id])
     @model = policy_scope(@course.sections)
   end
 
-# fixes the problem where ActionController::TestCase::Behavior::post
-# tries to access a non-existend URL helper (index and show work just fine :/ )
+  # fixes the problem where ActionController::TestCase::Behavior::post
+  # tries to access a non-existend URL helper
   def section_url(course_id)
     course_sections_path(course_id)
   end

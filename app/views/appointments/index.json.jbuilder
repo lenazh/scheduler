@@ -1,4 +1,8 @@
+user = current_user
 json.array!(@appointments) do |appointment|
-  json.extract! appointment.course, :id, :name, :created_at
-  json.url course_url(appointment.course, format: :json)
+  course = appointment.course
+  json.extract! course, :id, :name, :created_at
+  json.is_owned user.owns_course?(course)
+  json.is_teaching user.teaching_course?(course)
+  json.url course_url(course, format: :json)
 end

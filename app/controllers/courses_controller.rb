@@ -5,8 +5,7 @@ class CoursesController < ApplicationController
   after_action :verify_authorized, except: :index
 
   def assign_model
-    @model = Course.where(user_id: current_user.id)
-    # @model = policy_scope(Course) causes a Runtime circular dependency?
+    @model = policy_scope(Course)
   end
 
   def permitted_parameters

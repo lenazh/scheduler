@@ -1,13 +1,24 @@
-div.row  
+div.row
+  div ng-show="showSwitch"
+    select ng-model="role" ng-options="role.value as role.label for role in roles"
+
+  div ng-switch="role"
+    p ng-switch-when="owner"
+      | Click empty cells to create new sections. Click sections to edit them.
+    p ng-switch-when="gsi"
+      | Click sections to set how much you would like to teach each one.
+
   table[class="table table-striped" id="schedule"]
     thead 
     th 
     th ng-repeat="weekday in weekdays" ng-bind="weekday"
     tr ng-repeat="hour in hours"
       td.time-col ng-bind="hour"
-      td.event-col ng-repeat="weekday in weekdays" hour="hour" weekday="weekday"  ng-click="newGhostSection(hour, weekday)"
-        div.event-parent
+      td.event-col ng-repeat="weekday in weekdays" hour="hour" weekday="weekday" ng-click="emptyCellOnClick(hour, weekday)" ng-switch="role"
+        div.event-parent ng-switch-when="owner"
           calendar-event class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event" 
+        div.event-parent ng-switch-when="gsi"
+          calendar-preference class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event"
 
     tr 
       td
