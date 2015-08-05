@@ -4,6 +4,7 @@ div.event-parent
       b ng-bind="event.name"
     p
       b ng-bind="event.weekday"
+    p GSI: {{event.gsi.name}}
     p Room: {{event.room}}
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
@@ -33,6 +34,10 @@ div.event-parent
         label for="Room" Room
         input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.room"
+      p
+        label for="GSI" GSI
+        select ng-model="gsiId" ng-options="gsi.id as gsi.name for gsi in event.available_gsis" ng-click="stopPropagation($event)" ng-change="setGsi(gsiId)"
+        span.section-error ng-bind="event.errors.gsi"
       p
         br
         button[class="btn btn-primary" ng-click="save($event)" ng-show="isGhost"] Save

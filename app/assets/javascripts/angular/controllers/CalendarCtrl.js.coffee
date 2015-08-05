@@ -107,7 +107,20 @@
     updateSection = (section, successCallback) ->
       Section.update(
         section
-        ->
+        (data) ->
+          deleteSectionFromCells section
+          section = processSection data
+          addSectionToCells section
+          successCallback()
+        (error) ->
+          section['errors'] = error.data
+      )
+
+    setGsi = (section, gsi_id, successCallback) ->
+      Section.setGsi(
+        section
+        gsi_id
+        (data) ->
           deleteSectionFromCells section
           section = processSection section
           addSectionToCells section
@@ -216,6 +229,9 @@
 
     @getStyle = (section) ->
       getStyle(section)
+
+    @setGsi = (section, gsi_id, successCallback) ->
+      setGsi(section, gsi_id, successCallback)
 
     return
   ]

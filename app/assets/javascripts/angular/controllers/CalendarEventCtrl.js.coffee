@@ -1,5 +1,7 @@
 @schedulerModule.controller 'CalendarEventCtrl', ['$scope', ($scope) ->
 # TODO -- allow the event to be controlled from keyboard
+  if $scope.event.gsi
+    $scope.gsiId = $scope.event.gsi.id
 
   $scope.toggleExpand = ($event) ->
     if $scope.isGhost
@@ -39,6 +41,13 @@
   $scope.cancel = ($event) ->
     $scope.sectionCalendar.deleteGhost($scope.event)
     $event.stopPropagation()
+
+  $scope.setGsi = (gsiId)->
+    $scope.sectionCalendar.setGsi(
+      $scope.event
+      gsiId
+      ->
+    )
 
 # TODO - move this to filters
   $scope.pad = (minutes) ->

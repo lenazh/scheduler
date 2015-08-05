@@ -3,12 +3,14 @@
   
   buildParams = (section) ->
     {
-      'name': section['name'],
-      'start_hour': section['start_hour'],
-      'start_minute': section['start_minute'],
-      'duration_hours': section['duration_hours'],
-      'weekday': section['weekday'],
-      'room': section['room']
+      'section': {
+        'name': section['name'],
+        'start_hour': section['start_hour'],
+        'start_minute': section['start_minute'],
+        'duration_hours': section['duration_hours'],
+        'weekday': section['weekday'],
+        'room': section['room']
+      }
     }
 
   {
@@ -28,9 +30,18 @@
       )
 
     update: (section, success, error) ->
-      section.$update( 
+      sectionResource.update( 
+        { 'id': section.id }
         buildParams(section) 
-        -> success section
+        (data) -> success data
+        (e) -> error(e)
+      )
+
+    setGsi: (section, gsi_id, success, error) ->
+      sectionResource.update( 
+        { 'id': section.id }
+        { 'section': { 'gsi_id': gsi_id } }
+        (data) -> success data
         (e) -> error(e)
       )
       

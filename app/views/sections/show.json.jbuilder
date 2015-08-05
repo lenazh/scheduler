@@ -1,6 +1,11 @@
-json.extract! @section, :id, :name, :lecture, :start_hour, :start_minute, :duration_hours, :gsi_id, :weekday, :room, :created_at, :updated_at
-preferences = @section.preferences.sort { |x, y | y.preference <=> x.preference }
-json.gsis do
+json.extract! @section, :id, :name, :lecture, :start_hour, :start_minute, :duration_hours, :weekday, :room, :created_at, :updated_at
+if @section.gsi
+  json.gsi do
+    json.extract! @section.gsi, :id, :name, :email
+  end
+end
+preferences = @section.preferences.sort { |x, y| y.preference <=> x.preference }
+json.available_gsis do
   json.array!(preferences) do |preference|
     gsi = preference.user
     json.extract! gsi, :id, :name
