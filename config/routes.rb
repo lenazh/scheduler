@@ -30,7 +30,12 @@ Rails.application.routes.draw do
       resources :employments,
         except: [:new, :edit], defaults: { format: :json }
       resources :preferences,
-        except: [:new, :edit], defaults: { format: :json }
+        except: [:new, :edit], defaults: { format: :json } do
+          collection do
+            get :get
+            put :set
+          end
+        end
     end
   end
 

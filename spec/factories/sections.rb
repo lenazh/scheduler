@@ -34,5 +34,16 @@ FactoryGirl.define do
     start_hour 14
     start_minute 0
     duration_hours 2
+    weekday 'Wednesday'
+  end
+
+  factory :section_without_course, class: Section do
+    name 'Cat grooming'
+    lecture '2'
+    start_hour 18
+    start_minute 10
+    duration_hours 1
+    weekday 'Monday, Friday'
+    room '301 Cat Hall'
   end
 end
