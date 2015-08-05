@@ -9,37 +9,37 @@ div.event-parent
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
   div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)"
-    form.form-inline[name="form" novalidate]
-      p
+    form[name="form" novalidate]
+      div.form-group
         label for="name" Section
         input.form-control[type="text" required ng-model="event.name" name="name" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.name"
-      p
+      div.form-group
         label for="start_hour" Begins at (hour)
         input.form-control[type="text" required ng-model="event.start_hour" name="start_hour" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.start_hour"
-      p
+      div.form-group
         label for="start_minute" Begins at (minute)
         input.form-control[type="text" required ng-model="event.start_minute" name="start_minute" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.start_minute"
-      p
+      div.form-group
         label for="duration_hours" Duration (hours)
         input.form-control[type="text" required ng-model="event.duration_hours" name="duration_hours" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.duration_hours"
-      p
+      div.form-group
         label for="Weekday" Weekdays
         input.form-control[type="text" placeholder="Weekday" ng-trim="true" ng-model="event.weekday" name="Weekday" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.weekday"
-      p
+      div.form-group
         label for="Room" Room
         input.form-control[type="text" placeholder="Room..." ng-trim="true" ng-model="event.room" name="room" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.room"
-      p
+      div.form-group
         label for="GSI" GSI
-        select ng-model="gsiId" ng-options="gsi.id as gsi.name for gsi in event.available_gsis" ng-click="stopPropagation($event)" ng-change="setGsi(gsiId)"
+        select.form-control ng-model="gsiId" ng-options="gsi.id as gsi.name for gsi in event.available_gsis" ng-click="stopPropagation($event)" ng-change="setGsi(gsiId)"
         span.section-error ng-bind="event.errors.gsi"
-      p
-        br
+        
+      div.form-group
         button[class="btn btn-primary" ng-click="save($event)" ng-show="isGhost"] Save
         button[class="btn btn-default" ng-click="cancel($event)" ng-show="isGhost"] Cancel
         button[class="btn btn-default" ng-click="update($event)" ng-show="!isGhost"] Save

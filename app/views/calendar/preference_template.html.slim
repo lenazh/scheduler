@@ -16,7 +16,7 @@ div.event-parent
       p Room: {{event.room}}
       p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
       p Duration: {{event.duration_hours}} hours
-      p
-        b Do you want to teach this section?
-        br
-        select ng-model="preference" ng-options="item.value as item.label for item in preferences" ng-click="stopPropagation($event)" ng-change="set()"
+      form[name="form" novalidate]
+        div.form-group
+          label for="preference" Do you want to teach this section?
+          select.form-control name="preference" ng-model="preference" ng-options="item.value as item.label for item in preferences" ng-click="stopPropagation($event)" ng-change="set()"

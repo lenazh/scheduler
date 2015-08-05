@@ -1,6 +1,6 @@
 div.row
   div ng-show="showSwitch"
-    select ng-model="role" ng-options="role.value as role.label for role in roles"
+    select.form-control ng-model="role" ng-options="role.value as role.label for role in roles"
 
   div ng-switch="role"
     p ng-switch-when="owner"
