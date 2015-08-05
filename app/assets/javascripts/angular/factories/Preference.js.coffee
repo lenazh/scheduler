@@ -1,4 +1,4 @@
-@schedulerModule.factory 'Preference', ['$http', ($http) -> 
+@schedulerModule.factory 'Preference', ['$http', ($http) ->
   url = ''
   getUrl = ''
   setUrl = ''

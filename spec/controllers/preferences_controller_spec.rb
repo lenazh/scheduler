@@ -41,12 +41,12 @@ describe PreferencesController do
     describe 'get()' do
       def get_preference
         get :get,
-        {
-          course_id: course.id,
-          section_id: section.id,
-          format: :json
-        },
-        valid_session
+            {
+              course_id: course.id,
+              section_id: section.id,
+              format: :json
+            },
+            valid_session
       end
 
       it 'assigns @preference variable' do

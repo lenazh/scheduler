@@ -15,7 +15,7 @@
     hourKeyToHour = (hourKey) ->
       parseInt hourKey.replace(/:00/, '')
 
-    makeCells = () ->
+    makeCells = ->
       cells = []
       for hour in hours
         for weekday in weekdays
@@ -35,7 +35,7 @@
         delete cells[key][section_id]
       sectionIndex[section_id] = []
 
-    deleteGhostSections = () ->
+    deleteGhostSections = ->
       deleteSectionsHelper(ghostIndex)
 
     deleteSectionFromCells = (section) ->
@@ -70,7 +70,7 @@
 
     startHourValid = (section) ->
       start_hour = section['start_hour']
-      isWithin start_hour, calendar_start_hour, calendar_end_hour 
+      isWithin start_hour, calendar_start_hour, calendar_end_hour
       
     startMinuteValid = (section) ->
       start_minute = section['start_minute']
@@ -81,7 +81,7 @@
       isWithin duration_hours, 0, 10
 
     isSectionValid = (section) ->
-      valid = startHourValid(section) && 
+      valid = startHourValid(section) &&
         startMinuteValid(section) &&
         durationHoursValid(section)
       for weekday in section['weekdays']
@@ -139,7 +139,7 @@
         'weekday': weekday
         'start_hour': hourKeyToHour(hour),
         'start_minute': 0,
-        'duration_hours' : 2
+        'duration_hours': 2
       }
       addSectionToCells section
       section

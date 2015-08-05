@@ -53,20 +53,20 @@
     {
       title: "My Classes",
       active: "",
-      href: () -> "#courses"
-      selectable: () -> true
+      href: -> "#courses"
+      selectable: -> true
     },
     {
       title: "GSIs",
       active: "",
-      href: () -> ifCourseSelected "#courses/#{course['id']}/gsi"
-      selectable: () -> isCourseSelected()
+      href: -> ifCourseSelected "#courses/#{course['id']}/gsi"
+      selectable: -> isCourseSelected()
     },
     {
       title: "Schedule",
       active: "",
-      href: () -> ifCourseSelected "#calendar/#{course['id']}"
-      selectable: () -> isCourseSelected()
+      href: -> ifCourseSelected "#calendar/#{course['id']}"
+      selectable: -> isCourseSelected()
     }
   ]
 
@@ -77,7 +77,7 @@
     course = _course_
     saveToCookies()
 
-  resetCourse = () ->
+  resetCourse = ->
     clearCookies()
     loadFromCookies()
 
@@ -106,10 +106,10 @@
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item
-    course: () -> course
-    title: () -> course['title']
-    courseId: () -> course['id']
+    course: -> course
+    title: -> course['title']
+    courseId: -> course['id']
     setCourse: (course) -> setCourse course
-    resetCourse: () -> resetCourse()
+    resetCourse: -> resetCourse()
   }
 ]

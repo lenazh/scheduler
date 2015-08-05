@@ -38,7 +38,7 @@
     $scope.stopPropagation = ($event) ->
       $event.stopPropagation()
 
-    $scope.set = () ->
+    $scope.set = ->
       Preference.set $scope.event, $scope.preference
 
   # TODO - move this to filters
