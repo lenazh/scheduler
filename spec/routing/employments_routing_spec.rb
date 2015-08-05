@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe EmploymentsController do
   describe 'routing' do
-
     it 'routes to #index' do
       get('/api/courses/1/employments').should route_to(
         'employments#index',
@@ -32,6 +31,5 @@ describe EmploymentsController do
         'employments#destroy',
         format: :json, id: '1', course_id: '1')
     end
-
   end
 end

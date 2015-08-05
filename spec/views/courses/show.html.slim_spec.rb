@@ -7,7 +7,7 @@ describe 'courses/show' do
     @user.stub(:owns_course?).and_return(true)
     controller.stub(:current_user).and_return(@user)
   end
- 
+
   let(:model_class) { Course }
   let(:variable_to_assign) { :course }
   let(:expected_fields) { %w(id name created_at) }

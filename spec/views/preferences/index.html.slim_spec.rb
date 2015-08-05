@@ -11,5 +11,4 @@ describe 'preferences/index' do
   let(:expected_fields) { %w(id preference updated_at created_at) }
 
   it_behaves_like 'a JSON index view:'
-
 end

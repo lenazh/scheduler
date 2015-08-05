@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe PreferencesController do
   describe 'routing' do
-
     it 'routes to #index' do
       get('/api/courses/1/preferences').should route_to(
         'preferences#index',
@@ -32,6 +31,5 @@ describe PreferencesController do
         'preferences#destroy',
         format: :json, id: '1', course_id: '1')
     end
-
   end
 end

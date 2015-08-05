@@ -10,8 +10,8 @@ class SectionsController < ApplicationController
     @model = policy_scope(@course.sections)
   end
 
-# fixes the problem where ActionController::TestCase::Behavior::post
-# tries to access a non-existend URL helper
+  # fixes the problem where ActionController::TestCase::Behavior::post
+  # tries to access a non-existend URL helper
   def section_url(course_id)
     course_sections_path(course_id)
   end
