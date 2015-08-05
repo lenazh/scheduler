@@ -14,14 +14,12 @@
   {
     init: (course_id) ->
       sectionResource = $resource "#{gon.courses_api_path}/#{course_id}/sections/:id", 
-        { 
-          id: '@id',
-        }, 
-        { 
-          'update': { method:'PUT' }, headers: {'Content-Type': 'application/json'},
-          'post': headers: {'Content-Type': 'application/json'}
+        { 'id': '@id' },
+        {
+          'update': { 'method': 'PUT' },
+          'headers': {'Content-Type': 'application/json'},
         }
-
+        
     saveNew: (section, success, error) ->
       newSection = new sectionResource buildParams(section)
       newSection.$save(

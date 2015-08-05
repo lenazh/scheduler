@@ -2,6 +2,12 @@ div.row
   div ng-show="showSwitch"
     select ng-model="role" ng-options="role.value as role.label for role in roles"
 
+  div ng-switch="role"
+    p ng-switch-when="owner"
+      | Click empty cells to create new sections. Click sections to edit them.
+    p ng-switch-when="gsi"
+      | Click sections to set how much you would like to teach each one.
+
   table[class="table table-striped" id="schedule"]
     thead 
     th 

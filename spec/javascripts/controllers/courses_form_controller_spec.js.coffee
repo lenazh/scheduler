@@ -36,6 +36,8 @@ describe "CourseFormController", ->
       resetCourse: -> null
       setCourse: (id, name) -> null
       course: -> {'title': 'Course1', 'id': '2'}
+      title:  -> 'title'
+      courseId: -> '2'
     }
 
   beforeEach ->
