@@ -21,6 +21,7 @@ class PreferencesController < ApplicationController
 
   include JsonControllerHelper
 
+  # TODO: move this logic to the model?
   def get
     find_preference
     authorize(@preference, :show?)
