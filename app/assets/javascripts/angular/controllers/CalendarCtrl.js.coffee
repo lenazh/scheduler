@@ -3,7 +3,7 @@
 
   # Private functions
     getKey = (hour, weekday) ->
-      return hours.indexOf(hour) * weekdays.length + 
+      return hours.indexOf(hour) * weekdays.length +
         weekdays.indexOf(weekday)
     
     getHourKey = (section) ->
