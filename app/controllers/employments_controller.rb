@@ -86,7 +86,8 @@ class EmploymentsController < ApplicationController
     authorize User.new, :show?
     User.find_or_create_by(email: email) do |user|
       authorize User.new, :create?
-      user.name = email.match(/^(.+)?@.*$/)[1]
+      match = email.match(/^(.+)?@.*$/)
+      user.name = match[1] if match
       password = Devise.friendly_token.first(password_length)
       user.password = password
       user.password_confirmation = password
@@ -96,9 +97,9 @@ class EmploymentsController < ApplicationController
 
   # send an email to the user if their password changed
   def notify_user(_gsi)
-    puts 'New GSI created'
-    puts "Email: #{_gsi.email}"
-    puts "Password: #{_gsi.password}"
+    # puts 'New GSI created'
+    # puts "Email: #{_gsi.email}"
+    # puts "Password: #{_gsi.password}"
     # GsiMailer.enrollment(@course, _gsi).deliver if gsi.password
   end
 end

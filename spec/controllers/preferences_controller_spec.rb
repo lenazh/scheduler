@@ -73,26 +73,12 @@ describe PreferencesController do
       end
 
       describe 'with valid parameters' do
-        describe 'if the record existed' do
-          it 'updates the record' do
-            expect { set_preference(0.76, section) }.
-              to change(Preference, :count).by(0)
-            preference.reload
-            expect(preference.preference).to eq(0.76)
-          end
-        end
-
-        describe "if the record didn't exist" do
-          it 'creates a new record' do
-            new_section = create(:section_without_course)
-            course.sections << new_section
-            course.save!
-            expect { set_preference(0.16, new_section) }.
-              to change(Preference, :count).by(1)
-            new_section.reload
-            new_preference = assigns(:preference).preference
-            expect(new_preference).to be_within(1e-3).of 0.16
-          end
+        it 'assigns @preference variable' do
+          set_preference(0.145, section)
+          preference = assigns(:preference)
+          expect(preference.preference).to be_within(1e-3).of 0.145
+          expect(preference.user).to eq user
+          expect(preference.section).to eq section
         end
 
         it 'returns 201' do
@@ -100,12 +86,47 @@ describe PreferencesController do
           expect(response.response_code).to eq(201)
         end
 
-        it 'assigns @preference variable' do
-          set_preference(0.145, section)
-          preference = assigns(:preference)
-          expect(preference.preference).to be_within(1e-3).of 0.145
-          expect(preference.user).to eq user
-          expect(preference.section).to eq section
+        describe "if the preference is zero" do
+          describe 'if the record existed' do
+            it 'deletes the record' do
+              expect { set_preference(0, section) }.
+                to change(Preference, :count).by(-1)
+            end
+          end
+
+          describe "if the record didn't exist" do
+            it "doesn't create a new record" do
+              new_section = create(:section_without_course)
+              course.sections << new_section
+              course.save!
+              expect { set_preference(0, new_section) }.
+                to change(Preference, :count).by(0)
+            end
+          end
+        end
+
+        describe "if the preference is not zero" do
+          describe 'if the record existed' do
+            it 'updates the record' do
+              expect { set_preference(0.76, section) }.
+                to change(Preference, :count).by(0)
+              preference.reload
+              expect(preference.preference).to eq(0.76)
+            end
+          end
+
+          describe "if the record didn't exist" do
+            it 'creates a new record' do
+              new_section = create(:section_without_course)
+              course.sections << new_section
+              course.save!
+              expect { set_preference(0.16, new_section) }.
+                to change(Preference, :count).by(1)
+              new_section.reload
+              new_preference = assigns(:preference).preference
+              expect(new_preference).to be_within(1e-3).of 0.16
+            end
+          end
         end
       end
 
