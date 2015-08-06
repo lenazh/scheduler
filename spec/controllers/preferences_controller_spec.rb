@@ -18,13 +18,13 @@ describe PreferencesController do
     PreferencePolicy::Scope.any_instance.stub(:resolve) { Preference.all }
   end
 
-  describe do
-    before(:each) do
-      sign_in create(:user)
-    end
+  # describe do
+  #   before(:each) do
+  #     sign_in create(:user)
+  #   end
 
-    it_behaves_like 'a JSON resource controller:'
-  end
+  #   it_behaves_like 'a JSON resource controller:'
+  # end
 
   describe do
     let(:preference) { create(:preference) }
