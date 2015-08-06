@@ -16,10 +16,15 @@ class PreferencesController < ApplicationController
   end
 
   def permitted_parameters
-    [:preference]
+    [:preference, :user_id]
   end
 
-  include JsonControllerHelper
+  def create
+    binding.pry
+    super
+  end
+
+  # include JsonControllerHelper
 
   # locates the preference given section_id
   def get

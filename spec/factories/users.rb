@@ -40,7 +40,8 @@ FactoryGirl.define do
       owner = create(:user)
       course.user = owner
       user.courses_to_teach << course
-      user.sections << create(:section, course: course)
+      section = create(:section, course: course)
+      user.preferences << create(:preference, section: section, preference: 1.0)
       employment = user.employments.first
       employment.hours_per_week = 20
       employment.save!

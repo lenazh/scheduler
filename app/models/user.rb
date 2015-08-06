@@ -75,8 +75,10 @@ class User < ActiveRecord::Base
 
   # returns how many sections the user is allowed to teach in course
   def max_sections_in(course)
-    hours_to_max_sections Employment.where(
-      'user_id = ? AND course_id = ?', id, course.id).first.hours_per_week
+    employment = Employment.where(
+      'user_id = ? AND course_id = ?', id, course.id).first
+    return 0 unless employment
+    hours_to_max_sections employment.hours_per_week
   end
 
   # returns how many section the user is allowed to teach if he has

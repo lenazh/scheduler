@@ -29,13 +29,8 @@ Rails.application.routes.draw do
       resources :sections, except: [:new, :edit], defaults: { format: :json }
       resources :employments,
                 except: [:new, :edit], defaults: { format: :json }
-      resources :preferences,
-                except: [:new, :edit], defaults: { format: :json } do
-                  collection do
-                    get :get
-                    put :set
-                  end
-                end
+      get 'preferences/get' => 'preferences#get'
+      put 'preferences/set' => 'preferences#set'
     end
   end
 

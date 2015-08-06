@@ -4,8 +4,6 @@ require 'helpers/pundit_helper'
 describe PreferencesController do
   # name of the model for this RESTful resource
   let(:factory) { :preference }
-  let(:url_params) { { course_id: 'section.course.id' } }
-  let(:url_params_factory) { { course_id: :course } }
 
   # This should return the minimal set of values that should be in
   # the session in order to pass any filters (e.g. authentication) defined
