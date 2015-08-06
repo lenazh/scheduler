@@ -95,7 +95,45 @@ table#schedule {
     color: red;
 }
 
+#schedule .really-wants-section {
+    background-color: #01DF01;
+}
+
+#schedule .really-wants-section {
+    background-color: #01FF01;
+}
+
+#schedule .wants-section {
+    background-color: #CFFFCF;
+}
+
+#schedule .ok-with-section {
+    background-color: #EFEFEF;
+}
+
+#schedule .doesnt-like-section {
+    background-color: #FFCFCF;
+}
+
+#schedule .really-dislikes-section {
+    background-color: #FF1D1D;
+}
+
+#schedule .cant-make {
+    border: outset 3px red;
+    background-color: #EFEFEF;    
+}
+
+
 /* 
+
+    return "really-wants-section" if value >= 1.0
+    return "wants-section" if 1.0 > value >= 0.75
+    return "ok-with-section" if 0.75 > value >= 0.5
+    return "doesnt-like-section" if 0.5 > value >= 0.25
+    return "really-dislikes" if 0.25 > value > 0
+    return "cant-make" if value == 0
+
     100% = 1 hour
 
     set top and height atributes to position

@@ -1,9 +1,20 @@
 @schedulerModule.controller 'CalendarEventCtrl', ['$scope', ($scope) ->
 # TODO -- allow the event to be controlled from keyboard
-  if $scope.event.gsi
-    $scope.gsiId = $scope.event.gsi.id
-  else
-    $scope.gsiId = null
+  resetGsiSelector = ->
+    if $scope.event.gsi
+      $scope.gsiId = $scope.event.gsi.id
+    else
+      $scope.gsiId = null
+
+  gsiClass = (gsi) ->
+    return "cant-make" unless gsi
+    value = gsi.preference
+    return "really-wants-section" if value >= 1.0
+    return "wants-section" if 1.0 > value >= 0.75
+    return "ok-with-section" if 0.75 > value >= 0.5
+    return "doesnt-like-section" if 0.5 > value >= 0.25
+    return "really-dislikes" if 0.25 > value > 0
+    return "cant-make" if value == 0
 
   $scope.toggleExpand = ($event) ->
     if $scope.isGhost
@@ -49,12 +60,13 @@
       $scope.event
       gsiId
       ->
-      ->
-        if $scope.event.gsi
-          $scope.gsiId = $scope.event.gsi.id
-        else
-          $scope.gsiId = null
+      -> resetGsiSelector()
     )
+
+  $scope.eventClass = ->
+    "event #{gsiClass($scope.event.gsi)}"
+
+  resetGsiSelector()
 
 # TODO - move this to filters
   getPreference = (gsi) ->

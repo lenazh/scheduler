@@ -1,5 +1,5 @@
 div.event-parent
-  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)"
+  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     p
       b ng-bind="event.name"
     p
@@ -8,7 +8,7 @@ div.event-parent
     p Room: {{event.room}}
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
-  div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)"
+  div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     form[name="form" novalidate]
       div.form-group
         label for="name" Section
