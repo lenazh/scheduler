@@ -1,7 +1,9 @@
 json.extract! @section, :id, :name, :lecture, :start_hour, :start_minute, :duration_hours, :weekday, :room, :created_at, :updated_at
 if @section.gsi
+  gsi = @section.gsi
   json.gsi do
-    json.extract! @section.gsi, :id, :name, :email
+    json.extract! gsi, :id, :name, :email
+    json.preference gsi.preference(@section)
   end
 end
 preferences = @section.preferences.sort { |x, y| y.preference <=> x.preference }

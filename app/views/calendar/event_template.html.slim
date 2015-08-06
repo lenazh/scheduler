@@ -36,7 +36,7 @@ div.event-parent
         span.section-error ng-bind="event.errors.room"
       div.form-group
         label for="GSI" GSI
-        select.form-control ng-model="gsiId" ng-options="gsi.id as gsi.name for gsi in event.available_gsis" ng-click="stopPropagation($event)" ng-change="setGsi(gsiId)"
+        select.form-control ng-model="gsiId" ng-options="gsi.id as gsiLabel(gsi) for gsi in event.available_gsis" ng-click="stopPropagation($event)" ng-change="setGsi(gsiId)"
         span.section-error ng-bind="event.errors.gsi"
         
       div.form-group

@@ -57,6 +57,18 @@
     )
 
 # TODO - move this to filters
+  getPreference = (gsi) ->
+    value = gsi.preference
+    return "REALLY wants this section" if value >= 1.0
+    return "Wants this section" if 1.0 > value >= 0.75
+    return "OK with this section" if 0.75 > value >= 0.5
+    return "Doesn't like this section" if 0.5 > value >= 0.25
+    return "REALLY dislikes this section" if 0.25 > value > 0
+    return "Can't make it" if value == 0
+
+  $scope.gsiLabel = (gsi) ->
+    "#{gsi.name} (#{getPreference(gsi)})"
+
   $scope.pad = (minutes) ->
     if (minutes < 10)
       return "0" + minutes

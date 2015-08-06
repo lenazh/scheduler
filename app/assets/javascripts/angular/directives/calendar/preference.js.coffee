@@ -11,4 +11,5 @@
       scope.sectionCalendar = sectionCalendar
       scope.editStyle = {height: 'auto', width: 'auto', 'z-index': '200'}
       scope.showEditForm = false
+      scope.element = element
   }

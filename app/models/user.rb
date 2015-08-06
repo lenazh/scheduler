@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   end
 
   # returns how many hours per week does the GSI teach the course
-  # assumes that the Employments of Course have been eagerly loaded before
+  # assumes that the Employments of course have been eagerly loaded before
   def hours(course)
     course.employments.each do |employment|
       if id == employment.user_id
@@ -61,6 +61,18 @@ class User < ActiveRecord::Base
     end
     0
   end
+
+  # returns how much the GSI prefers to teach this course
+  # assumes that the Preferences of section have been eagerly loaded before
+  def preference(section)
+    section.preferences.each do |preference|
+      if id == preference.user_id
+        return preference.preference
+      end
+    end
+    0.0
+  end
+
 
   # returns how many sections the user is teaching in course
   def sections_in(course)

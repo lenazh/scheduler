@@ -15,4 +15,5 @@
       scope.editStyle = {height: 'auto', width: 'auto', 'z-index': '200'}
       scope.isGhost = isGhost()
       scope.showEditForm = isGhost()
+      scope.element = element
   }
