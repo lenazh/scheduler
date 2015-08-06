@@ -27,19 +27,21 @@ class AutoScheduler
     @_sectionsAvailable[gsi.id] > 0
 
   # returns the next available GSI given a section and the gsi
-  _nextGsi: (section, gsi) ->
-    @_unassign(gsi, section) if gsi
-    start = section.lastGsiId + 1
+  _nextGsi: (section) ->
+    gsi = section.lastGsi
+    start = section.lastGsiIndex + 1
     end = section.available_gsis.length - 1
-    return null if start >= end
+    @_unassign(gsi, section) if gsi
+    return null if start > end
     @_findGsi(section, start, end)
 
   # returns the previous available GSI given a section and the gsi
-  _previousGsi: (section, gsi) ->
-    @_unassign(gsi, section) if gsi
-    start = section.lastGsiId - 1
+  _previousGsi: (section) ->
+    gsi = section.lastGsi
+    start = section.lastGsiIndex - 1
     end = 0
-    return null if start <= end
+    @_unassign(gsi, section) if gsi
+    return null if start < end
     @_findGsi(section, start, end)
 
   # returns the text available GSI witin the given range
@@ -64,25 +66,47 @@ class AutoScheduler
       return true if fill(id + 1)
 
   # marks that the GSI teaching the section
-  _assign = (gsi, section, index) ->
-    @_sectionsAvailable[gsi.id] -= 1
+  _assign: (gsi, section, index) ->
+    availability = @_sectionsAvailable[gsi.id]
+    if availability > 0
+      @_sectionsAvailable[gsi.id] -= 1
+    else
+      throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
     section.lastGsi = gsi
-    section.lastGsiId = index
+    section.lastGsiIndex = index
 
   # marks that the GSI is no longer teaching the section
-  _unassign = (gsi, section, index) ->
-    @_sectionsAvailable[gsi.id] += 1
+  _unassign: (gsi, section) ->
+    availability = @_sectionsAvailable[gsi.id]
+    if availability < hours_to_sections(gsi['hours_per_week'])
+      @_sectionsAvailable[gsi.id] += 1
+    else
+      throw "GSI #{gsi.id} #{gsi.name} recovered more hours than he/she \
+      initially had"
 
   # remember last GSI position for each section
   _prepareSectionIndex: ->
     for section in @_sections
       section.lastGsi = null
-      section.lastGsiId = -1
+      section.lastGsiIndex = -1
 
   # appends how many sections a GSI can teach to each GSI
   _prepareGsiIndex: ->
     for gsi in @_gsis
       @_sectionsAvailable[gsi.id] = hours_to_sections gsi['hours_per_week']
+
+  # updates the status of the solver
+  _updateStatus: ->
+    @_status = []
+    if @sectionsNobodyCanTeach().length > 0
+      @_status.push 'There are sections nobody can teach'
+
+    unless @enoughGsiHours()
+      @_status.push 'There are not enough GSIs to teach all the sections'
+      @_status.push "You need #{@needHours() - @maxHours()} more hours/week"
+
+    if @solvable
+      @_status.push 'Ready to schedule'
 
   # public methods
 
@@ -103,19 +127,6 @@ class AutoScheduler
   # returns the result of the preliminary check of whether
   # a solution exists
   solvable: -> @_solvable
-
-  # updates the status of the solver
-  _updateStatus: ->
-    @_status = []
-    if @sectionsNobodyCanTeach().length > 0
-      @_status.push 'There are sections nobody can teach'
-
-    unless @enoughGsiHours()
-      @_status.push 'There are not enough GSIs to teach all the sections'
-      @_status.push "You need #{@needHours() - @maxHours()} more hours/week"
-
-    if @solvable
-      @_status.push 'Ready to schedule'
 
   # how many hours/week you need to teach all the sections
   needHours: ->
