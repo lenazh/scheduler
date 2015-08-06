@@ -23,6 +23,9 @@ class Section < ActiveRecord::Base
     in: 0..59, message: "Can't be less than 0 or greater than 59" }
   validate :duration_cant_be_longer_than_10hrs_or_negative
   validate :weekdays_are_valid
+  validate :workload
+
+  include ActionView::Helpers::TextHelper
 
   def duration_cant_be_longer_than_10hrs_or_negative
     if (duration_hours > 10) || (duration_hours < 0)
@@ -33,6 +36,19 @@ class Section < ActiveRecord::Base
   def weekdays_are_valid
     weekdays = weekday.split(/[ ;,]+/)
     weekdays.each { |weekday| weekday_valid?(weekday) }
+  end
+
+  # validates that the GSI doesn't teach more than the maximum allowed workload
+  def workload
+    return unless gsi
+    sections_max = gsi.max_sections_in course
+    sections_teaching = gsi.sections_in course
+    sections_teaching += 1 unless gsi.appointment_persisted? self
+    hours = gsi.hours course
+    if sections_teaching > sections_max
+      errors.add :gsi, "#{gsi.name} can't teach more than \
+      #{pluralize(sections_max, 'section')} (#{pluralize(hours, 'hour')}/week)"
+    end
   end
 
   private

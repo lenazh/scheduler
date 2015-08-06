@@ -2,6 +2,8 @@
 # TODO -- allow the event to be controlled from keyboard
   if $scope.event.gsi
     $scope.gsiId = $scope.event.gsi.id
+  else
+    $scope.gsiId = null
 
   $scope.toggleExpand = ($event) ->
     if $scope.isGhost
@@ -47,6 +49,11 @@
       $scope.event
       gsiId
       ->
+      ->
+        if $scope.event.gsi
+          $scope.gsiId = $scope.event.gsi.id
+        else
+          $scope.gsiId = null
     )
 
 # TODO - move this to filters

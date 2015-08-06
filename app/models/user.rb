@@ -61,4 +61,27 @@ class User < ActiveRecord::Base
     end
     0
   end
+
+  # returns how many sections the user is teaching in course
+  def sections_in(course)
+    count = Section.where('gsi_id = ? AND course_id = ?', id, course.id).count
+  end
+
+  # returns falsy value if the information of user teaching this section is
+  # not in db and truthy value if it is
+  def appointment_persisted?(section)
+    Section.where('gsi_id = ? AND id = ?', id, section.id).count > 0
+  end
+
+  # returns how many sections the user is allowed to teach in course
+  def max_sections_in(course)
+    hours_to_max_sections Employment.where(
+      'user_id = ? AND course_id = ?', id, course.id).first.hours_per_week
+  end
+
+  # returns how many section the user is allowed to teach if he has
+  # [hours] hours/week appointment
+  def hours_to_max_sections(hours)
+    hours / 10
+  end
 end

@@ -4,6 +4,9 @@
 class Preference < ActiveRecord::Base
   belongs_to :user
   belongs_to :section
+
+  validates_presence_of :user
+  validates_presence_of :section
   validate :between_0_and_1
 
   # returns true if successful false otherwise
@@ -30,7 +33,7 @@ class Preference < ActiveRecord::Base
   # validates if the preference is in (0; 1] interval
   def between_0_and_1
     unless (preference > 0) && (preference <= 1)
-      errors.add :preference, "Preference has to be in (0; 1] interval (#{self.preference})"
+      errors.add :preference, "has to be in (0; 1] interval"
     end
   end
 end

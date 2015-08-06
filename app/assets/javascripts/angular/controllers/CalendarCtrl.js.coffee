@@ -116,7 +116,7 @@
           section['errors'] = error.data
       )
 
-    setGsi = (section, gsi_id, successCallback) ->
+    setGsi = (section, gsi_id, successCallback, errorCallback) ->
       Section.setGsi(
         section
         gsi_id
@@ -127,6 +127,7 @@
           successCallback()
         (error) ->
           section['errors'] = error.data
+          errorCallback()
       )
 
     saveSection = (section, successCallback) ->
@@ -230,8 +231,8 @@
     @getStyle = (section) ->
       getStyle(section)
 
-    @setGsi = (section, gsi_id, successCallback) ->
-      setGsi(section, gsi_id, successCallback)
+    @setGsi = (section, gsi_id, successCallback, errorCallback) ->
+      setGsi(section, gsi_id, successCallback, errorCallback)
 
     return
   ]
