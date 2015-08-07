@@ -17,27 +17,29 @@ describe 'AutoScheduler', ->
           {
             'id': 1, 'name': '101',
             'available_gsis': [
-              { 'id': 1, 'preference': 1.0 }, { 'id': 2, 'preference': 0.25 }
+              { 'id': 1, 'preference': 1.0, 'hours_per_week': 20 },
+              { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
             ]
           },
           {
             'id': 2, 'name': '102',
             'available_gsis': [
-              { 'id': 2, 'preference': 0.75 },
-              { 'id': 3, 'preference': 0.75 },
-              { 'id': 1, 'preference': 0.25 }
+              { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
+              { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
+              { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
             ]
           },
           {
             'id': 3, 'name': '103',
             'available_gsis': [
-              { 'id': 2, 'preference': 0.5 }
+              { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
             ]
           },
           {
             'id': 4, 'name': '104',
             'available_gsis': [
-              { 'id': 3, 'preference': 1.0 }, { 'id': 2, 'preference': 0.25 }
+              { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
+              { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
             ]
           }
         ]
@@ -263,7 +265,7 @@ describe 'AutoScheduler', ->
             gsi = scheduler._previousGsi(section)
             expect(scheduler._findGsi).toHaveBeenCalledWith(section, 0, 0)
 
-      describe '_getGsi(section, next)', ->
+      describe '_advanceGsi(section, next)', ->
         section = {}
         beforeEach ->
           spyOn(scheduler, '_nextGsi')
@@ -272,11 +274,11 @@ describe 'AutoScheduler', ->
 
         describe 'next is false', ->
           it 'calls _previousGsi(...)', ->
-            scheduler._getGsi(section, false)
+            scheduler._advanceGsi(section, false)
             expect(scheduler._previousGsi).toHaveBeenCalledWith(section, section.lastGsi)
 
         describe 'next is true', ->
           it 'calls _nextGsi(...)', ->
-            scheduler._getGsi(section, true)
+            scheduler._advanceGsi(section, true)
             expect(scheduler._nextGsi).toHaveBeenCalledWith(section, section.lastGsi)
 

@@ -22,25 +22,17 @@ class AutoScheduler
   sections_to_hours = (sections) ->
     sections * 10
 
-  # returns true if the GSI can teach and false otherwise
-  _canTeach: (gsi) ->
-    @_sectionsAvailable[gsi.id] > 0
-
   # returns the next available GSI given a section and the gsi
   _nextGsi: (section) ->
-    gsi = section.lastGsi
     start = section.lastGsiIndex + 1
     end = section.available_gsis.length - 1
-    @_unassign(gsi, section) if gsi
     return null if start > end
     @_findGsi(section, start, end)
 
   # returns the previous available GSI given a section and the gsi
   _previousGsi: (section) ->
-    gsi = section.lastGsi
     start = section.lastGsiIndex - 1
     end = 0
-    @_unassign(gsi, section) if gsi
     return null if start < end
     @_findGsi(section, start, end)
 
@@ -55,22 +47,54 @@ class AutoScheduler
     null
 
   # returns the upcoming GSI given section and direction
-  _getGsi: (section, next) ->
+  _advanceGsi: (section, next) ->
+    gsi = section.lastGsi
+    @_unassign(gsi, section) if gsi
     if next
       @_nextGsi(section, section.lastGsi)
     else
       @_previousGsi(section, section.lastGsi)
 
+  # advances the search by one step forward or backward
+  _advanceSearch: (next) ->
+    index = @_sections.length - 1
+    section = @_sections[index]
+    return unless section.lastGsi
+    section.lastGsi = @_advanceGsi(section, next)
+
+  # sets the GSI of that section to the first (or last) possible GSI,
+  # depending on direction
+  _resetSection: (id, next) ->
+    return if (id < 0) or (id >= @_sections.length)
+    section = @_sections[id]
+    gsi = section.lastGsi
+    @_unassign(gsi, section) if gsi
+    if next
+      section.lastGsiIndex = -1
+    else
+      section.lastGsiIndex = @_sections.length
+
   # recursively assigns GSIs to sections with index id and larger
   # returns true if the assignment can be made and false otherwise
-  _fill: (id, next) ->
-    return true if id >= @_sections.length
+  _fill: (id, next, increment) ->
+    return true if (id >= @_sections.length) || (id < 0)
+    section = @_sections[id]
+    gsi = section.lastGsi
     loop
-      section = @_sections[id]
-      gsi = @_getGsi(section, next)
-      return false unless gsi
-      section.lastGsi = gsi
-      return true if @_fill(id + 1, next)
+      if gsi && @_fill(id + increment, next, increment)
+        return true
+      else
+        gsi = @_advanceGsi(section, next)
+        @_resetSection(id + increment, next)
+        return false unless gsi
+
+  # fills sections from "left" to "right"
+  _fillRight: (next) =>
+    @_fill(0, next, 1)
+
+  # fills sections from "right" to "left"
+  _fillLeft: (next) =>
+    @_fill(@_sections.length - 1, next, -1)
 
   # marks that the GSI teaching the section
   _assign: (gsi, section, index) ->
@@ -84,18 +108,24 @@ class AutoScheduler
 
   # marks that the GSI is no longer teaching the section
   _unassign: (gsi, section) ->
+    section.lastGsi = null
     availability = @_sectionsAvailable[gsi.id]
     if availability < hours_to_sections(gsi['hours_per_week'])
       @_sectionsAvailable[gsi.id] += 1
+    else
+      throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
+      than he/she initially had"
 
+  # returns true if the GSI can teach and false otherwise
+  _canTeach: (gsi) ->
+    @_sectionsAvailable[gsi.id] > 0
+    
   # remember last GSI position for each section
-  _prepareSectionIndex: ->
+  # and how much each GSI can teach
+  _resetIndex: ->
     for section in @_sections
       section.lastGsi = null
       section.lastGsiIndex = -1
-
-  # appends how many sections a GSI can teach to each GSI
-  _prepareGsiIndex: ->
     for gsi in @_gsis
       @_sectionsAvailable[gsi.id] = hours_to_sections gsi['hours_per_week']
 
@@ -121,6 +151,16 @@ class AutoScheduler
     @_quality /= @_sections.length
     return
 
+  # finds the solution given the solver function and direction
+  _solve: (solver, next) ->
+    return null unless @solvable
+    if solver(next)
+      @_buildSolution()
+    else
+      @_solution = null
+      @_quality = 0
+    @_solution  
+
   # public methods
 
   constructor: (sections, gsis, options = {}) ->
@@ -129,8 +169,7 @@ class AutoScheduler
     @checkIfSolvable()
     @_updateStatus()
     if @solvable()
-      @_prepareGsiIndex()
-      @_prepareSectionIndex()
+      @_resetIndex()
 
   # returns a description of a problem if one exists or that
   # the solver is ready
@@ -165,25 +204,22 @@ class AutoScheduler
     orphanSections = []
     for section in @_sections
       orphanSections.push(section) if section['available_gsis'].length == 0
-    orphanSections
+    orphanSections  
+
+  # returns first available solution or null if none exists
+  first: ->
+    @_resetIndex()
+    @_solve(@_fillRight, true)
 
   # returns next available solution or null if none exists
   next: ->
-    return null unless @solvable
-    if @_fill(0, true)
-      @_buildSolution()
-    else
-      @_solution = null
-    @_solution
+    @_advanceSearch(true)
+    @_solve(@_fillRight, true)
 
   # returns the previous solution or null if none exists
   previous: ->
-    return null unless @solvable
-    if @_fill(0, false)
-      @_buildSolution()
-    else
-      @_solution = null
-    @_solution
+    @_advanceSearch(false)
+    @_solve(@_fillRight, false)
 
   # returns the current selected solution or null if no solution
   current: ->
