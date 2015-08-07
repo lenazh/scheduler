@@ -2,7 +2,7 @@
 class EmploymentsController < ApplicationController
   respond_to :json
   before_filter :assign_model
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized, except: [:index, :roster]
 
   include JsonControllerHelper
 
@@ -35,6 +35,11 @@ class EmploymentsController < ApplicationController
     @employment.destroy
     destroy_if_needed(old_gsi)
     head :no_content
+  end
+
+  # same as index, but the IDs belong to User model instead of Employment
+  def roster
+    @employments = @model.all
   end
 
   # which model parameters is the controller allowed to update

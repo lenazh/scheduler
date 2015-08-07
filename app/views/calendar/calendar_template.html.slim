@@ -23,3 +23,36 @@ div.row
     tr 
       td
       td ng-repeat="weekday in weekdays"
+
+div#autoscheduler ng-if="schedulerReady && isOwner"
+  div.page-header
+    h2 Auto-scheduler
+
+  div.row
+    form.form-inline ng-if="schedulerSolvable()"
+      button[class="btn btn-danger" ng-click="schedulerReset()"] Reset
+      button[class="btn btn-default" ng-click="schedulerFirst()"] First
+      button[class="btn btn-default" ng-click="schedulerNext()"] Next
+      button[class="btn btn-default" ng-click="schedulerPrevious()"] Previous
+      button[class="btn btn-success" ng-click="schedulerSave()"] Save
+
+
+    div#autoscheduler-unemployed ng-if="schedulerHappiness() != 0"
+      h4 They can teach more
+      table[class="table table-striped"]
+        thead
+        th Name
+        th Email
+        th Unused hours/week
+        tr ng-repeat="gsi in schedulerUnemployed()"
+          td ng-bind="gsi.name"
+          td ng-bind="gsi.email"
+          td ng-bind="gsi['unused_hours']"
+
+    div#autoscheduler-status
+      p
+        b ng-if="schedulerSolvable()"
+          | Happiness = {{ schedulerHappiness() }} %
+      p
+        b Status:
+      p ng-repeat="status in scheduler.status()" ng-bind="status"

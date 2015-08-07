@@ -2,7 +2,7 @@
 class SectionsController < ApplicationController
   respond_to :json
   before_filter :assign_model
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized, except: [:index, :clear]
 
   def assign_model
     @course = Course.includes(:sections, :employments).find(params[:course_id])
@@ -13,6 +13,13 @@ class SectionsController < ApplicationController
   # tries to access a non-existend URL helper
   def section_url(course_id)
     course_sections_path(course_id)
+  end
+
+  # sets all sections' GSIs to be null
+  def clear
+    @sections = @model.all
+    @sections.update_all('gsi_id = NULL')
+    render :index, status: :ok
   end
 
   def permitted_parameters

@@ -1,3 +1,42 @@
+# This class is responsible for automatic scheduling of classess
+# AutoScheduler in constructed as
+# scheduler = new AutoScheduler(sections, gsis)
+#
+# where
+# sections is an array of sections to be scheduled and 
+# gsis is an array of all available gsis
+#
+# each section in sections is a hash. Each section has to have
+#  available_gsis field that is an array of all available gsis
+#  each gsi in gsis is a hash that has 'id' and 'hours_per_week'
+#  fields matching those in gsis array
+#
+# Solution is provided in a form of hash:
+#   {
+#     section1_id: { GSI assigned to section 1 },
+#     section2_id: { GSI assigned to section 2 },
+#     ...
+#   }
+#
+# scheduler has the following public methods:
+#   .solvable() true if a solution may be found and false otherwise
+#     there is no guarantee the solution actually exists
+#   .first() returns the first available solution of null if none exists
+#   .next() returns the next available solution or null if none exists
+#     Equivalent to .first() when it's called the first time
+#   .previous() returns the previous solution or null if none exists
+#   .current() returns the current solution of null if none exists
+#   .quality() returns the averaged happiness (preference) of all GSIs
+#     chosen to teach the sections or 0.0 if there are no solution
+#   .sectionsNobodyCanTeach() returns the list of sections that have
+#     available_gsi == []
+#   .unemployed() returns an array of GSIs who can teach more sections.
+#     Each GSI has 'unused_hours' field with how many more hours he/she
+#     can teach
+#   .needHours() returns how many hours/week are needed to teach all
+#     the sections
+#   .maxHours() returns how many hours/week the GSIs provide combined
+
 class AutoScheduler
   # "private" methods and fields
   _sections: []
@@ -8,11 +47,12 @@ class AutoScheduler
 
   # Sets correspondence between the sections and GSIs, such as
   # { section1 => gsi1, section2 => gsi2, ... }
-  _solution: null
+  _solution: {}
+  _solutionArray: []
 
   # Average satisfaction level of GSIs, calculated as
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
-  _quality: 0
+  _quality: 0.0
 
   # converts hours/week into maximum number of sections the GSI can teach
   hours_to_sections = (hours) ->
@@ -164,10 +204,12 @@ class AutoScheduler
 
   _buildSolution: ->
     @_solution = {}
+    @_solutionArray = new Array(@_sections.length)
     @_quality = 0
-    for section in @_sections
+    for section, index in @_sections
       @_solution[section.id] = section.lastGsi
-      @_quality += section.lastGsi.preference
+      @_solutionArray[index] = section.lastGsi
+      @_quality += parseFloat(section.lastGsi.preference)
     @_quality /= @_sections.length
     return
 
@@ -184,8 +226,8 @@ class AutoScheduler
   # public methods
 
   constructor: (sections, gsis, options = {}) ->
-    @_sections = sections
-    @_gsis = gsis
+    @_sections = angular.copy sections
+    @_gsis = angular.copy gsis
     @_resetIndex()
     @checkIfSolvable()
     @_updateStatus()
@@ -220,10 +262,7 @@ class AutoScheduler
 
   # Check the list of sections that no GSI can teach
   sectionsNobodyCanTeach: ->
-    orphanSections = []
-    for section in @_sections
-      orphanSections.push(section) if section['available_gsis'].length == 0
-    orphanSections  
+    (section for section in @_sections when section['available_gsis'].length == 0)
 
   # returns first available solution or null if none exists
   first: ->

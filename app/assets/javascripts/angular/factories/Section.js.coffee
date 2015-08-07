@@ -1,5 +1,6 @@
-@schedulerModule.factory 'Section', ['$resource', ($resource) -> 
+@schedulerModule.factory 'Section', ['$resource', '$http', ($resource, $http) -> 
   sectionResource = {}
+  baseUrl = ""
   
   buildParams = (section) ->
     {
@@ -15,7 +16,8 @@
 
   {
     init: (course_id) ->
-      sectionResource = $resource "#{gon.courses_api_path}/#{course_id}/sections/:id", 
+      baseUrl = "#{gon.courses_api_path}/#{course_id}/sections"
+      sectionResource = $resource "#{baseUrl}/:id", 
         { 'id': '@id' },
         {
           'update': { 'method': 'PUT' },
@@ -50,5 +52,8 @@
 
     all: (success) -> 
       all = sectionResource.query -> success(all)
+
+    clear: (success) -> 
+      $http.post("#{baseUrl}/clear").then (result) -> success(result['data'])
   }
 ]

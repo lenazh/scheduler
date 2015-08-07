@@ -143,3 +143,15 @@ table#schedule {
     height: 200%; <-- two hours long 
 
 */
+
+
+#autoscheduler-control-bar {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#autoscheduler-control-bar span {
+    display: table-cell;
+    text-align: center;
+}

@@ -1,5 +1,6 @@
 @schedulerModule.controller 'CalendarCtrl',
-  ['$scope', '$cookies', 'Section', ($scope, $cookies, Section) ->
+  ['$scope', '$cookies', 'Section', 'Employment',
+  ($scope, $cookies, Section, Employment) ->
 
   # Private functions
     getKey = (hour, weekday) ->
@@ -48,6 +49,10 @@
       section = processSection rawSection
       for weekday in section['weekdays']
         placeSection getHourKey(section), weekday, section
+
+    redrawSection = (section) ->
+      deleteSectionFromCells section
+      addSectionToCells section
 
     placeSection = (hour, weekday, section) ->
       key = getKey(hour, weekday)
@@ -107,10 +112,8 @@
     updateSection = (section, successCallback) ->
       Section.update(
         section
-        (data) ->
-          deleteSectionFromCells section
-          section = processSection data
-          addSectionToCells section
+        (section) ->
+          redrawSection section
           successCallback()
         (error) ->
           section['errors'] = error.data
@@ -120,15 +123,31 @@
       Section.setGsi(
         section
         gsi_id
-        (data) ->
-          deleteSectionFromCells section
-          section = processSection section
-          addSectionToCells section
+        (section) ->
+          redrawSection section
           successCallback()
         (error) ->
           section['errors'] = error.data
           errorCallback()
       )
+
+    propose = (solution) ->
+      for gsi, index in solution
+        section = angular.copy sections[index]
+        section.gsi = gsi
+        redrawSection section
+
+    resetCalendar = () ->
+      promises = []
+      for section in sections
+        redrawSection section
+
+    saveSchedule = (solution) ->
+      Section.clear (sections) ->
+        for gsi, index in solution
+          section = sections[index]
+          setGsi section, gsi.id, (->), (->)
+
 
     saveSection = (section, successCallback) ->
       Section.saveNew(
@@ -198,13 +217,29 @@
       $scope.role = 'gsi'
 
     $scope.showSwitch = isOwner && isTeaching
+    $scope.isOwner = isOwner
+
+    # AutoScheduler data
+    sections = []
+    gsis = []
+    $scope.scheduler = {}
+    $scope.schedulerReady = false
 
     # Populate the calendar with events
     courseId = $cookies.get 'course_id'
     Section.init(courseId)
-    Section.all (all) ->
-      for section in all
+    Employment.init(courseId)
+    Section.all (_sections) ->
+      sections = _sections
+      if isOwner
+        Employment.roster (_gsis) ->
+          gsis = _gsis
+          $scope.scheduler = new schedulerApp.AutoScheduler(sections, gsis)
+          $scope.schedulerReady = true
+
+      for section in sections
         addSectionToCells section
+
 
 
   ## Expose the interface
@@ -233,6 +268,34 @@
 
     @setGsi = (section, gsi_id, successCallback, errorCallback) ->
       setGsi(section, gsi_id, successCallback, errorCallback)
+
+    # button handlers for AutoScheduling
+    $scope.schedulerReset = ->
+      resetCalendar()
+
+    $scope.schedulerFirst = ->
+      $scope.scheduler.first()
+      propose($scope.scheduler._solutionArray)
+
+    $scope.schedulerNext = ->
+      $scope.scheduler.next()
+      propose($scope.scheduler._solutionArray)
+
+    $scope.schedulerPrevious = ->
+      $scope.scheduler.previous()
+      propose($scope.scheduler._solutionArray)
+
+    $scope.schedulerSave = ->
+      saveSchedule($scope.scheduler._solutionArray)
+
+    $scope.schedulerHappiness = ->
+      $scope.scheduler.quality() * 100
+
+    $scope.schedulerUnemployed = ->
+      $scope.scheduler.unemployed()
+
+    $scope.schedulerSolvable = ->
+      $scope.scheduler.solvable()
 
     return
   ]
