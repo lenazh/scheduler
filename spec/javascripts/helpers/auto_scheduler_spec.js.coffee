@@ -74,41 +74,78 @@ describe 'AutoScheduler', ->
       it 'should be true', ->
         expect(scheduler.solvable()).toBe true
 
-    describe 'next()', ->
+    describe 'next()/previous()', ->
       expectSolution = (actual, expected) ->
-        for key, value in expected
+        for key, value of expected
           expect(actual[key].id).toEqual value
 
       expectData = (data) ->
         for dataset in data
           expectedSolution = dataset.solution
           expectedQuality = dataset.quality
-          solution = scheduler.next()
-          console.log solution
-          console.log "Quality = #{scheduler.quality()}"
+          next = dataset.next
+          if (next)
+            # console.log "Next solution..."
+            solution = scheduler.next()
+          else
+            # console.log "Previous solution..."
+            solution = scheduler.previous()
+          quality = scheduler.quality()
+          # console.log solution
+          # console.log "Quality = #{quality}"
           expectSolution solution, expectedSolution
-          expect(scheduler.quality()).toEqual expectedQuality
+          expect(quality).toEqual expectedQuality
 
       it 'returns expected solutions', ->
         expectedData = [
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0) },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0) },
-          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0) },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0) },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0) },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0) },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0) },
-          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0) },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.5 / 4.0) },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.75 / 4.0) }
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: true },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
+          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: true },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: true },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0), next: true },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: true },
+          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: true },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.0 / 4.0), next: true },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.25 / 4.0), next: true },
+          { solution : null, quality: 0.0, next: true },
+          { solution : null, quality: 0.0, next: true },
+          { solution : null, quality: 0.0, next: true },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.25 / 4.0), next: false },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.0 / 4.0), next: false },
+          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: false },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: false },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0), next: false },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: false },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: false },
+          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: false },
+          { solution : null, quality: 0.0, next: false },
+          { solution : null, quality: 0.0, next: false },
+          { solution : null, quality: 0.0, next: false },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: true },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
+          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: true },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: true },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: false },
+          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: false },
         ]
         expectData expectedData
 
-
-
-    describe 'previous()', ->
-
-    describe 'current()', ->    
+    describe 'unemployed()', ->
+      it "returns a list of underemployed GSIs and how many \
+      more sections they can teach", ->
+        solution = scheduler.next()
+        unemployed = scheduler.unemployed()
+        expect(unemployed[0].name).toBe 'Vader'
+        expect(unemployed[0]['unused_hours']).toBe 10
+        expect(unemployed[1].name).toBe 'GlaDOS'
+        expect(unemployed[1]['unused_hours']).toBe 60
+        expect(unemployed[2]).not.toBeDefined()
 
 
     describe "'private' functions", ->
@@ -281,4 +318,117 @@ describe 'AutoScheduler', ->
           it 'calls _nextGsi(...)', ->
             scheduler._advanceGsi(section, true)
             expect(scheduler._nextGsi).toHaveBeenCalledWith(section, section.lastGsi)
+
+  describe "When a solution can't be found", ->
+    describe "because there are sections nobody can teach", ->
+      beforeEach ->
+        gsis =
+          [
+            { 'id': 1, 'hours_per_week': 20, 'name': 'Vader' },
+            { 'id': 2, 'hours_per_week': 80, 'name': 'GlaDOS' },
+            { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
+          ]
+
+        sections = 
+          [
+            {
+              'id': 1, 'name': '101',
+              'available_gsis': []
+            },
+            {
+              'id': 2, 'name': '102',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
+                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
+                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
+              ]
+            },
+            {
+              'id': 3, 'name': '103',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
+              ]
+            },
+            {
+              'id': 4, 'name': '104',
+              'available_gsis': [
+                { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
+                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
+              ]
+            }
+          ]
+
+        scheduler = new schedulerApp.AutoScheduler(sections, gsis)
+
+      describe 'status()', ->
+        it 'mentions that there are sections no GSI can teach', ->
+          expect(scheduler.status().join()).toMatch /sections nobody can teach/
+
+    describe "because there are not ehough GSIs", ->
+      beforeEach ->
+        gsis =
+          [
+            { 'id': 1, 'hours_per_week': 10, 'name': 'Vader' },
+            { 'id': 2, 'hours_per_week': 10, 'name': 'GlaDOS' },
+            { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
+          ]
+
+        sections = 
+          [
+            {
+              'id': 1, 'name': '101',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
+                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
+                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
+              ]
+            },
+            {
+              'id': 2, 'name': '102',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
+                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
+                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
+              ]
+            },
+            {
+              'id': 3, 'name': '103',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
+              ]
+            },
+            {
+              'id': 4, 'name': '104',
+              'available_gsis': [
+                { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
+                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
+              ]
+            }
+          ]
+
+        scheduler = new schedulerApp.AutoScheduler(sections, gsis)
+
+      describe 'status()', ->
+        it 'mentions that there are not enough GSIs', ->
+          expect(scheduler.status().join()).toMatch /not enough GSIs/
+
+    afterEach ->
+      # not solvable
+      expect(scheduler.solvable()).toBe false
+
+      # previous/next returns null
+      expect(scheduler.next()).toBe null
+      expect(scheduler.next()).toBe null
+      expect(scheduler.previous()).toBe null
+      expect(scheduler.previous()).toBe null
+
+      # quality is 0.0
+      expect(scheduler.quality()).toBe 0.0
+
+      # _fill() is not called
+      spyOn(scheduler, '_fill')
+      scheduler.next()
+      scheduler.previous()
+      expect(scheduler._fill).not.toHaveBeenCalled()
+
 

@@ -22,6 +22,14 @@ class AutoScheduler
   sections_to_hours = (sections) ->
     sections * 10
 
+  # returns how many more sections the GSI can teach
+  _availability: (gsi) ->
+    @_sectionsAvailable[gsi.id]
+
+  # changes the availability of the gsi by x
+  _changeAvailability: (gsi, x) ->
+    @_sectionsAvailable[gsi.id] += x
+
   # returns the next available GSI given a section and the gsi
   _nextGsi: (section) ->
     start = section.lastGsiIndex + 1
@@ -39,6 +47,11 @@ class AutoScheduler
   # returns the text available GSI witin the given range
   # start and end are both included
   _findGsi: (section, start, end) ->
+    max = section.available_gsis.length
+    if (start < 0) || (start >= max)
+      throw "start pointer is out of range"
+    if (end < 0) || (end >= max)
+      throw "end pointer is out of range"
     for i in [start..end]
       gsi = section.available_gsis[i]
       if @_canTeach(gsi)
@@ -50,10 +63,21 @@ class AutoScheduler
   _advanceGsi: (section, next) ->
     gsi = section.lastGsi
     @_unassign(gsi, section) if gsi
-    if next
-      @_nextGsi(section, section.lastGsi)
-    else
-      @_previousGsi(section, section.lastGsi)
+    gsi =
+      if next then @_nextGsi(section, section.lastGsi)
+      else @_previousGsi(section, section.lastGsi)
+    @_setIndexAfterLast(section, next) unless gsi
+    gsi
+
+  # Rewinds the section index to beyond the last available
+  # GSI in 'next' diraction
+  _setIndexAfterLast: (section, next) ->
+    section.lastGsiIndex = if next then section.available_gsis.length else -1
+
+  # Rewinds the section index to beyond the first available
+  # GSI in 'next' diraction
+  _setIndexBeforeFirst: (section, next) ->
+    section.lastGsiIndex = if next then -1 else section.available_gsis.length
 
   # advances the search by one step forward or backward
   _advanceSearch: (next) ->
@@ -69,10 +93,7 @@ class AutoScheduler
     section = @_sections[id]
     gsi = section.lastGsi
     @_unassign(gsi, section) if gsi
-    if next
-      section.lastGsiIndex = -1
-    else
-      section.lastGsiIndex = @_sections.length
+    @_setIndexBeforeFirst(section, next)
 
   # recursively assigns GSIs to sections with index id and larger
   # returns true if the assignment can be made and false otherwise
@@ -99,8 +120,8 @@ class AutoScheduler
   # marks that the GSI teaching the section
   _assign: (gsi, section, index) ->
     availability = @_sectionsAvailable[gsi.id]
-    if availability > 0
-      @_sectionsAvailable[gsi.id] -= 1
+    if @_availability(gsi) > 0
+      @_changeAvailability(gsi, -1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
     section.lastGsi = gsi
@@ -109,9 +130,8 @@ class AutoScheduler
   # marks that the GSI is no longer teaching the section
   _unassign: (gsi, section) ->
     section.lastGsi = null
-    availability = @_sectionsAvailable[gsi.id]
-    if availability < hours_to_sections(gsi['hours_per_week'])
-      @_sectionsAvailable[gsi.id] += 1
+    if @_availability(gsi) < hours_to_sections(gsi['hours_per_week'])
+      @_changeAvailability(gsi, +1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
@@ -139,7 +159,7 @@ class AutoScheduler
       @_status.push 'There are not enough GSIs to teach all the sections'
       @_status.push "You need #{@needHours() - @maxHours()} more hours/week"
 
-    if @solvable
+    if @solvable()
       @_status.push 'Ready to schedule'
 
   _buildSolution: ->
@@ -153,7 +173,7 @@ class AutoScheduler
 
   # finds the solution given the solver function and direction
   _solve: (solver, next) ->
-    return null unless @solvable
+    return null unless @solvable()
     if solver(next)
       @_buildSolution()
     else
@@ -166,10 +186,9 @@ class AutoScheduler
   constructor: (sections, gsis, options = {}) ->
     @_sections = sections
     @_gsis = gsis
+    @_resetIndex()
     @checkIfSolvable()
     @_updateStatus()
-    if @solvable()
-      @_resetIndex()
 
   # returns a description of a problem if one exists or that
   # the solver is ready
@@ -229,10 +248,12 @@ class AutoScheduler
   # Returns the list of unemployed GSIs and how many more hours/week
   # they can teach
   unemployed: ->
-    null
+    unemployedGsiList = (gsi for gsi in @_gsis when @_availability(gsi) > 0)
+    for gsi in unemployedGsiList
+      gsi['unused_hours'] = sections_to_hours @_availability(gsi)
+    unemployedGsiList
 
   # returns how happy are the GSIs with their assignments on average
   quality: -> @_quality
-
 
 schedulerApp.AutoScheduler = AutoScheduler
