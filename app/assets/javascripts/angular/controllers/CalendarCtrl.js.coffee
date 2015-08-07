@@ -125,10 +125,10 @@
         gsi_id
         (section) ->
           redrawSection section
-          successCallback()
+          successCallback section
         (error) ->
           section['errors'] = error.data
-          errorCallback()
+          errorCallback(error)
       )
 
     propose = (solution) ->
@@ -138,16 +138,16 @@
         redrawSection section
 
     resetCalendar = () ->
-      promises = []
-      for section in sections
-        redrawSection section
+      Section.all (_sections) ->
+        sections = _sections
+        for section in sections
+          redrawSection section
 
     saveSchedule = (solution) ->
-      Section.clear (sections) ->
+      Section.clear (_sections) ->
         for gsi, index in solution
           section = sections[index]
           setGsi section, gsi.id, (->), (->)
-
 
     saveSection = (section, successCallback) ->
       Section.saveNew(
