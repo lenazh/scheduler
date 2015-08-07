@@ -72,6 +72,43 @@ describe 'AutoScheduler', ->
       it 'should be true', ->
         expect(scheduler.solvable()).toBe true
 
+    describe 'next()', ->
+      expectSolution = (actual, expected) ->
+        for key, value in expected
+          expect(actual[key].id).toEqual value
+
+      expectData = (data) ->
+        for dataset in data
+          expectedSolution = dataset.solution
+          expectedQuality = dataset.quality
+          solution = scheduler.next()
+          console.log solution
+          console.log "Quality = #{scheduler.quality()}"
+          expectSolution solution, expectedSolution
+          expect(scheduler.quality()).toEqual expectedQuality
+
+      it 'returns expected solutions', ->
+        expectedData = [
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0) },
+          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0) },
+          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0) },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0) },
+          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0) },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0) },
+          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0) },
+          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0) },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.5 / 4.0) },
+          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.75 / 4.0) }
+        ]
+        expectData expectedData
+
+
+
+    describe 'previous()', ->
+
+    describe 'current()', ->    
+
+
     describe "'private' functions", ->
       describe '_prepareGsiIndex()', ->
         it 'stores number of sections GSIs can teach in _sectionsAvailable', ->
@@ -225,3 +262,21 @@ describe 'AutoScheduler', ->
             scheduler._assign(gsis[2], section, 1)
             gsi = scheduler._previousGsi(section)
             expect(scheduler._findGsi).toHaveBeenCalledWith(section, 0, 0)
+
+      describe '_getGsi(section, next)', ->
+        section = {}
+        beforeEach ->
+          spyOn(scheduler, '_nextGsi')
+          spyOn(scheduler, '_previousGsi')
+          section = scheduler._sections[1]
+
+        describe 'next is false', ->
+          it 'calls _previousGsi(...)', ->
+            scheduler._getGsi(section, false)
+            expect(scheduler._previousGsi).toHaveBeenCalledWith(section, section.lastGsi)
+
+        describe 'next is true', ->
+          it 'calls _nextGsi(...)', ->
+            scheduler._getGsi(section, true)
+            expect(scheduler._nextGsi).toHaveBeenCalledWith(section, section.lastGsi)
+

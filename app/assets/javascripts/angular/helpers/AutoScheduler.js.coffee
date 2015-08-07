@@ -8,7 +8,7 @@ class AutoScheduler
 
   # Sets correspondence between the sections and GSIs, such as
   # { section1 => gsi1, section2 => gsi2, ... }
-  _solution: {}
+  _solution: null
 
   # Average satisfaction level of GSIs, calculated as
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
@@ -54,16 +54,23 @@ class AutoScheduler
         return gsi
     null
 
+  # returns the upcoming GSI given section and direction
+  _getGsi: (section, next) ->
+    if next
+      @_nextGsi(section, section.lastGsi)
+    else
+      @_previousGsi(section, section.lastGsi)
+
   # recursively assigns GSIs to sections with index id and larger
   # returns true if the assignment can be made and false otherwise
-  _fill: (id) ->
+  _fill: (id, next) ->
     return true if id >= @_sections.length
     loop
       section = @_sections[id]
-      gsi = @_nextGsi(section, section.lastGsi)
+      gsi = @_getGsi(section, next)
       return false unless gsi
       section.lastGsi = gsi
-      return true if fill(id + 1)
+      return true if @_fill(id + 1, next)
 
   # marks that the GSI teaching the section
   _assign: (gsi, section, index) ->
@@ -80,9 +87,6 @@ class AutoScheduler
     availability = @_sectionsAvailable[gsi.id]
     if availability < hours_to_sections(gsi['hours_per_week'])
       @_sectionsAvailable[gsi.id] += 1
-    else
-      throw "GSI #{gsi.id} #{gsi.name} recovered more hours than he/she \
-      initially had"
 
   # remember last GSI position for each section
   _prepareSectionIndex: ->
@@ -108,6 +112,15 @@ class AutoScheduler
     if @solvable
       @_status.push 'Ready to schedule'
 
+  _buildSolution: ->
+    @_solution = {}
+    @_quality = 0
+    for section in @_sections
+      @_solution[section.id] = section.lastGsi
+      @_quality += section.lastGsi.preference
+    @_quality /= @_sections.length
+    return
+
   # public methods
 
   constructor: (sections, gsis, options = {}) ->
@@ -118,7 +131,6 @@ class AutoScheduler
     if @solvable()
       @_prepareGsiIndex()
       @_prepareSectionIndex()
-
 
   # returns a description of a problem if one exists or that
   # the solver is ready
@@ -157,18 +169,26 @@ class AutoScheduler
 
   # returns next available solution or null if none exists
   next: ->
-    return unless @solvable
-    null
+    return null unless @solvable
+    if @_fill(0, true)
+      @_buildSolution()
+    else
+      @_solution = null
+    @_solution
 
   # returns the previous solution or null if none exists
   previous: ->
-    return unless @solvable
-    null
+    return null unless @solvable
+    if @_fill(0, false)
+      @_buildSolution()
+    else
+      @_solution = null
+    @_solution
 
   # returns the current selected solution or null if no solution
   current: ->
-    return unless @solvable
-    null
+    return null unless @solvable
+    @_solution
 
   # Returns the list of unemployed GSIs and how many more hours/week
   # they can teach
