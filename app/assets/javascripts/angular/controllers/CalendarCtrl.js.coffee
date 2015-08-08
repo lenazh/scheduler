@@ -176,6 +176,10 @@
       }
       addSectionToCells section
       section
+
+    emptyCellOnClick = (hour, weekday) ->
+      if $scope.role == 'owner'
+        return newGhostSection(hour, weekday)
       
 
   # Initialize the calendar
@@ -248,8 +252,10 @@
       getSections(hour, weekday)
 
     $scope.emptyCellOnClick = (hour, weekday) ->
-      if $scope.role == 'owner'
-        return newGhostSection(hour, weekday)
+      emptyCellOnClick(hour, weekday)
+
+    @emptyCellOnClick = (hour, weekday) ->
+      emptyCellOnClick(hour, weekday)
 
     @saveSection = (section, successCallback) ->
       saveSection(section, successCallback)

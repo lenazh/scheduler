@@ -1,5 +1,7 @@
 div.event-parent
   div.event ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+    div.add-event ng-click="new($event)"
+      | +
     p
       b ng-bind="event.name"
     p

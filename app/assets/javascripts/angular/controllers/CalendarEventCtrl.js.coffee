@@ -55,6 +55,12 @@
     $scope.sectionCalendar.deleteGhost($scope.event)
     $event.stopPropagation()
 
+  $scope.new = ($event) ->
+    hour = $scope.hour
+    weekday = $scope.weekday
+    $scope.sectionCalendar.emptyCellOnClick(hour, weekday)
+    $event.stopPropagation()
+
   $scope.setGsi = (gsiId)->
     $scope.sectionCalendar.setGsi(
       $scope.event

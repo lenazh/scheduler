@@ -3,6 +3,8 @@
     restrict: 'E',
     scope: {
       event: '='
+      weekday: '='
+      hour: '='
     },
     require: '^sectionCalendar'
     templateUrl: 'event_template.html',

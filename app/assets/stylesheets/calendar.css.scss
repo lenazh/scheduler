@@ -124,6 +124,16 @@ table#schedule {
     background-color: #EFEFEF;    
 }
 
+#schedule .add-event {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 15px;
+    height: 15px;
+    box-sizing: border-box;
+    border: 1px black solid;
+    border-radius: 5px;
+}
 
 /* 
 

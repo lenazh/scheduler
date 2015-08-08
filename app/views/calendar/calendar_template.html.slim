@@ -16,7 +16,7 @@ div.row
       td.time-col ng-bind="hour"
       td.event-col ng-repeat="weekday in weekdays" hour="hour" weekday="weekday" ng-click="emptyCellOnClick(hour, weekday)" ng-switch="role"
         div.event-parent ng-switch-when="owner"
-          calendar-event class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event" 
+          calendar-event class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event" hour="hour" weekday="weekday"
         div.event-parent ng-switch-when="gsi"
           calendar-preference class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event"
 
