@@ -16,6 +16,9 @@
     return "really-dislikes" if 0.25 > value > 0
     return "cant-make" if value == 0
 
+  $scope.availableGsis = angular.copy $scope.event.available_gsis
+  $scope.availableGsis.push { id: null, name: '(nobody)', preference: 0.0}
+
   $scope.toggleExpand = ($event) ->
     if $scope.isGhost
       $event.stopPropagation()
@@ -85,7 +88,10 @@
     return "Can't make it" if value == 0
 
   $scope.gsiLabel = (gsi) ->
-    "#{gsi.name} (#{getPreference(gsi)})"
+    if gsi.id
+      "#{gsi.name} (#{getPreference(gsi)})"
+    else
+      "(none)"
 
   $scope.pad = (minutes) ->
     if (minutes < 10)
