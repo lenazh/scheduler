@@ -17,6 +17,7 @@
     return "cant-make" if value == 0
 
   $scope.availableGsis = angular.copy $scope.event.available_gsis
+  $scope.availableGsis ||= []
   $scope.availableGsis.push { id: null, name: '(nobody)', preference: 0.0}
 
   $scope.toggleExpand = ($event) ->
