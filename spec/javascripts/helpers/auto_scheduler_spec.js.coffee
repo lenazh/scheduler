@@ -98,41 +98,128 @@ describe 'AutoScheduler', ->
 
       it 'returns expected solutions', ->
         expectedData = [
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: true },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
-          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: true },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: true },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0), next: true },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: true },
-          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: true },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.0 / 4.0), next: true },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.25 / 4.0), next: true },
-          { solution : null, quality: 0.0, next: true },
-          { solution : null, quality: 0.0, next: true },
-          { solution : null, quality: 0.0, next: true },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 2 }, quality: (1.25 / 4.0), next: false },
-          { solution : { 1: 2, 2: 1, 3: 2, 4: 3 }, quality: (2.0 / 4.0), next: false },
-          { solution : { 1: 2, 2: 3, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: false },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 2 }, quality: (1.75 / 4.0), next: false },
-          { solution : { 1: 2, 2: 2, 3: 2, 4: 3 }, quality: (2.5 / 4.0), next: false },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: false },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: false },
-          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: false },
-          { solution : null, quality: 0.0, next: false },
-          { solution : null, quality: 0.0, next: false },
-          { solution : null, quality: 0.0, next: false },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: true },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
-          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: true },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: true },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 2 }, quality: (2.0 / 4.0), next: true },
-          { solution : { 1: 1, 2: 1, 3: 2, 4: 3 }, quality: (2.75 / 4.0), next: false },
-          { solution : { 1: 1, 2: 3, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 2 }, quality: (2.5 / 4.0), next: false },
-          { solution : { 1: 1, 2: 2, 3: 2, 4: 3 }, quality: (3.25 / 4.0), next: false },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: true 
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+            },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
+            quality: (1.25 / 4.0), next: true
+          },
+          { solution: null, quality: 0.0, next: true },
+          { solution: null, quality: 0.0, next: true },
+          { solution: null, quality: 0.0, next: true },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
+            quality: (1.25 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
+            quality: (2.0 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: false
+          },
+          { solution: null, quality: 0.0, next: false },
+          { solution: null, quality: 0.0, next: false },
+          { solution: null, quality: 0.0, next: false },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: false
+          }
         ]
         expectData expectedData
 
@@ -244,7 +331,8 @@ describe 'AutoScheduler', ->
 
           afterEach ->
             it 'assigns the GSI that has been found', ->
-              expect(scheduler._assign).toHaveBeenCalledWith(gsi, section, index)
+              expect(scheduler._assign).
+                toHaveBeenCalledWith(gsi, section, index)
 
         describe "GSI doesn't exist", ->
           it 'returns null', ->
@@ -262,7 +350,7 @@ describe 'AutoScheduler', ->
 
         describe 'current GSI is the last one', ->
           beforeEach ->
-            scheduler._assign(gsis[0], section, 2)   
+            scheduler._assign(gsis[0], section, 2)
 
           it 'returns null', ->
             gsi = scheduler._nextGsi(section)
@@ -286,7 +374,7 @@ describe 'AutoScheduler', ->
 
         describe 'current GSI is the first one', ->
           beforeEach ->
-            scheduler._assign(gsis[1], section, 0)   
+            scheduler._assign(gsis[1], section, 0)
 
           it 'returns null', ->
             gsi = scheduler._previousGsi(section)
@@ -312,12 +400,14 @@ describe 'AutoScheduler', ->
         describe 'next is false', ->
           it 'calls _previousGsi(...)', ->
             scheduler._advanceGsi(section, false)
-            expect(scheduler._previousGsi).toHaveBeenCalledWith(section, section.lastGsi)
+            expect(scheduler._previousGsi).
+              toHaveBeenCalledWith(section, section.lastGsi)
 
         describe 'next is true', ->
           it 'calls _nextGsi(...)', ->
             scheduler._advanceGsi(section, true)
-            expect(scheduler._nextGsi).toHaveBeenCalledWith(section, section.lastGsi)
+            expect(scheduler._nextGsi).
+              toHaveBeenCalledWith(section, section.lastGsi)
 
   describe "When a solution can't be found", ->
     describe "because there are sections nobody can teach", ->
@@ -329,7 +419,7 @@ describe 'AutoScheduler', ->
             { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
           ]
 
-        sections = 
+        sections =
           [
             {
               'id': 1, 'name': '101',
@@ -373,7 +463,7 @@ describe 'AutoScheduler', ->
             { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
           ]
 
-        sections = 
+        sections =
           [
             {
               'id': 1, 'name': '101',
