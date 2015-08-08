@@ -12,7 +12,7 @@ describe 'AutoScheduler', ->
           { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
         ]
 
-      sections = 
+      sections =
         [
           {
             'id': 1, 'name': '101',
@@ -100,7 +100,7 @@ describe 'AutoScheduler', ->
         expectedData = [
           {
             solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
-            quality: (3.25 / 4.0), next: true 
+            quality: (3.25 / 4.0), next: true
           },
           {
             solution: { 1: 1, 2: 2, 3: 2, 4: 2 },

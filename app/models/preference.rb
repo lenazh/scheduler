@@ -5,8 +5,8 @@ class Preference < ActiveRecord::Base
   belongs_to :user
   belongs_to :section
 
-  validates_presence_of :user
-  validates_presence_of :section
+  validates :user, presence: true
+  validates :section, presence: true
   validate :between_0_and_1
 
   # returns true if successful false otherwise
@@ -25,15 +25,14 @@ class Preference < ActiveRecord::Base
   def self.get(user_id, section_id)
     record = Preference.where(
       'section_id = ? AND user_id = ?', section_id, user_id).first
-    record ||= Preference.new preference: 0,
-                              section_id: section_id,
-                              user_id: user_id    
+    record || Preference.new(
+      preference: 0,section_id: section_id, user_id: user_id)
   end
 
   # validates if the preference is in (0; 1] interval
   def between_0_and_1
     unless (preference > 0) && (preference <= 1)
-      errors.add :preference, "has to be in (0; 1] interval"
+      errors.add :preference, 'has to be in (0; 1] interval'
     end
   end
 end

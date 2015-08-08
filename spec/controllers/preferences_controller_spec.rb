@@ -84,7 +84,7 @@ describe PreferencesController do
           expect(response.response_code).to eq(201)
         end
 
-        describe "if the preference is zero" do
+        describe 'if the preference is zero' do
           describe 'if the record existed' do
             it 'deletes the record' do
               expect { set_preference(0, section) }.
@@ -103,7 +103,7 @@ describe PreferencesController do
           end
         end
 
-        describe "if the preference is not zero" do
+        describe 'if the preference is not zero' do
           describe 'if the record existed' do
             it 'updates the record' do
               expect { set_preference(0.76, section) }.

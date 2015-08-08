@@ -19,11 +19,6 @@ class PreferencesController < ApplicationController
     [:preference, :user_id]
   end
 
-  def create
-    binding.pry
-    super
-  end
-
   # include JsonControllerHelper
 
   # locates the preference given section_id
@@ -37,7 +32,7 @@ class PreferencesController < ApplicationController
   def set
     get_by_section(params[:section_id])
     authorize(@preference, :create?)
-    if (@preference.set(params[:preference]))
+    if @preference.set(params[:preference])
       render :show, status: :created
     else
       render json: @preference.errors, status: :unprocessable_entity

@@ -73,10 +73,9 @@ class User < ActiveRecord::Base
     0.0
   end
 
-
   # returns how many sections the user is teaching in course
   def sections_in(course)
-    count = Section.where('gsi_id = ? AND course_id = ?', id, course.id).count
+    Section.where('gsi_id = ? AND course_id = ?', id, course.id).count
   end
 
   # returns falsy value if the information of user teaching this section is
