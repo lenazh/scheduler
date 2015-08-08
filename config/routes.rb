@@ -26,16 +26,13 @@ Rails.application.routes.draw do
               only: [:show, :index], defaults: { format: :json }
     resources :users, except: [:new, :edit], defaults: { format: :json }
     resources :courses, except: [:new, :edit], defaults: { format: :json } do
+      post 'sections/clear' => 'sections#clear'
       resources :sections, except: [:new, :edit], defaults: { format: :json }
+      get 'employments/roster' => 'employments#roster'
       resources :employments,
                 except: [:new, :edit], defaults: { format: :json }
-      resources :preferences,
-                except: [:new, :edit], defaults: { format: :json } do
-                  collection do
-                    get :get
-                    put :set
-                  end
-                end
+      get 'preferences/get' => 'preferences#get'
+      put 'preferences/set' => 'preferences#set'
     end
   end
 

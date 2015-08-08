@@ -3,6 +3,8 @@
     restrict: 'E',
     scope: {
       event: '='
+      weekday: '='
+      hour: '='
     },
     require: '^sectionCalendar'
     templateUrl: 'event_template.html',
@@ -15,4 +17,5 @@
       scope.editStyle = {height: 'auto', width: 'auto', 'z-index': '200'}
       scope.isGhost = isGhost()
       scope.showEditForm = isGhost()
+      scope.element = element
   }

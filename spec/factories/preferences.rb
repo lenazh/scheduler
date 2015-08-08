@@ -9,7 +9,7 @@ FactoryGirl.define do
     end
 
     factory :another_preference, class: Preference do
-      preference 1
+      preference 1.0
     end
 
     factory :invalid_preference, class: Preference do

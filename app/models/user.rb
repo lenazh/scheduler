@@ -50,4 +50,51 @@ class User < ActiveRecord::Base
     return false unless section
     owns_course?(section.course)
   end
+
+  # returns how many hours per week does the GSI teach the course
+  # assumes that the Employments of course have been eagerly loaded before
+  def hours(course)
+    course.employments.each do |employment|
+      if id == employment.user_id
+        return employment.hours_per_week
+      end
+    end
+    0
+  end
+
+  # returns how much the GSI prefers to teach this course
+  # assumes that the Preferences of section have been eagerly loaded before
+  def preference(section)
+    section.preferences.each do |preference|
+      if id == preference.user_id
+        return preference.preference
+      end
+    end
+    0.0
+  end
+
+  # returns how many sections the user is teaching in course
+  def sections_in(course)
+    Section.where('gsi_id = ? AND course_id = ?', id, course.id).count
+  end
+
+  # returns falsy value if the information of user teaching this section is
+  # not in db and truthy value if it is
+  def appointment_persisted?(section)
+    Section.where('gsi_id = ? AND id = ?', id, section.id).count > 0
+  end
+
+  # returns how many sections the user is allowed to teach in course
+  def max_sections_in(course)
+    employment = Employment.where(
+      'user_id = ? AND course_id = ?', id, course.id).first
+    return 0 unless employment
+    hours_to_max_sections employment.hours_per_week
+  end
+
+  # returns how many section the user is allowed to teach if he has
+  # [hours] hours/week appointment
+  def hours_to_max_sections(hours)
+    hours / 10
+  end
 end

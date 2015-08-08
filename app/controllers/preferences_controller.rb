@@ -16,25 +16,24 @@ class PreferencesController < ApplicationController
   end
 
   def permitted_parameters
-    [:preference]
+    [:preference, :user_id]
   end
 
-  include JsonControllerHelper
+  # include JsonControllerHelper
 
+  # locates the preference given section_id
   def get
-    find_preference
+    get_by_section(params[:section_id])
     authorize(@preference, :show?)
     render :show, status: :ok
   end
 
+  # updates the preference given section_id
   def set
-    find_preference
+    get_by_section(params[:section_id])
     authorize(@preference, :create?)
-    @preference.preference = params[:preference]
-    if @preference.save
-      render :show,
-             status: :created,
-             location: course_preference_path(@course.id, @preference.id)
+    if @preference.set(params[:preference])
+      render :show, status: :created
     else
       render json: @preference.errors, status: :unprocessable_entity
     end
@@ -42,14 +41,8 @@ class PreferencesController < ApplicationController
 
   private
 
-  def find_preference
-    # find_or_create_by is not used to keep get() safe
-    section_id = params[:section_id].to_i
-    user_id = current_user.id
-    @preference =
-      @model.where('section_id = ? AND user_id = ?', section_id, user_id).first
-    @preference ||= Preference.new preference: 0,
-                                   section_id: section_id,
-                                   user_id: user_id
+  # locates the preference given section_id
+  def get_by_section(section_id)
+    @preference = Preference.get(current_user.id, section_id)
   end
 end

@@ -1,19 +1,23 @@
-@schedulerModule.factory 'Section', ['$resource', ($resource) -> 
+@schedulerModule.factory 'Section', ['$resource', '$http', ($resource, $http) -> 
   sectionResource = {}
+  baseUrl = ""
   
   buildParams = (section) ->
     {
-      'name': section['name'],
-      'start_hour': section['start_hour'],
-      'start_minute': section['start_minute'],
-      'duration_hours': section['duration_hours'],
-      'weekday': section['weekday'],
-      'room': section['room']
+      'section': {
+        'name': section['name'],
+        'start_hour': section['start_hour'],
+        'start_minute': section['start_minute'],
+        'duration_hours': section['duration_hours'],
+        'weekday': section['weekday'],
+        'room': section['room']
+      }
     }
 
   {
     init: (course_id) ->
-      sectionResource = $resource "#{gon.courses_api_path}/#{course_id}/sections/:id", 
+      baseUrl = "#{gon.courses_api_path}/#{course_id}/sections"
+      sectionResource = $resource "#{baseUrl}/:id", 
         { 'id': '@id' },
         {
           'update': { 'method': 'PUT' },
@@ -28,9 +32,18 @@
       )
 
     update: (section, success, error) ->
-      section.$update( 
+      sectionResource.update( 
+        { 'id': section.id }
         buildParams(section) 
-        -> success section
+        (data) -> success data
+        (e) -> error(e)
+      )
+
+    setGsi: (section, gsi_id, success, error) ->
+      sectionResource.update( 
+        { 'id': section.id }
+        { 'section': { 'gsi_id': gsi_id } }
+        (data) -> success data
         (e) -> error(e)
       )
       
@@ -39,5 +52,8 @@
 
     all: (success) -> 
       all = sectionResource.query -> success(all)
+
+    clear: (success) -> 
+      $http.post("#{baseUrl}/clear").then (result) -> success(result['data'])
   }
 ]

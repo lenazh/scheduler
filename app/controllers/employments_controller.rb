@@ -2,7 +2,7 @@
 class EmploymentsController < ApplicationController
   respond_to :json
   before_filter :assign_model
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized, except: [:index, :roster]
 
   include JsonControllerHelper
 
@@ -35,6 +35,11 @@ class EmploymentsController < ApplicationController
     @employment.destroy
     destroy_if_needed(old_gsi)
     head :no_content
+  end
+
+  # same as index, but the IDs belong to User model instead of Employment
+  def roster
+    @employments = @model.all
   end
 
   # which model parameters is the controller allowed to update
@@ -86,7 +91,8 @@ class EmploymentsController < ApplicationController
     authorize User.new, :show?
     User.find_or_create_by(email: email) do |user|
       authorize User.new, :create?
-      user.name = '-'
+      match = email.match(/^(.+)?@.*$/)
+      user.name = match[1] if match
       password = Devise.friendly_token.first(password_length)
       user.password = password
       user.password_confirmation = password
@@ -96,6 +102,9 @@ class EmploymentsController < ApplicationController
 
   # send an email to the user if their password changed
   def notify_user(_gsi)
+    # puts 'New GSI created'
+    # puts "Email: #{_gsi.email}"
+    # puts "Password: #{_gsi.password}"
     # GsiMailer.enrollment(@course, _gsi).deliver if gsi.password
   end
 end

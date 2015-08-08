@@ -1,107 +1,154 @@
 table#schedule {
-    width: 100%;
-    border-collapse: collapse;
-    border-style: hidden;
-    empty-cells: show;
-    font-family: sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  border-style: hidden;
+  empty-cells: show;
+  font-family: sans-serif;
 }
 
 #schedule td {  
-    box-sizing: border-box;
-    padding: 0px;
-    height: 3em;
+  box-sizing: border-box;
+  padding: 0;
+  height: 3em;
 }
 
 #schedule td.event-col {
-    width: 18%;
-    text-align: center;
+  width: 18%;
+  text-align: center;
 }
 
 #schedule .time-col {
-    width: 10%;
-    text-align: center;
+  width: 10%;
+  text-align: center;
 }
 
 
 #schedule td.event-col:empty:hover {
-    border: solid 2px #5C5C8A;
+  border: solid 2px #5C5C8A;
 }
 
 #schedule .event-parent {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-
-    display: table;
+  box-sizing: border-box;
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
 }
 
 #schedule .event {
-    border: outset 1px #666666;
-    background-color: #EFEFEF;
-    border-radius: 5px;
-    margin:0px;
-    padding: 0.2em;
-    font-size: x-small;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    box-sizing: border-box;
-    overflow: hidden; 
-    height: 100%;
-    width: 100%;
-    display: table-cell;
-    z-index: 10;
+  border: outset 1px #666666;
+  background-color: #EFEFEF;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0.2em;
+  font-size: x-small;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  overflow: hidden; 
+  height: 100%;
+  width: 100%;
+  display: table-cell;
+  z-index: 10;
 }
 
 #schedule .event p {
-    font-size: x-small;
-    padding: 0px;
-    margin-bottom: 0px;
-    margin-top: 0px;
+  font-size: x-small;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding: 0;
 }
 
 .event-table {
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-    display: table-cell;
+  border: 0;
+  display: table-cell;
+  margin: 0;
+  padding: 0;
 }
 
 #schedule .ghost {
-    opacity: 0.5;
-    display: none;
-    height: 200%;
-    z-index: 100;
+  display: none;
+  height: 200%;
+  opacity: 0.5;
+  z-index: 100;
 }
 
 #schedule .event:hover {
-    box-shadow:  0 0 3px;
+  box-shadow: 0 0 3px;
 }
 
 #schedule button {
-    margin: 1em;
+  margin: 1em;
 }
 
 #schedule label {
-    font-size: small;
+  font-size: small;
 }
 
 #schedule form {
-    margin: 1em;
+  margin: 1em;
 }
 
 #schedule .section-error {
-    color: red;
+  color: red;
+}
+
+#schedule .really-wants-section {
+  background-color: #01DF01;
+}
+
+#schedule .really-wants-section {
+  background-color: #01FF01;
+}
+
+#schedule .wants-section {
+  background-color: #CFFFCF;
+}
+
+#schedule .ok-with-section {
+  background-color: #EFEFEF;
+}
+
+#schedule .doesnt-like-section {
+  background-color: #FFCFCF;
+}
+
+#schedule .really-dislikes-section {
+  background-color: #FF1D1D;
+}
+
+#schedule .cant-make {
+  border: outset 3px red;
+  background-color: #EFEFEF;  
+}
+
+#schedule .add-event {
+  border: 1px black solid;
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15px;
 }
 
 /* 
-    100% = 1 hour
 
-    set top and height atributes to position
-    the beginning and end of the event, e.g:
+  return "really-wants-section" if value >= 1.0
+  return "wants-section" if 1.0 > value >= 0.75
+  return "ok-with-section" if 0.75 > value >= 0.5
+  return "doesnt-like-section" if 0.5 > value >= 0.25
+  return "really-dislikes" if 0.25 > value > 0
+  return "cant-make" if value == 0
 
-    top: 25%; <-- starts at 15 minutes 
-    height: 200%; <-- two hours long 
+  100% = 1 hour
+
+  set top and height atributes to position
+  the beginning and end of the event, e.g:
+
+  top: 25%; <-- starts at 15 minutes 
+  height: 200%; <-- two hours long 
 
 */

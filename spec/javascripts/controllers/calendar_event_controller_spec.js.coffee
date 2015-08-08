@@ -38,15 +38,16 @@ describe "CalendarEventCtrl", ->
         'z-index': '200'
       }
       event: {
-        "id": 7,
-        "name": "108",
-        "start_hour": 16,
-        "start_minute": 0,
-        "duration_hours": 1.5,
-        "weekday": "Thursday",
-        "room": "105",
-        "gsi": {}
-        "style": {}
+        'id': 7,
+        'name': '108',
+        'start_hour': 16,
+        'start_minute': 0,
+        'duration_hours': 1.5,
+        'weekday': 'Thursday',
+        'room': '105',
+        'gsi': {}
+        'style': {}
+        'available_gsis': []
       }
     }
 

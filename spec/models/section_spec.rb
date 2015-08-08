@@ -5,7 +5,10 @@ describe Section do
   let(:course) { create(:course) }
 
   describe 'that is valid should have' do
-    subject { create(:section, course: course, gsi: user) }
+    subject do
+      create(:employment, course: course, gsi: user, hours_per_week: 20)
+      create(:section, course: course, gsi: user)
+    end
 
     it { should be_valid }
     its(:name) { should_not be_empty }

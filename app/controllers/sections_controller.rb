@@ -2,18 +2,24 @@
 class SectionsController < ApplicationController
   respond_to :json
   before_filter :assign_model
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
+  after_action :verify_authorized, except: [:index, :clear]
 
   def assign_model
-    @course = Course.find(params[:course_id])
-    @model = policy_scope(@course.sections)
+    @course = Course.includes(:sections, :employments).find(params[:course_id])
+    @model = @course.sections.includes(:preferences, :potential_gsis)
   end
 
   # fixes the problem where ActionController::TestCase::Behavior::post
   # tries to access a non-existend URL helper
   def section_url(course_id)
     course_sections_path(course_id)
+  end
+
+  # sets all sections' GSIs to be null
+  def clear
+    @sections = @model.all
+    @sections.update_all('gsi_id = NULL')
+    render :index, status: :ok
   end
 
   def permitted_parameters
