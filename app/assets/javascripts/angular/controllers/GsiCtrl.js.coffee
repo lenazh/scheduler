@@ -1,4 +1,4 @@
 @schedulerModule.controller 'GsiCtrl',
-  ['$scope', '$routeParams', 'Employment', ($scope, $routeParams, Employment) ->
-    new schedulerApp.EmploymentFormController($scope, $routeParams, Employment)
+  ['$scope', '$cookies', 'Employment', ($scope, $cookies, Employment) ->
+    new schedulerApp.EmploymentFormController($scope, $cookies, Employment)
 ]

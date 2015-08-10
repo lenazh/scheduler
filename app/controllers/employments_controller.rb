@@ -1,4 +1,5 @@
 # JSON API controller that serves GSIs resource
+# Lists all the GSIs enroller in your course
 class EmploymentsController < ApplicationController
   respond_to :json
   before_filter :assign_model
@@ -8,7 +9,7 @@ class EmploymentsController < ApplicationController
 
   # retreives the parent model and the association from the DB
   def assign_model
-    @course = policy_scope(Course).find(params[:course_id])
+    @course = Course.find(params[:course_id])
     @model = EmploymentPolicy::Scope.
       new(current_user, Employment).resolve_employments(@course)
   end
