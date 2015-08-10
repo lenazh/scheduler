@@ -1,6 +1,7 @@
 @schedulerModule.controller 'CalendarPreferenceCtrl',
   ['$scope', 'Navbar', 'Preference', ($scope, Navbar, Preference) ->
     gsiClass = (value) ->
+      value = parseFloat(value)
       return "really-wants-section" if value >= 1.0
       return "wants-section" if 1.0 > value >= 0.75
       return "ok-with-section" if 0.75 > value >= 0.5
@@ -15,23 +16,23 @@
     $scope.preferences = [
       {
         label: "Can't make it"
-        value: 0.0
+        value: '0.0'
       },
       {
         label: "Not really",
-        value: 0.25
+        value: '0.25'
       },
       {
         label: "Ambivalent",
-        value: 0.5
+        value: '0.5'
       },
       {
         label: 'Yes',
-        value: 0.75
+        value: '0.75'
       },
       {
         label: 'Ideal fit for me',
-        value: 1.0
+        value: '1.0'
       }
     ]
 
