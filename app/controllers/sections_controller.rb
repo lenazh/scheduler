@@ -7,6 +7,7 @@ class SectionsController < ApplicationController
   def assign_model
     @course = Course.includes(:sections, :employments).find(params[:course_id])
     @model = @course.sections.includes(:preferences, :potential_gsis)
+    @user = current_user
   end
 
   # fixes the problem where ActionController::TestCase::Behavior::post

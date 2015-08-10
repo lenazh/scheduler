@@ -8,8 +8,9 @@
       return "really-dislikes" if 0.25 > value > 0
       return "cant-make" if value == 0
 
+    # the class that div containing the event gets
     $scope.eventClass = ->
-      "event #{gsiClass($scope.preference)}"
+      "event #{gsiClass($scope.event.preference)}"
 
     $scope.preferences = [
       {
@@ -35,16 +36,8 @@
     ]
 
     Preference.init(Navbar.courseId())
-    Preference.get $scope.event,
-      (preference) ->
-        $scope.preference = parseFloat(preference)
 
     $scope.toggleExpand = ($event) ->
-      unless $scope.showEditForm
-        Preference.get $scope.event,
-          (preference) ->
-            $scope.preference = parseFloat(preference)
-
       $scope.showEditForm = !$scope.showEditForm
       $event.stopPropagation()
 
@@ -52,7 +45,7 @@
       $event.stopPropagation()
 
     $scope.set = ->
-      Preference.set $scope.event, $scope.preference
+      Preference.set $scope.event, $scope.event.preference
 
   # TODO - move this to filters
     $scope.pad = (minutes) ->
