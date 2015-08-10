@@ -9,6 +9,12 @@ describe 'sections/index' do
   end
 
   before(:each) do
+    @user = stub_model(User, attributes_for(:user))
+    @user.stub(:preference).and_return('1.0')
+    controller.stub(:current_user).and_return(@user)
+  end
+
+  before(:each) do
     assign(:course, stub_model(Course, attributes_for(:course)))
   end
 

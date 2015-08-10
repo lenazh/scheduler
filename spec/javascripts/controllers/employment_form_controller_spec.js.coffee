@@ -1,6 +1,6 @@
 describe "EmploymentFormController", ->
   $scope = {}
-  $routeParams = {}
+  $cookies = {}
   controller = {}
 
   fakeResults = {}
@@ -47,7 +47,15 @@ describe "EmploymentFormController", ->
       remove: (gsi) -> null
     }
 
-    $routeParams = { 'course_id': course_id }
+    $cookies = {
+      values: {
+        'course_id': course_id
+        'owner': 'true'
+      }
+
+      get: (key) ->
+        @values[key]
+    }
     $scope = {}
 
   beforeEach ->
@@ -58,10 +66,10 @@ describe "EmploymentFormController", ->
     spyOn(gsiMock, 'init')
 
     controller = new schedulerApp.EmploymentFormController(
-      $scope, $routeParams, gsiMock)
+      $scope, $cookies, gsiMock)
 
   it "calls Gsi.init(...) while initializing with the correct course_id", ->
-    expect(gsiMock.init).toHaveBeenCalledWith($routeParams['course_id'])
+    expect(gsiMock.init).toHaveBeenCalledWith($cookies.values['course_id'])
 
   it "has 'email' field", ->
     expect(controller.fields.email).toBeDefined()

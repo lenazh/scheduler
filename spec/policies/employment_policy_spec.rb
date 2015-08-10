@@ -40,8 +40,8 @@ describe EmploymentPolicy do
       end
 
       describe 'if user is employed' do
-        it 'grants access' do
-          expect(subject).to permit(gsi, employment)
+        it 'denies access' do
+          expect(subject).not_to permit(gsi, employment)
         end
       end
 
