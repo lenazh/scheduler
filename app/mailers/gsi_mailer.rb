@@ -10,7 +10,7 @@ class GsiMailer < ActionMailer::Base
     @password = gsi.password
     # TODO: Fix the URL
     url = ActionMailer::Base.default_url_options
-    @hostname = "http://#{url[:host]}:#{url[:port]}"
+    @hostname = "http://#{url[:host]}"
     mail to: @gsi.email, subject: "Teaching #{course.name}"
   end
 end
