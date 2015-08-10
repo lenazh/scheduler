@@ -105,6 +105,6 @@ class EmploymentsController < ApplicationController
     # puts 'New GSI created'
     # puts "Email: #{_gsi.email}"
     # puts "Password: #{_gsi.password}"
-    # GsiMailer.enrollment(@course, _gsi).deliver if gsi.password
+    GsiMailer.enrollment(@course, _gsi).deliver if _gsi.password
   end
 end
