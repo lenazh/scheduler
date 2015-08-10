@@ -226,7 +226,7 @@
     # AutoScheduler data
     sections = []
     gsis = []
-    $scope.scheduler = {}
+    scheduler = {}
     $scope.schedulerReady = false
 
     # Populate the calendar with events
@@ -238,7 +238,7 @@
       if isOwner
         Employment.roster (_gsis) ->
           gsis = _gsis
-          $scope.scheduler = new schedulerApp.AutoScheduler(sections, gsis)
+          scheduler = new schedulerApp.AutoScheduler(sections, gsis)
           $scope.schedulerReady = true
 
       for section in sections
@@ -280,28 +280,34 @@
       resetCalendar()
 
     $scope.schedulerFirst = ->
-      $scope.scheduler.first()
-      propose($scope.scheduler._solutionArray)
+      scheduler.first()
+      propose(scheduler._solutionArray)
 
     $scope.schedulerNext = ->
-      $scope.scheduler.next()
-      propose($scope.scheduler._solutionArray)
+      scheduler.next()
+      propose(scheduler._solutionArray)
 
     $scope.schedulerPrevious = ->
-      $scope.scheduler.previous()
-      propose($scope.scheduler._solutionArray)
+      scheduler.previous()
+      propose(scheduler._solutionArray)
 
     $scope.schedulerSave = ->
-      saveSchedule($scope.scheduler._solutionArray)
+      saveSchedule(scheduler._solutionArray)
 
     $scope.schedulerHappiness = ->
-      $scope.scheduler.quality() * 100
+      scheduler.quality() * 100
 
     $scope.schedulerUnemployed = ->
-      $scope.scheduler.unemployed()
+      scheduler.unemployed()
 
     $scope.schedulerSolvable = ->
-      $scope.scheduler.solvable()
+      scheduler.solvable()
+
+    $scope.displayUnemployed = ->
+      (scheduler.quality() != 0.0) && (scheduler.unemployed().length > 0)
+
+    $scope.schedulerStatus = ->
+      scheduler.status()
 
     return
   ]

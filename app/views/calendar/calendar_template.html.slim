@@ -37,7 +37,7 @@ div#autoscheduler ng-if="schedulerReady && isOwner"
       button[class="btn btn-success" ng-click="schedulerSave()"] Save
 
 
-    div#autoscheduler-unemployed ng-if="schedulerHappiness() != 0"
+    div#autoscheduler-unemployed ng-if="displayUnemployed()"
       h4 They can teach more
       table[class="table table-striped"]
         thead
@@ -55,4 +55,4 @@ div#autoscheduler ng-if="schedulerReady && isOwner"
           | Happiness = {{ schedulerHappiness() }} %
       p
         b Status:
-      p ng-repeat="status in scheduler.status()" ng-bind="status"
+      p ng-repeat="status in schedulerStatus()" ng-bind="status"
