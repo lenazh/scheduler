@@ -11,7 +11,6 @@ div.row
         th Hours/week
         th
         th
-        th
       tr ng-repeat="gsi in gsiCtrl.all"
         td ng-attr-id="gsi-name-{{gsi.id}}" ng-bind="gsi.name" 
         td ng-attr-id="gsi-email-{{gsi.id}}" ng-bind="gsi.email"
@@ -19,9 +18,6 @@ div.row
 
         td.text-right 
           button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit"] Edit
-
-        td.text-right 
-          button[class="btn btn-default" ng-click="gsiCtrl.invite(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-resend"] Re-send invitation
 
         td.text-right 
           button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete"] X
@@ -36,7 +32,7 @@ div.row
 
           button[class="btn btn-defauls" ng-click="gsiCtrl.addForm()" ng-hide="gsiCtrl.hideUpdateButton"] Cancel
 
-        td class="text-right" colspan="3"          
+        td class="text-right" colspan="2"          
           button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="!gsiCtrl.form_is_valid() || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
 
           button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="!gsiCtrl.form_is_valid()" ng-hide="gsiCtrl.hideUpdateButton"] Update
