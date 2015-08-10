@@ -9,6 +9,10 @@
   teaching_cookie = 'course_teaching'
   owner_cookie = 'course_owner'
 
+  expirationDate = ->
+    now = new Date()
+    expires = new Date now.getFullYear() + 1, now.getMonth(), now.getDate()
+
   loadFromCookies = ->
     course[id_key] = $cookies.get id_cookie
     course[title_key] = $cookies.get title_cookie
@@ -17,10 +21,10 @@
     courseDefaults()
 
   saveToCookies = ->
-    $cookies.put id_cookie, course[id_key]
-    $cookies.put title_cookie, course[title_key]
-    $cookies.put teaching_cookie, course[teaching_key]
-    $cookies.put owner_cookie, course[owner_key]
+    $cookies.put id_cookie, course[id_key], { expires: expirationDate() }
+    $cookies.put title_cookie, course[title_key], { expires: expirationDate() }
+    $cookies.put teaching_cookie, course[teaching_key], { expires: expirationDate() }
+    $cookies.put owner_cookie, course[owner_key], { expires: expirationDate() }
 
   clearCookies = ->
     $cookies.remove id_cookie

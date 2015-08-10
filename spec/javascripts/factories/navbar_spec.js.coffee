@@ -65,16 +65,24 @@ describe "navbarFactory", ->
       'owner': false
     }
 
+    expirationDate = ->
+      now = new Date()
+      expires = new Date now.getFullYear() + 1, now.getMonth(), now.getDate()
+
     Navbar.setCourse(course)
     course = Navbar.course()
     expect(course['id']).toEqual fakeId
     expect(course['title']).toEqual fakeTitle
     expect(course['teaching']).toBe true
     expect(course['owner']).toBe false
-    expect($cookies.put).toHaveBeenCalledWith('course_id', fakeId)
-    expect($cookies.put).toHaveBeenCalledWith('course_title', fakeTitle)
-    expect($cookies.put).toHaveBeenCalledWith('course_teaching', true)
-    expect($cookies.put).toHaveBeenCalledWith('course_owner', false)
+    expect($cookies.put).toHaveBeenCalledWith 'course_id',
+      fakeId, { expires: expirationDate() }
+    expect($cookies.put).toHaveBeenCalledWith 'course_title',
+      fakeTitle, { expires: expirationDate() }
+    expect($cookies.put).toHaveBeenCalledWith 'course_teaching',
+      true, { expires: expirationDate() }
+    expect($cookies.put).toHaveBeenCalledWith 'course_owner',
+      false, { expires: expirationDate() }
 
   it "has Navbar.resetCourse() that sets the current course to blank", ->
     Navbar.resetCourse()
