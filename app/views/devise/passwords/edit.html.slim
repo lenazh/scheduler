@@ -9,10 +9,14 @@ div.panel-body
       = devise_error_messages!
 
       = f.hidden_field :reset_password_token
-      = f.label :password, "New password"
-      = f.password_field :password, autofocus: true, autocomplete: "off"
-      = f.label :password_confirmation, "Confirm new password"
-      = f.password_field :password_confirmation, autocomplete: "off"
+      
+      div.control-group
+        = f.label :password, "New password"
+        = f.password_field :password, autofocus: true, autocomplete: "off"
+
+      div.control-group
+        = f.label :password_confirmation, "Confirm new password"
+        = f.password_field :password_confirmation, autocomplete: "off"
 
       div.control-group
         = f.submit "Change my password", class: 'btn btn-default'
