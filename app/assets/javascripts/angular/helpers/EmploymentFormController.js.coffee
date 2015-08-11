@@ -1,7 +1,7 @@
 class EmploymentFormController extends schedulerApp.FormController
   $scope = {}
   $cookies = {}
-  isOwner: false 
+  isOwner: false
 
   constructor: (_$scope_, _$cookies_, Employment) ->
     $scope = _$scope_
