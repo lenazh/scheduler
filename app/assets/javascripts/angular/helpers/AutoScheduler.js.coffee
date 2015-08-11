@@ -218,7 +218,7 @@ class AutoScheduler
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
     section.lastGsi = gsi
     section.lastGsiIndex = index
-    @_changeHours(gsi, section, 1) if @_keepWithinTheSameLecture
+    @_changeHours(gsi, section, 1) if @keepWithinTheSameLecture()
 
   # marks that the GSI is no longer teaching the section
   _unassign: (gsi, section) ->
@@ -228,7 +228,7 @@ class AutoScheduler
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
-    @_changeHours(gsi, section, -1) if @_keepWithinTheSameLecture
+    @_changeHours(gsi, section, -1) if @keepWithinTheSameLecture()
 
   # returns true if the GSI can teach and false otherwise
   _canTeach: (gsi, section) ->

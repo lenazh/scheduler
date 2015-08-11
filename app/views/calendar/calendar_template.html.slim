@@ -36,6 +36,10 @@ div#autoscheduler ng-if="schedulerReady && isOwner"
       button[class="btn btn-default" ng-click="schedulerNext()"] Next
       button[class="btn btn-success" ng-click="schedulerSave()"] Save
 
+    div.checkbox
+      label
+        input type="checkbox" ng-model="keepWithinTheSameLecture" ng-change="schedulerSameLectureChange(keepWithinTheSameLecture)"
+        | Keep GSIs within one lecture
 
     div#autoscheduler-unemployed ng-if="displayUnemployed()"
       h4 They can teach more
