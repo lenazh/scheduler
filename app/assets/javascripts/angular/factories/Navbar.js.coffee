@@ -23,7 +23,8 @@
   saveToCookies = ->
     $cookies.put id_cookie, course[id_key], { expires: expirationDate() }
     $cookies.put title_cookie, course[title_key], { expires: expirationDate() }
-    $cookies.put teaching_cookie, course[teaching_key], { expires: expirationDate() }
+    $cookies.put teaching_cookie,
+      course[teaching_key], { expires: expirationDate() }
     $cookies.put owner_cookie, course[owner_key], { expires: expirationDate() }
 
   clearCookies = ->

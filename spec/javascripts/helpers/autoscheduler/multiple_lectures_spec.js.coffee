@@ -75,8 +75,8 @@ describe 'AutoScheduler', ->
         gsi = gsis[0]
         section101 = sections[0]
         section102 = sections[1]
-        section201 = sections[2]     
-        section202 = sections[3]     
+        section201 = sections[2]
+        section202 = sections[3]
 
       describe '_canTeach(gsi, section)', ->
         describe 'GSI has no hours left', ->
@@ -132,17 +132,21 @@ describe 'AutoScheduler', ->
         describe 'GSI is teaching sections in a different lectures', ->
           it 'is true', ->
             scheduler._assign gsi, section101
-            expect(scheduler._teachingAnyOtherLecture(gsi, section201)).toBe true
+            expect(scheduler._teachingAnyOtherLecture(gsi, section201))
+              .toBe true
 
         describe 'GSI is teaching sections only in this lecture', ->
           it 'is false', ->
             scheduler._assign gsi, section101
-            expect(scheduler._teachingAnyOtherLecture(gsi, section102)).toBe false
+            expect(scheduler._teachingAnyOtherLecture(gsi, section102))
+              .toBe false
 
         describe 'GSI is not teaching any sections', ->
           it 'is false', ->
-            expect(scheduler._teachingAnyOtherLecture(gsi, section102)).toBe false
-            expect(scheduler._teachingAnyOtherLecture(gsi, section201)).toBe false
+            expect(scheduler._teachingAnyOtherLecture(gsi, section102))
+              .toBe false
+            expect(scheduler._teachingAnyOtherLecture(gsi, section201))
+              .toBe false
 
       describe '_assign', ->
         it 'decreases the GSI availability by one', ->
