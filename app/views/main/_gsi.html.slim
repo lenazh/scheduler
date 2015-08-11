@@ -1,7 +1,10 @@
 div.page-header
   h1#gsi-employment GSI roster
 
-div.row  
+div.row 
+  p
+    | GSIs with 10 hours/week appointments can teach one section per week, GSIs with 20 hours/week appointments can teach two sections per week, etc.
+
   form.form-inline[name="form" novalidate]  
     table[class="table table-striped" id="gsi-roster"]
       thead 
@@ -17,12 +20,12 @@ div.row
         td ng-attr-id="gsi-hours-{{gsi.id}}" ng-bind="gsi.hours_per_week"
 
         td.text-right 
-          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit"] Edit
+          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit" ng-show="gsiCtrl.isOwner"] Edit
 
         td.text-right 
-          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete"] X
+          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete" ng-show="gsiCtrl.isOwner"] X
         
-      tr
+      tr ng-show="gsiCtrl.isOwner"
         td
         td
           input.form-control[placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.fields.email" name="email"]

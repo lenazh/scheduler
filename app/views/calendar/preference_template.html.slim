@@ -19,4 +19,4 @@ div.event-parent
       form[name="form" novalidate]
         div.form-group
           label for="preference" Do you want to teach this section?
-          select.form-control name="preference" ng-model="preference" ng-options="item.value as item.label for item in preferences" ng-click="stopPropagation($event)" ng-change="set()"
+          select.form-control name="preference" ng-model="event.preference" ng-options="item.value as item.label for item in preferences" ng-click="stopPropagation($event)" ng-change="set()"

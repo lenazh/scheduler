@@ -309,5 +309,9 @@
     $scope.schedulerStatus = ->
       scheduler.status()
 
+    $scope.keepWithinTheSameLecture = true
+    $scope.schedulerSameLectureChange = (value) ->
+      scheduler.keepWithinTheSameLecture(value)
+
     return
   ]

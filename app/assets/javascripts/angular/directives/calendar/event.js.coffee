@@ -14,7 +14,7 @@
         (scope.event.id == 0)
 
       scope.sectionCalendar = sectionCalendar
-      scope.editStyle = {height: 'auto', width: 'auto', 'z-index': '200'}
+      scope.editStyle = {height: 'auto', width: '30em', 'z-index': '200'}
       scope.isGhost = isGhost()
       scope.showEditForm = isGhost()
       scope.element = element

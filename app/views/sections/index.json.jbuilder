@@ -7,6 +7,7 @@ json.array!(@sections) do |section|
       json.preference gsi.preference(section)
     end
   end
+
   preferences = section.preferences.sort { |x, y| y.preference <=> x.preference }
   json.available_gsis do
     json.array!(preferences) do |preference|
@@ -16,5 +17,8 @@ json.array!(@sections) do |section|
       json.hours_per_week gsi.hours(@course) 
     end
   end
+
+  json.preference @user.preference(section)
+
   json.url course_section_url(@course.id, section.id)
 end

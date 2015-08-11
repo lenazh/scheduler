@@ -45,6 +45,7 @@ describe 'AutoScheduler', ->
         ]
 
       scheduler = new schedulerApp.AutoScheduler(sections, gsis)
+      scheduler._keepWithinTheSameLecture = false
 
     describe 'maxHours()', ->
       it 'returns how many hours/week all GSIs can provide combined', ->
@@ -237,10 +238,10 @@ describe 'AutoScheduler', ->
 
     describe "'private' functions", ->
       describe '_prepareGsiIndex()', ->
-        it 'stores number of sections GSIs can teach in _sectionsAvailable', ->
-          expect(scheduler._sectionsAvailable[1]).toBe 2
-          expect(scheduler._sectionsAvailable[2]).toBe 8
-          expect(scheduler._sectionsAvailable[3]).toBe 1
+        it 'stores number of sections GSIs can teach', ->
+          expect(scheduler._availability(gsis[0])).toBe 2
+          expect(scheduler._availability(gsis[1])).toBe 8
+          expect(scheduler._availability(gsis[2])).toBe 1
 
       describe '_prepareSectionIndex()', ->
         it 'sets the last GSI to null for each section', ->
@@ -256,14 +257,14 @@ describe 'AutoScheduler', ->
         index = 0
 
         beforeEach ->
-          scheduler._sectionsAvailable[1] = availability
+          gsi = gsis[0]
+          scheduler._setAvailability(gsi, availability)
           _sections = scheduler._sections
           section = _sections[0]
-          gsi = gsis[0]
           scheduler._assign(gsi, section, index)
 
         it 'decreases the number of sections the GSI can teach by one', ->
-          expect(scheduler._sectionsAvailable[1]).toBe (availability - 1)
+          expect(scheduler._availability(gsi)).toBe (availability - 1)
 
         it 'assigns _section.lastGsi', ->
           expect(scheduler._sections[0].lastGsi).toEqual gsi
@@ -277,23 +278,23 @@ describe 'AutoScheduler', ->
         section = {}
 
         beforeEach ->
-          scheduler._sectionsAvailable[1] = availability
+          gsi = gsis[0]
+          scheduler._setAvailability(gsi, availability)
           _sections = scheduler._sections
           section = _sections[0]
-          gsi = gsis[0]
           scheduler._unassign(gsi, section)
 
         it 'increases the number of sections the GSI can teach by one', ->
-          expect(scheduler._sectionsAvailable[1]).toBe (availability + 1)
+          expect(scheduler._availability(gsi)).toBe (availability + 1)
 
       describe '_canTeach(gsi)', ->
         it 'returns true if the GSI can teach at least one section', ->
-          scheduler._sectionsAvailable[1] = 1
-          expect(scheduler._canTeach(gsis[0])).toBe true
+          scheduler._setAvailability(gsis[0], 1)
+          expect(scheduler._canTeach(gsis[0]), null).toBe true
 
         it 'returns false if the GSI can teach at zero sections', ->
-          scheduler._sectionsAvailable[1] = 0
-          expect(scheduler._canTeach(gsis[0])).toBe false
+          scheduler._setAvailability(gsis[0], 0)
+          expect(scheduler._canTeach(gsis[0]), null).toBe false
 
       describe '_findGsi(section, start, end)', ->
         describe 'GSI exists', ->
@@ -312,7 +313,7 @@ describe 'AutoScheduler', ->
               index = 1
 
             it 'returns correct GSI example 2', ->
-              scheduler._sectionsAvailable[3] = 0
+              scheduler._setAvailability(gsis[2], 0)
               gsi = scheduler._findGsi(section, 1, 2)
               expect(gsi.id).toBe 1
               index = 2
@@ -324,7 +325,7 @@ describe 'AutoScheduler', ->
               index = 1
 
             it 'returns correct GSI example 2', ->
-              scheduler._sectionsAvailable[3] = 0
+              scheduler._setAvailability(gsis[2], 0)
               gsi = scheduler._findGsi(section, 1, 0)
               expect(gsi.id).toBe 2
               index = 0
@@ -337,8 +338,8 @@ describe 'AutoScheduler', ->
         describe "GSI doesn't exist", ->
           it 'returns null', ->
             section = scheduler._sections[1]
-            scheduler._sectionsAvailable[1] = 0
-            scheduler._sectionsAvailable[3] = 0
+            scheduler._setAvailability(gsis[0], 0)
+            scheduler._setAvailability(gsis[2], 0)
             gsi = scheduler._findGsi(section, 1, 2)
             expect(gsi).toBe null
 
@@ -408,117 +409,3 @@ describe 'AutoScheduler', ->
             scheduler._advanceGsi(section, true)
             expect(scheduler._nextGsi).
               toHaveBeenCalledWith(section, section.lastGsi)
-
-  describe "When a solution can't be found", ->
-    describe "because there are sections nobody can teach", ->
-      beforeEach ->
-        gsis =
-          [
-            { 'id': 1, 'hours_per_week': 20, 'name': 'Vader' },
-            { 'id': 2, 'hours_per_week': 80, 'name': 'GlaDOS' },
-            { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
-          ]
-
-        sections =
-          [
-            {
-              'id': 1, 'name': '101',
-              'available_gsis': []
-            },
-            {
-              'id': 2, 'name': '102',
-              'available_gsis': [
-                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
-                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
-                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
-              ]
-            },
-            {
-              'id': 3, 'name': '103',
-              'available_gsis': [
-                { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
-              ]
-            },
-            {
-              'id': 4, 'name': '104',
-              'available_gsis': [
-                { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
-                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-              ]
-            }
-          ]
-
-        scheduler = new schedulerApp.AutoScheduler(sections, gsis)
-
-      describe 'status()', ->
-        it 'mentions that there are sections no GSI can teach', ->
-          expect(scheduler.status().join()).toMatch /sections nobody can teach/
-
-    describe "because there are not ehough GSIs", ->
-      beforeEach ->
-        gsis =
-          [
-            { 'id': 1, 'hours_per_week': 10, 'name': 'Vader' },
-            { 'id': 2, 'hours_per_week': 10, 'name': 'GlaDOS' },
-            { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
-          ]
-
-        sections =
-          [
-            {
-              'id': 1, 'name': '101',
-              'available_gsis': [
-                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
-                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
-                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
-              ]
-            },
-            {
-              'id': 2, 'name': '102',
-              'available_gsis': [
-                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
-                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
-                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
-              ]
-            },
-            {
-              'id': 3, 'name': '103',
-              'available_gsis': [
-                { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
-              ]
-            },
-            {
-              'id': 4, 'name': '104',
-              'available_gsis': [
-                { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
-                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-              ]
-            }
-          ]
-
-        scheduler = new schedulerApp.AutoScheduler(sections, gsis)
-
-      describe 'status()', ->
-        it 'mentions that there are not enough GSIs', ->
-          expect(scheduler.status().join()).toMatch /not enough GSIs/
-
-    afterEach ->
-      # not solvable
-      expect(scheduler.solvable()).toBe false
-
-      # previous/next returns null
-      expect(scheduler.next()).toBe null
-      expect(scheduler.next()).toBe null
-      expect(scheduler.previous()).toBe null
-      expect(scheduler.previous()).toBe null
-
-      # quality is 0.0
-      expect(scheduler.quality()).toBe 0.0
-
-      # _fill() is not called
-      spyOn(scheduler, '_fill')
-      scheduler.next()
-      scheduler.previous()
-      expect(scheduler._fill).not.toHaveBeenCalled()
-
-

@@ -8,5 +8,11 @@ describe 'sections/show' do
     %w(id name start_hour start_minute duration_hours weekday room)
   end
 
+  before(:each) do
+    @user = stub_model(User, attributes_for(:user))
+    @user.stub(:preference).and_return('1.0')
+    controller.stub(:current_user).and_return(@user)
+  end
+
   it_behaves_like 'a JSON show view:'
 end

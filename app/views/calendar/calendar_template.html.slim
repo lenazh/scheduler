@@ -4,7 +4,7 @@ div.row
 
   div ng-switch="role"
     p ng-switch-when="owner"
-      | Click empty cells to create new sections. Click sections to edit them and assign GSIs manually.
+      | Click empty cells to create new sections. Click the "+" symbol to add another section into the same cell. Click sections to edit them and assign GSIs manually.
     p ng-switch-when="gsi"
       | Click sections to choose how much you would like to teach each one.
 
@@ -36,6 +36,10 @@ div#autoscheduler ng-if="schedulerReady && isOwner"
       button[class="btn btn-default" ng-click="schedulerNext()"] Next
       button[class="btn btn-success" ng-click="schedulerSave()"] Save
 
+    div.checkbox
+      label
+        input type="checkbox" ng-model="keepWithinTheSameLecture" ng-change="schedulerSameLectureChange(keepWithinTheSameLecture)"
+        | Keep GSIs within one lecture
 
     div#autoscheduler-unemployed ng-if="displayUnemployed()"
       h4 They can teach more

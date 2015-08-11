@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
         return preference.preference
       end
     end
-    0.0
+    '0.0'
   end
 
   # returns how many sections the user is teaching in course
