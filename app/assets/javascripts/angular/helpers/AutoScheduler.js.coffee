@@ -1,3 +1,4 @@
+# TODO: this class should be split into multiple classes
 # This class is responsible for automatic scheduling of classess
 # AutoScheduler in constructed as
 # scheduler = new AutoScheduler(sections, gsis)
@@ -11,12 +12,19 @@
 #  each gsi in gsis is a hash that has 'id' and 'hours_per_week'
 #  fields matching those in gsis array
 #
-# Solution is provided in a form of hash:
+# Solution is provided in a form of hash with scheduler.solution() is called
+# (more convenient for testing)
 #   {
 #     section1_id: { GSI assigned to section 1 },
 #     section2_id: { GSI assigned to section 2 },
 #     ...
 #   }
+#
+# Alternatively, the solution can be accessed at scheduler._solutionArray
+# (turned out to be more convenient for integrating with CalendarController)
+# [ gsi1, gsi2, gsi3, ... ], where the GSIs position correspond to section's
+# positions in sections array the AutoScheduler was constructed with.
+#
 #
 # scheduler has the following public methods:
 #   .solvable() true if a solution may be found and false otherwise
@@ -43,7 +51,7 @@ class AutoScheduler
   _gsis: []
   _status: ['Not initialized']
   _solvable: false
-  _sectionsAvailable: {}
+  _gsiData: {}
 
   # Sets correspondence between the sections and GSIs, such as
   # { section1 => gsi1, section2 => gsi2, ... }
@@ -54,6 +62,10 @@ class AutoScheduler
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
   _quality: 0.0
 
+  # indicates whether the scheduler should assign GSIs sections only within
+  # the same lecture
+  _keepWithinTheSameLecture: true
+
   # converts hours/week into maximum number of sections the GSI can teach
   hours_to_sections = (hours) ->
     hours / 10
@@ -62,13 +74,54 @@ class AutoScheduler
   sections_to_hours = (sections) ->
     sections * 10
 
+  # returns what section the lecture belongs to
+  section_to_lecture = (section) ->
+    section.name.substring(0, 1)
+
   # returns how many more sections the GSI can teach
   _availability: (gsi) ->
-    @_sectionsAvailable[gsi.id]
+    @_gsiData[gsi.id]['availability']
 
   # changes the availability of the gsi by x
   _changeAvailability: (gsi, x) ->
-    @_sectionsAvailable[gsi.id] += x
+    @_gsiData[gsi.id]['availability'] += x
+
+  # sets the availability of the gsi to x and resets lecture index
+  _setAvailability: (gsi, x) ->
+    @_gsiData[gsi.id] = {}
+    @_gsiData[gsi.id]['availability'] = x
+    @_gsiData[gsi.id]['lectures'] = {}
+
+  # returns how many hours the GSI is teaching in lecture that
+  # section belongs to
+  _getHours: (gsi, section) ->
+    lecture = section_to_lecture section
+    if typeof(@_gsiData[gsi.id]['lectures'][lecture]) == 'undefined'
+      @_gsiData[gsi.id]['lectures'][lecture] = 0
+    @_gsiData[gsi.id]['lectures'][lecture]
+
+  # changes how many hours a GSI is teathing within the lecture
+  # that section belongs to by x
+  _changeHours: (gsi, section, x) ->
+    lecture = section_to_lecture section
+    if typeof(@_gsiData[gsi.id]['lectures'][lecture]) == 'undefined'
+      @_gsiData[gsi.id]['lectures'][lecture] = 0
+    @_gsiData[gsi.id]['lectures'][lecture] += x
+
+  # returns whether the GSI is teaching the lecture the section
+  # belongs to
+  _teachingLecture: (gsi, section) ->
+    lecture = section_to_lecture section
+    @_gsiData[gsi.id]['lectures'][lecture] > 0
+
+  # returns whether the GSI is teaching any lectures the section
+  # doesn't belong to
+  _teachingAnyOtherLecture: (gsi, section) ->
+    lecture = section_to_lecture section
+    for otherLecture, hours of @_gsiData[gsi.id]['lectures']
+      if lecture != otherLecture
+        return true if hours > 0
+    return false
 
   # returns the next available GSI given a section and the gsi
   _nextGsi: (section) ->
@@ -94,7 +147,7 @@ class AutoScheduler
       throw "end pointer is out of range"
     for i in [start..end]
       gsi = section.available_gsis[i]
-      if @_canTeach(gsi)
+      if @_canTeach(gsi, section)
         @_assign(gsi, section, i)
         return gsi
     null
@@ -159,13 +212,13 @@ class AutoScheduler
 
   # marks that the GSI teaching the section
   _assign: (gsi, section, index) ->
-    availability = @_sectionsAvailable[gsi.id]
     if @_availability(gsi) > 0
       @_changeAvailability(gsi, -1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
     section.lastGsi = gsi
     section.lastGsiIndex = index
+    @_changeHours(gsi, section, 1) if @_keepWithinTheSameLecture
 
   # marks that the GSI is no longer teaching the section
   _unassign: (gsi, section) ->
@@ -175,10 +228,14 @@ class AutoScheduler
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
+    @_changeHours(gsi, section, -1) if @_keepWithinTheSameLecture
 
   # returns true if the GSI can teach and false otherwise
-  _canTeach: (gsi) ->
-    @_sectionsAvailable[gsi.id] > 0
+  _canTeach: (gsi, section) ->
+    if @_keepWithinTheSameLecture
+      (@_availability(gsi) > 0) && !@_teachingAnyOtherLecture(gsi, section)
+    else
+      @_availability(gsi) > 0
     
   # remember last GSI position for each section
   # and how much each GSI can teach
@@ -187,7 +244,7 @@ class AutoScheduler
       section.lastGsi = null
       section.lastGsiIndex = -1
     for gsi in @_gsis
-      @_sectionsAvailable[gsi.id] = hours_to_sections gsi['hours_per_week']
+      @_setAvailability gsi, hours_to_sections(gsi['hours_per_week'])
 
   # updates the status of the solver
   _updateStatus: ->
@@ -223,14 +280,19 @@ class AutoScheduler
       @_quality = 0
     @_solution  
 
-  # public methods
+  # public methods and fields
 
-  constructor: (sections, gsis, options = {}) ->
+  constructor: (sections, gsis) ->
     @_sections = angular.copy sections
     @_gsis = angular.copy gsis
     @_resetIndex()
     @checkIfSolvable()
     @_updateStatus()
+
+  # getter/setter for _keepWithinTheSameLecture
+  keepWithinTheSameLecture: (value) ->
+    return @_keepWithinTheSameLecture if typeof value == 'undefined'
+    @_keepWithinTheSameLecture = value
 
   # returns a description of a problem if one exists or that
   # the solver is ready
