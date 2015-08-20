@@ -1,6 +1,6 @@
 div.row
-  div ng-show="showSwitch"
-    select.form-control ng-model="role" ng-options="role.value as role.label for role in roles"
+  div ng-if="showSwitch"
+    select.form-control ng-model="role" ng-options="role.value as role.label for role in roles" name="role" id="schedule-role"
 
   div ng-switch="role"
     p ng-switch-when="owner"
@@ -8,7 +8,7 @@ div.row
     p ng-switch-when="gsi"
       | Click sections to choose how much you would like to teach each one.
 
-  table[class="table table-striped" id="schedule"]
+  table[class="table table-striped" id="schedule-table"]
     thead 
     th 
     th ng-repeat="weekday in weekdays" ng-bind="weekday"

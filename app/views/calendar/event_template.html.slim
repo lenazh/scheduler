@@ -1,5 +1,5 @@
 div.event-parent
-  div class="event event-collapsed" ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+  div class="event event-collapsed" ng-style="{top: event.style.top, height: event.style.height}" ng-if="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     div class="event-control add-event" ng-click="new($event)"
       | +
     p
@@ -10,7 +10,7 @@ div.event-parent
     p Room: {{event.room}}
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
-  div class="event event-expanded" ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+  div class="event event-expanded" ng-style="editStyle" ng-if="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     div class="event-control minimize-event"
       | -
     form[name="form" novalidate]
