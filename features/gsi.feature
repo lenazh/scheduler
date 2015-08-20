@@ -1,8 +1,8 @@
-Feature: GSI roaster
+Feature: GSI roster
 
   As a User,
   I want to be able to enroll GSIs for my classes.
-  So that the autoassignment system can figure their schedule for me.
+  So that the auto-assignment system can figure their schedule for me.
 
 Background:
   Given the web site is set up
@@ -49,7 +49,7 @@ Scenario: Changing GSI hours
   And I should see "10" in GSI list
 
 
-Scenario: Cancelling a GSI editing
+Scenario: Canceling a GSI editing
   Given a GSI with "gsi@example.com" email working "20" hours a week exists  
   And I edit this GSI
   When I fill in "email" with "crowbar@gmail.com"
