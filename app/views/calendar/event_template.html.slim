@@ -1,16 +1,18 @@
 div.event-parent
-  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
-    div.add-event ng-click="new($event)"
+  div class="event event-collapsed" ng-style="{top: event.style.top, height: event.style.height}" ng-show="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+    div class="event-control add-event" ng-click="new($event)"
       | +
     p
-      b ng-bind="event.name"
+      b ng-bind="event.name" class="section-name"
     p
-      b ng-bind="event.weekday"
+      b ng-bind="event.weekday" class="section-weekday"
     p GSI: {{event.gsi.name}}
     p Room: {{event.room}}
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
-  div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+  div class="event event-expanded" ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+    div class="event-control minimize-event"
+      | -
     form[name="form" novalidate]
       div.form-group
         label for="name" Section

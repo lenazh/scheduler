@@ -8,6 +8,8 @@ div.event-parent
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
   div.event ng-style="editStyle" ng-show="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+    div class="event-control minimize-event"
+      | -
     form.form-inline[name="form" novalidate]
       p
         b ng-bind="event.name"

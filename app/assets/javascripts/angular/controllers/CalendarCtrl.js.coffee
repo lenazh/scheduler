@@ -313,5 +313,7 @@
     $scope.schedulerSameLectureChange = (value) ->
       scheduler.keepWithinTheSameLecture(value)
 
+    $scope.cellId = (hour, weekday) -> hour.replace(/:/, '') + weekday
+
     return
   ]
