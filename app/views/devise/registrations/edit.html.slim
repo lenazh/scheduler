@@ -8,6 +8,8 @@ div.panel-body
       div.control-group
         a[class='btn btn-default' href='#{root_path}' data-no-turbolink="true"] Back to scheduling classess
 
+      hr
+
       = devise_error_messages!
 
       = f.label :name, class: 'control-label'
@@ -20,21 +22,28 @@ div.panel-body
         div
           | Currently waiting confirmation for: #{resource.unconfirmed_email}
 
+      hr
+
       = f.label :password, class: 'control-label'
-      span[class="help-block"]
-        | Password (leave blank if you don't want to change it)
       = f.password_field :password, autocomplete: "off", class: 'form-control'
+      span[class="help-block"]
+        | (leave blank if you don't want to change it)
 
       = f.label :password_confirmation, class: 'control-label'
       = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
 
+      hr
+
       = f.label :current_password, class: 'control-label'
-      span[class="help-block"]
-        | Current password (we need your current password to confirm your changes)
       = f.password_field :current_password, autocomplete: "off", class: 'form-control'
+      span[class="help-block"]
+        | (we need your current password to confirm your changes)
 
       div.control-group
         = f.submit "Update", class: 'btn btn-default'
+
+      hr
+      div.control-group
         a[class='btn btn-default' href='#{root_path}' data-no-turbolink="true"] Back to scheduling classess
 
   div[style='height:50px']
