@@ -22,12 +22,12 @@ Given(/^"(.*?)" class exists$/) do |name|
 end
 
 When(/^I select this class$/) do
-  click_link 'My Classes'
+  click_link 'My Classes', match: :first
   click_button @class
 end
 
 Given(/^"(.*?)" class is selected$/) do |name|
-  click_link 'My Classes'
+  click_link 'My Classes', match: :first
   click_button name
 end
 
