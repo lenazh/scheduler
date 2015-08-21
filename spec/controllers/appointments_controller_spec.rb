@@ -10,8 +10,8 @@ describe AppointmentsController do
   let(:course2) { create(:course) }
   let(:user) do
     user = create(:user)
-    user.courses_to_teach << course1
-    user.courses_to_teach << course2
+    create(:employment, course: course1, gsi: user)
+    create(:employment, course: course2, gsi: user)
     user.save!
     user
   end
@@ -37,7 +37,7 @@ describe AppointmentsController do
   describe 'GET show' do
     it 'assigns the requested appointment as @appointment' do
       get :show, { id: employment.id, format: :json }, valid_session
-      expect(assigns(:appointment).id).to eq employment.course.id
+      expect(assigns(:appointment).id).to eq employment.id
     end
   end
 end

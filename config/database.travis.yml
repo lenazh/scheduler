@@ -6,15 +6,15 @@ default: &default
 development:
   <<: *default
   database: scheduler_development
-  username: pguser
+  username: postgres
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test: &test
   <<: *default
-  database: scheduler_test 
-  username: pguser
+  database: test-postgres_test 
+  username: postgres
   pool: 50
   timeout: 7000
 

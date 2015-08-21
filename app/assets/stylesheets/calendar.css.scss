@@ -1,4 +1,4 @@
-table#schedule {
+table#schedule-table {
   width: 100%;
   border-collapse: collapse;
   border-style: hidden;
@@ -6,28 +6,28 @@ table#schedule {
   font-family: sans-serif;
 }
 
-#schedule td {  
+#schedule-table td {  
   box-sizing: border-box;
   padding: 0;
   height: 3em;
 }
 
-#schedule td.event-col {
+#schedule-table td.event-col {
   width: 18%;
   text-align: center;
 }
 
-#schedule .time-col {
+#schedule-table .time-col {
   width: 10%;
   text-align: center;
 }
 
 
-#schedule td.event-col:empty:hover {
+#schedule-table td.event-col:empty:hover {
   border: solid 2px #5C5C8A;
 }
 
-#schedule .event-parent {
+#schedule-table .event-parent {
   box-sizing: border-box;
   display: table;
   height: 100%;
@@ -35,7 +35,7 @@ table#schedule {
   width: 100%;
 }
 
-#schedule .event {
+#schedule-table .event {
   border: outset 1px #666666;
   background-color: #EFEFEF;
   border-radius: 5px;
@@ -53,7 +53,7 @@ table#schedule {
   z-index: 10;
 }
 
-#schedule .event p {
+#schedule-table .event p {
   font-size: x-small;
   margin-bottom: 0;
   margin-top: 0;
@@ -67,71 +67,78 @@ table#schedule {
   padding: 0;
 }
 
-#schedule .ghost {
+#schedule-table .ghost {
   display: none;
   height: 200%;
   opacity: 0.5;
   z-index: 100;
 }
 
-#schedule .event:hover {
+#schedule-table .event:hover {
   box-shadow: 0 0 3px;
 }
 
-#schedule button {
+#schedule-table button {
   margin: 1em;
 }
 
-#schedule label {
+#schedule-table label {
   font-size: small;
 }
 
-#schedule form {
+#schedule-table form {
   margin: 1em;
 }
 
-#schedule .section-error {
+#schedule-table .section-error {
   color: red;
 }
 
-#schedule .really-wants-section {
+#schedule-table .really-wants-section {
   background-color: #01DF01;
 }
 
-#schedule .really-wants-section {
+#schedule-table .really-wants-section {
   background-color: #01FF01;
 }
 
-#schedule .wants-section {
+#schedule-table .wants-section {
   background-color: #CFFFCF;
 }
 
-#schedule .ok-with-section {
+#schedule-table .ok-with-section {
   background-color: #EFEFEF;
 }
 
-#schedule .doesnt-like-section {
+#schedule-table .doesnt-like-section {
   background-color: #FFCFCF;
 }
 
-#schedule .really-dislikes-section {
+#schedule-table .really-dislikes-section {
   background-color: #FF1D1D;
 }
 
-#schedule .cant-make {
+#schedule-table .cant-make {
   border: outset 3px red;
   background-color: #EFEFEF;  
 }
 
-#schedule .add-event {
-  border: 1px black solid;
+#schedule-table .event-control {
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
+  cursor: pointer;
+  cursor: hand;
+  display: inline-block;
+  font-weight: bold;
   height: 15px;
+  width: 15px;
+}
+
+#schedule-table .event-control-panel {
   position: absolute;
   top: 0;
   right: 0;
-  width: 15px;
 }
 
 /* 

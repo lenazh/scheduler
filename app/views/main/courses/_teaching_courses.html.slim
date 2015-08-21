@@ -5,10 +5,21 @@ div.row ng-controller="AppointmentsCtrl as appointments"
     table[class="table table-striped" id="teaching-classes"]
       thead 
       tr
-        th Title
-        th Created
+        th.col-md-1 Title
+        th.col-md-1
+        th class="col-md-3 text-center" Created
+        th.col-md-2
+        th.col-md-1
 
       tr ng-repeat="course in appointments.all"
         td 
-          button[class="btn btn-link" ng-click="appointments.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }} 
-        td ng-bind="course.created_at | date"
+          button[class="btn btn-link" ng-click="appointments.selectAndNavigate(course, '/calendar/' + course.id)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }}
+        
+        td
+        
+        td.text-center ng-bind="course.created_at | date"
+        
+        td.text-center
+          button[class="btn btn-default" ng-click="appointments.selectAndNavigate(course, '/courses/' + course.id + '/gsi')" ng-attr-id="teaching-class-{{course.id}}-view-gsis"] View GSIs 
+
+        td

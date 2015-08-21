@@ -26,7 +26,7 @@ Scenario: Class name appears in navigation bar title when it's selected
   Then I should see "Kerbology" in navigation bar title
 
 
-Scenario: GSIs navigates to the GSI roaster section when a class is selected
+Scenario: GSIs navigates to the GSI roster section when a class is selected
   Given "Kerbology" class exists
   And I select this class
   When I click "GSIs"

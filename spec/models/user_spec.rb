@@ -19,8 +19,7 @@ describe User do
   let(:user) { create(:user) }
   let(:gsi) do
     gsi = create(:user)
-    course.gsis << gsi
-    course.save!
+    create(:employment, gsi: gsi, course: course)
     gsi
   end
 
@@ -70,15 +69,13 @@ describe User do
     end
 
     it 'returns 1 if the person has 1 appointment' do
-      user.courses_to_teach << course1
-      user.save!
+      create(:employment, course: course1, gsi: user)
       expect(user.appointments_count).to eq 1
     end
 
     it 'returns 2 if the person has 2 appointments' do
-      user.courses_to_teach << course1
-      user.courses_to_teach << course2
-      user.save!
+      create(:employment, course: course1, gsi: user)
+      create(:employment, course: course2, gsi: user)
       expect(user.appointments_count).to eq 2
     end
   end

@@ -45,6 +45,26 @@ module HtmlSelectorsHelpers
         "Now, go and add a mapping in #{__FILE__}"
     end
   end
+
+  def expect_content_within(selector, value, negate)
+    within(selector) do
+      if negate
+        expect(page).to have_no_content value
+      else
+        expect(page).to have_content value
+      end
+    end
+  end
+
+  def expect_css_within(selector, css, negate)
+    within(selector) do
+      if negate
+        expect(page).to have_no_css css
+      else
+        expect(page).to have_css css
+      end
+    end
+  end
 end
 
 World(HtmlSelectorsHelpers)

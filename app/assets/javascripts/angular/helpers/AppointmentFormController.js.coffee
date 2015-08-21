@@ -47,4 +47,11 @@ class AppointmentFormController extends schedulerApp.FormController
   select: (course) ->
     @_updateNavbarTitle course, course['name']
 
+  navigate: (path) ->
+    @_navbar.navigate path
+
+  selectAndNavigate: (course, path) ->
+    @select course
+    @navigate path
+
 schedulerApp.AppointmentFormController = AppointmentFormController

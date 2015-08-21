@@ -1,0 +1,54 @@
+div#autoscheduler ng-if="schedulerReady && isOwner && (role == 'owner')"
+  div.page-header
+    h2#autoscheduler-title Auto-scheduler
+
+  div.row
+    form.form-inline ng-if="schedulerSolvable()"
+      button[class="btn btn-danger" ng-click="schedulerReset()"] Reset
+      button[class="btn btn-primary" ng-click="schedulerFirst()"] Auto-schedule
+      button[class="btn btn-default" ng-click="schedulerPrevious()"] << Previous
+      button[class="btn btn-default" ng-click="schedulerNext()"] Next >>
+      button[class="btn btn-success" ng-click="schedulerSave()" ng-disabled="disableSchedulerSave()"] Save
+
+    div.checkbox
+      label
+        input type="checkbox" ng-model="keepWithinTheSameLecture" ng-change="schedulerSameLectureChange(keepWithinTheSameLecture)"
+        | Keep GSIs within one lecture (lectures whose names begin with the same symbol)
+
+    div#under-employed ng-if="displayUnemployed()"
+      h4 They can teach more
+      table[class="table table-striped"]
+        thead
+        th Name
+        th Email
+        th Unused hours/week
+        tr ng-repeat="gsi in schedulerUnemployed()"
+          td ng-bind="gsi.name"
+          td ng-bind="gsi.email"
+          td ng-bind="gsi['unused_hours']"
+
+    div#sections-nobody-can-teach ng-if="displaySectionsNobodyCanTeach()"
+      h4 Sections nobody can teach
+      table[class="table table-striped"]
+        tr ng-repeat="section in schedulerSectionsNobodyCanTeach()"
+          td ng-bind="section.name"
+
+    div#no-preference ng-if="displayGsisWithNoPreferences()"
+      h4 GSIs who didn't set their preferences
+      table[class="table table-striped"]
+        thead
+        th Name
+        th Appointment (hours/week)
+        th Sections he/she can make
+        tr ng-repeat="gsi in schedulerGsisWithNoPreferences()"
+          td ng-bind="gsi.name"
+          td ng-bind="gsi.hours_per_week"
+          td ng-bind="gsi.sections_can_teach"
+
+    div#status
+      p
+        b ng-if="schedulerSolvable()"
+          | Happiness = {{ schedulerHappiness() }} %
+      p
+        b Status:
+      p ng-repeat="status in schedulerStatus()" ng-bind="status"

@@ -103,11 +103,15 @@
         select item
         return
 
+  navigate = (path) ->
+    $location.path path
+    selectCurrentItem()
 
   selectCurrentItem()
 
 # Expose the interface
   {
+    navigate: (path) -> navigate path
     items: -> items
     select: (item) -> select item
     deselect: (item) -> deselect item

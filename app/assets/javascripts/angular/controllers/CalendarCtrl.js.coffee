@@ -1,3 +1,11 @@
+# This file needs to be refactored
+
+# TODO
+# Calendar needs to be a separate object or a factory
+# Autoscheduler needs to construct without sections and GSIs
+# and initialize when both become available and every time
+# sections change
+
 @schedulerModule.controller 'CalendarCtrl',
   ['$scope', '$cookies', 'Section', 'Employment',
   ($scope, $cookies, Section, Employment) ->
@@ -239,7 +247,7 @@
         Employment.roster (_gsis) ->
           gsis = _gsis
           scheduler = new schedulerApp.AutoScheduler(sections, gsis)
-          $scope.schedulerReady = true
+          $scope.schedulerReady = true if sections.length > 0
 
       for section in sections
         addSectionToCells section
@@ -280,19 +288,29 @@
       resetCalendar()
 
     $scope.schedulerFirst = ->
-      scheduler.first()
-      propose(scheduler._solutionArray)
+      if scheduler.first()
+        propose(scheduler._solutionArray)
+      else
+        alert 'There are no possible solutions'
 
     $scope.schedulerNext = ->
-      scheduler.next()
-      propose(scheduler._solutionArray)
+      if scheduler.next()
+        propose(scheduler._solutionArray)
+      else 
+        alert 'There is no next solution'
 
     $scope.schedulerPrevious = ->
-      scheduler.previous()
-      propose(scheduler._solutionArray)
+      if scheduler.previous()
+        propose(scheduler._solutionArray)
+      else
+        alert 'There is no previous solution'
+
+    $scope.disableSchedulerSave = ->
+      scheduler._solutionArray.length == 0
 
     $scope.schedulerSave = ->
-      saveSchedule(scheduler._solutionArray)
+      if scheduler._solutionArray.length > 0
+        saveSchedule(scheduler._solutionArray)
 
     $scope.schedulerHappiness = ->
       scheduler.quality() * 100
@@ -306,12 +324,26 @@
     $scope.displayUnemployed = ->
       (scheduler.quality() != 0.0) && (scheduler.unemployed().length > 0)
 
+    $scope.displayGsisWithNoPreferences = ->
+      scheduler.gsisWithNoPreferences().length > 0
+
+    $scope.schedulerGsisWithNoPreferences = ->
+      scheduler.gsisWithNoPreferences()
+
+    $scope.displaySectionsNobodyCanTeach = ->
+      scheduler.sectionsNobodyCanTeach().length > 0
+
+    $scope.schedulerSectionsNobodyCanTeach = ->
+      scheduler.sectionsNobodyCanTeach()
+
     $scope.schedulerStatus = ->
       scheduler.status()
 
     $scope.keepWithinTheSameLecture = true
     $scope.schedulerSameLectureChange = (value) ->
       scheduler.keepWithinTheSameLecture(value)
+
+    $scope.cellId = (hour, weekday) -> weekday + hour.replace(/:/, '')
 
     return
   ]

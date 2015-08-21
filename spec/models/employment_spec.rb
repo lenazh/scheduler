@@ -12,4 +12,16 @@ describe Employment do
     its(:gsi) { should_not be_nil }
     its(:hours_per_week) { should_not be_nil }
   end
+
+  describe 'is invalid when' do
+    describe 'hours_per_week < 0' do
+      subject { build(:employment, hours_per_week: -20) }
+      it { should_not be_valid }
+    end
+
+    describe 'hours_per_week > 168' do
+      subject { build(:employment, hours_per_week: 2000) }
+      it { should_not be_valid }
+    end
+  end
 end

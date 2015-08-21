@@ -5,19 +5,24 @@ div.row ng-controller="CoursesCtrl as courses"
     table[class="table table-striped" id="owned-classes"]
       thead 
       tr
-        th Title
-        th Created
-        th
-        th
+        th.col-md-1 Title
+        th.col-md-1
+        th class="col-md-3 text-center" Created
+        th.col-md-2
+        th.col-md-1
       tr ng-repeat="course in courses.all"
-        td 
-          button[class="btn btn-link" ng-click="courses.select(course)" ng-attr-id="owned-class-{{course.id}}"] {{ course.name }} 
-        td ng-bind="course.created_at | date"
+        td
+          button[class="btn btn-link" ng-click="courses.selectAndNavigate(course, '/calendar/' + course.id)" ng-attr-id="owned-class-{{course.id}}"] {{ course.name }} 
 
-        td.text-right 
+        td.text-left 
           button[class="btn btn-default" ng-click="courses.editForm(course)" ng-disabled="courses.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-edit"] Edit
 
-        td.text-right 
+        td.text-center ng-bind="course.created_at | date"
+
+        td.text-center
+          button[class="btn btn-default" ng-click="courses.selectAndNavigate(course, '/courses/' + course.id + '/gsi')" ng-disabled="courses.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-manage-gsis"] Manage GSIs 
+
+        td.text-right
           button[class="btn btn-danger" ng-click="courses.remove(course)" ng-disabled="courses.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-delete"] X
         
 
@@ -27,7 +32,7 @@ div.row ng-controller="CoursesCtrl as courses"
 
           button[class="btn btn-defauls" ng-click="courses.addForm()" ng-hide="courses.hideUpdateButton"] Cancel
 
-        td class="text-right" colspan="2"          
+        td class="text-right" colspan="3"          
           button[class="btn btn-success" ng-click="courses.saveNew()" ng-disabled="!courses.form_is_valid() || courses.disableEditingAndDeletion" ng-hide="courses.hideAddButton"] Add
 
           button[class="btn btn-primary" ng-click="courses.update()" ng-disabled="!courses.form_is_valid()" ng-hide="courses.hideUpdateButton"] Update
