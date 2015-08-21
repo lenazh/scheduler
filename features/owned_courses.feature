@@ -68,3 +68,9 @@ Scenario: Deleting a class that is on navbar
   And I should see "Kerbology" in navigation bar title
   When I delete this class
   Then I shouldn't see "Spaceflight 101" in navigation bar title
+
+
+Scenario: Manage GSIs button
+  Given "Kerbology" class exists
+  When I press "Manage GSIs"
+  Then I should see "GSI employment" section

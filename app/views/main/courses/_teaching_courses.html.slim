@@ -8,11 +8,18 @@ div.row ng-controller="AppointmentsCtrl as appointments"
         th.col-md-1 Title
         th.col-md-1
         th class="col-md-3 text-center" Created
+        th.col-md-2
         th.col-md-1
 
       tr ng-repeat="course in appointments.all"
         td 
           button[class="btn btn-link" ng-click="appointments.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }}
+        
         td
+        
         td.text-center ng-bind="course.created_at | date"
+        
+        td.text-center
+          button[class="btn btn-default" ng-click="courses.selectAndNavigate(course, '/courses/' + course.id + '/gsi')" ng-attr-id="teaching-class-{{course.id}}-view-gsis"] View GSIs 
+
         td
