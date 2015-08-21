@@ -25,7 +25,7 @@ describe 'AppointmentFormController', ->
       title: -> course['title']
       courseId: -> course['id']
       setCourse: (course) -> null
-      resetCourse: -> null    
+      resetCourse: -> null
     }
 
     spyOn(resource, 'all')
