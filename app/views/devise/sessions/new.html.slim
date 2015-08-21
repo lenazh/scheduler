@@ -1,23 +1,44 @@
-div.panel-heading
-  h2#sign-in.panel-title
-    | Sign in
+div.jumbotron
+  div.container
+    h1 Automated GSI scheduler
 
-div.panel-body
-  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    fieldset
-      = f.label :email, class: 'control-label'
-      = f.email_field :email, autofocus: true, class: 'form-control'
+    h2 Are you a head GSI for the upcoming semester?
 
-      = f.label :password, class: 'control-label'
-      = f.password_field :password, autocomplete: "off", class: 'form-control'
+    hr
 
-      - if devise_mapping.rememberable?
-        div.checkbox
-          label.checkbox
-            = f.check_box :remember_me
-            | Remember me
+    p
+      | 1. Create a class schedule
+    p 
+      | 2. Enroll the GSIs to find out which sections each one of them prefers
+    p
+      | 3. Find every possible way of assigning sections a few clicks
 
-      div.control-group
-        = f.submit "Sign in", class: 'btn btn-default'
+    hr
 
-    = render "devise/shared/links"
+    a class="btn btn-primary btn-lg" href="/users/sign_up" role="button"
+      | Sign up >>
+
+div class="panel panel-default"
+  div.panel-heading
+    h2#sign-in.panel-title
+      | Sign in
+
+  div.panel-body
+    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      fieldset
+        = f.label :email, class: 'control-label'
+        = f.email_field :email, autofocus: true, class: 'form-control'
+
+        = f.label :password, class: 'control-label'
+        = f.password_field :password, autocomplete: "off", class: 'form-control'
+
+        - if devise_mapping.rememberable?
+          div.checkbox
+            label.checkbox
+              = f.check_box :remember_me
+              | Remember me
+
+        div.control-group
+          = f.submit "Sign in", class: 'btn btn-default'
+
+      = render "devise/shared/links"

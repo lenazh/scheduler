@@ -1,24 +1,25 @@
-div.panel-heading
-  h2.panel-title
-    | Change your password
+div class="panel panel-default"
+  div.panel-heading
+    h2.panel-title
+      | Change your password
 
-div.panel-body
+  div.panel-body
 
-  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
-    fieldset
-      = devise_error_messages!
+    = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+      fieldset
+        = devise_error_messages!
 
-      = f.hidden_field :reset_password_token
-      
-      div.control-group
-        = f.label :password, "New password", class: 'control-label'
-        = f.password_field :password, autofocus: true, autocomplete: "off", class: 'form-control'
+        = f.hidden_field :reset_password_token
+        
+        div.control-group
+          = f.label :password, "New password", class: 'control-label'
+          = f.password_field :password, autofocus: true, autocomplete: "off", class: 'form-control'
 
-      div.control-group
-        = f.label :password_confirmation, "Confirm new password", class: 'control-label'
-        = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
+        div.control-group
+          = f.label :password_confirmation, "Confirm new password", class: 'control-label'
+          = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control'
 
-      div.control-group
-        = f.submit "Change my password", class: 'btn btn-default'
+        div.control-group
+          = f.submit "Change my password", class: 'btn btn-default'
 
-  = render "devise/shared/links"
+    = render "devise/shared/links"

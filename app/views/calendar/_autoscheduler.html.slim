@@ -13,7 +13,7 @@ div#autoscheduler ng-if="schedulerReady && isOwner && (role == 'owner')"
     div.checkbox
       label
         input type="checkbox" ng-model="keepWithinTheSameLecture" ng-change="schedulerSameLectureChange(keepWithinTheSameLecture)"
-        | Keep GSIs within one lecture
+        | Keep GSIs within one lecture (lectures whose names begin with the same symbol)
 
     div#under-employed ng-if="displayUnemployed()"
       h4 They can teach more

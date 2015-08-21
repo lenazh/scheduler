@@ -1,17 +1,18 @@
-div.panel-heading
-  h2.panel-title
-    | Forgot your password?
+div class="panel panel-default"
+  div.panel-heading
+    h2.panel-title
+      | Forgot your password?
 
-div.panel-body
+  div.panel-body
 
-  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| 
-    fieldset
-      = devise_error_messages! 
+    = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| 
+      fieldset
+        = devise_error_messages! 
 
-      = f.label :email, class: 'control-label'
-      = f.email_field :email, autofocus: true, class: 'form-control'
+        = f.label :email, class: 'control-label'
+        = f.email_field :email, autofocus: true, class: 'form-control'
 
-      div.control-group
-        = f.submit "Send me reset password instructions", class: 'btn btn-default'
+        div.control-group
+          = f.submit "Send me reset password instructions", class: 'btn btn-default'
 
-  = render "devise/shared/links" 
+    = render "devise/shared/links" 
