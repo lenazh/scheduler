@@ -71,6 +71,7 @@ class EmploymentsController < ApplicationController
     gsi = find_or_create_by(gsi_params[:email])
     return false unless gsi.persisted?
     @employment.gsi = gsi
+    notify_user(user)
     true
   end
 
@@ -97,15 +98,18 @@ class EmploymentsController < ApplicationController
       password = Devise.friendly_token.first(password_length)
       user.password = password
       user.password_confirmation = password
-      notify_user(user)
     end
   end
 
-  # send an email to the user if their password changed
+  # send an email to the user when they are enrolled for the class
   def notify_user(_gsi)
-    # puts 'New GSI created'
-    # puts "Email: #{_gsi.email}"
-    # puts "Password: #{_gsi.password}"
-    GsiMailer.enrollment(@course, _gsi).deliver if _gsi.password
+    if _gsi.password
+      # puts 'New GSI created'
+      # puts "Email: #{_gsi.email}"
+      # puts "Password: #{_gsi.password}"
+      GsiMailer.new_gsi_enrollment(@course, _gsi).deliver
+    else
+      GsiMailer.existing_gsi_enrollment(@course, _gsi).deliver
+    end
   end
 end
