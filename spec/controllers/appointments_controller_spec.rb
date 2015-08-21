@@ -37,7 +37,7 @@ describe AppointmentsController do
   describe 'GET show' do
     it 'assigns the requested appointment as @appointment' do
       get :show, { id: employment.id, format: :json }, valid_session
-      expect(assigns(:appointment).id).to eq employment.course.id
+      expect(assigns(:appointment).id).to eq employment.id
     end
   end
 end

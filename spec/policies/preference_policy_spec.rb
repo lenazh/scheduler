@@ -7,9 +7,7 @@ describe PreferencePolicy do
   let(:gsi) do
     gsi = create(:user, name: 'Snoopy')
     create(:employment, course: section.course, gsi: gsi)
-    gsi.preferences << create(:preference,
-                              user_id: gsi.id, section_id: section.id)
-    gsi.save!
+    create(:preference, user_id: gsi.id, section_id: section.id)
     gsi
   end
   let(:course) { section.course }
@@ -18,7 +16,7 @@ describe PreferencePolicy do
   subject { described_class }
 
   permissions :create? do
-    let(:preference) { build(:preference, section_id: course.id) }
+    let(:preference) { build(:preference, section_id: section.id) }
     describe 'if user enrolled as a gsi in that course' do
       it 'grants access' do
         expect(subject).to permit(gsi, preference)

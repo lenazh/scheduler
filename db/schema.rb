@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150804194939) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "courses", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -20,7 +23,7 @@ ActiveRecord::Schema.define(version: 20150804194939) do
     t.integer  "user_id"
   end
 
-  add_index "courses", ["user_id"], name: "index_courses_on_user_id"
+  add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree
 
   create_table "employments", force: true do |t|
     t.integer  "user_id"
@@ -30,8 +33,8 @@ ActiveRecord::Schema.define(version: 20150804194939) do
     t.datetime "updated_at"
   end
 
-  add_index "employments", ["course_id"], name: "index_employments_on_course_id"
-  add_index "employments", ["user_id"], name: "index_employments_on_user_id"
+  add_index "employments", ["course_id"], name: "index_employments_on_course_id", using: :btree
+  add_index "employments", ["user_id"], name: "index_employments_on_user_id", using: :btree
 
   create_table "preferences", force: true do |t|
     t.integer  "user_id"
@@ -41,8 +44,8 @@ ActiveRecord::Schema.define(version: 20150804194939) do
     t.decimal  "preference", precision: 6, scale: 3
   end
 
-  add_index "preferences", ["section_id"], name: "index_preferences_on_section_id"
-  add_index "preferences", ["user_id"], name: "index_preferences_on_user_id"
+  add_index "preferences", ["section_id"], name: "index_preferences_on_section_id", using: :btree
+  add_index "preferences", ["user_id"], name: "index_preferences_on_user_id", using: :btree
 
   create_table "sections", force: true do |t|
     t.string   "name"
@@ -53,13 +56,13 @@ ActiveRecord::Schema.define(version: 20150804194939) do
     t.integer  "course_id"
     t.integer  "gsi_id"
     t.string   "lecture"
-    t.integer  "start_hour",     limit: 1
-    t.integer  "start_minute",   limit: 1
+    t.integer  "start_hour",     limit: 2
+    t.integer  "start_minute",   limit: 2
     t.decimal  "duration_hours",           precision: 6, scale: 3
   end
 
-  add_index "sections", ["course_id"], name: "index_sections_on_course_id"
-  add_index "sections", ["gsi_id"], name: "index_sections_on_gsi_id"
+  add_index "sections", ["course_id"], name: "index_sections_on_course_id", using: :btree
+  add_index "sections", ["gsi_id"], name: "index_sections_on_gsi_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
@@ -80,7 +83,7 @@ ActiveRecord::Schema.define(version: 20150804194939) do
     t.string   "uid"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

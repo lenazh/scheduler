@@ -45,6 +45,9 @@ gem 'twitter-bootstrap-rails'
 # Use gon to supply JS variables from the controller
 gem 'gon'
 
+# Use Postgres as the database for Active Record
+  gem 'pg'
+
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring',        group: :development
@@ -55,8 +58,6 @@ group :development do
 end
 
 group :development, :test do
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
   gem 'binding_of_caller', '~> 0.7.2'
   gem 'pry'
   gem 'pry-byebug'
@@ -81,8 +82,6 @@ end
 gem 'codeclimate-test-reporter', group: :test
 
 group :production do
-  # Use Postgres as the database for Active Record
-  gem 'pg'
   gem 'rails_12factor'
   gem 'heroku-deflater'
 end
