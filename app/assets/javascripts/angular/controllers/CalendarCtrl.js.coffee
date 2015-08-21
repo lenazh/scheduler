@@ -288,16 +288,23 @@
       resetCalendar()
 
     $scope.schedulerFirst = ->
-      scheduler.first()
-      propose(scheduler._solutionArray)
+      if scheduler.first()
+        propose(scheduler._solutionArray)
+      else
+        alert 'There are no possible solutions'
+      
 
     $scope.schedulerNext = ->
-      scheduler.next()
-      propose(scheduler._solutionArray)
+      if scheduler.next()
+        propose(scheduler._solutionArray)
+      else 
+        alert 'There is no next solution'
 
     $scope.schedulerPrevious = ->
-      scheduler.previous()
-      propose(scheduler._solutionArray)
+      if scheduler.previous()
+        propose(scheduler._solutionArray)
+      else
+        alert 'There is no previous solution'
 
     $scope.schedulerSave = ->
       saveSchedule(scheduler._solutionArray)
