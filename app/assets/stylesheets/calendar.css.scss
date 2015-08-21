@@ -124,14 +124,21 @@ table#schedule-table {
 }
 
 #schedule-table .event-control {
-  border: 1px black solid;
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
+  cursor: pointer;
+  cursor: hand;
+  display: inline-block;
+  font-weight: bold;
   height: 15px;
+  width: 15px;
+}
+
+#schedule-table .event-control-panel {
   position: absolute;
   top: 0;
   right: 0;
-  width: 15px;
 }
 
 /* 

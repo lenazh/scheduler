@@ -45,7 +45,8 @@
     $event.stopPropagation()
 
   $scope.delete = ($event) ->
-    $scope.sectionCalendar.deleteSection($scope.event)
+    if confirm "Really delete section #{$scope.event.name}?"
+      $scope.sectionCalendar.deleteSection($scope.event)
     $event.stopPropagation()
 
   $scope.save = ($event) ->

@@ -1,7 +1,8 @@
 div.event-parent
   div class="event event-collapsed" ng-style="{top: event.style.top, height: event.style.height}" ng-if="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
-    div class="event-control add-event" ng-click="new($event)"
-      | +
+    div.event-control-panel
+      div class="event-control add-event" ng-click="new($event)"
+        | +
     p
       b ng-bind="event.name" class="section-name"
     p
@@ -11,8 +12,15 @@ div.event-parent
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
   div class="event event-expanded" ng-style="editStyle" ng-if="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
-    div class="event-control minimize-event"
-      | -
+
+    div class="event-control-panel"
+      div class="event-control minimize-event" ng-show="!isGhost" ng-click="toggleExpand($event)"
+        | _
+      div class="event-control remove-event" ng-show="isGhost" ng-click="cancel($event)"
+        | x
+      div class="event-control remove-event" ng-show="!isGhost" ng-click="delete($event)"
+        | x
+
     form[name="form" novalidate]
       div.form-group
         label for="name" Section
@@ -31,7 +39,7 @@ div.event-parent
         input.form-control[type="text" required ng-model="event.duration_hours" name="duration_hours" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.duration_hours"
       div.form-group
-        label for="Weekday" Weekdays
+        label for="Weekday" Weekdays (comma separated)
         input.form-control[type="text" placeholder="Weekday" ng-trim="true" ng-model="event.weekday" name="Weekday" ng-click="stopPropagation($event)"]
         span.section-error ng-bind="event.errors.weekday"
       div.form-group
