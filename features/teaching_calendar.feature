@@ -6,9 +6,10 @@ Feature: Calendar of the class that I teach
 Background:
   Given the web site is set up
   And "user" is logged in
-  And "Kerbology" class exists and selected
+  And "Kerbology" class exists
+  And I select this class
   And "user" is teaching for this class
-  And "Kerbology" class is selected
+  And I select this class from the classes I teach
   And I click "Schedule"
   And I create "Spaceflight 101" at "14:00" on "Wednesday"
   And I switch to the preferences view

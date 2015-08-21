@@ -7,6 +7,20 @@ When(/^I select this class$/) do
   click_button @class, match: :first
 end
 
+When(/^I select this class from the classes I teach$/) do
+  click_link 'My Classes'
+  within('#teaching-classes') do
+    click_button @class
+  end
+end
+
+When(/^I select this class from the classes I own$/) do
+  click_link 'My Classes'
+  within('#owned-classes') do
+    click_button @class
+  end
+end
+
 Given(/^"(.*?)" class is selected$/) do |name|
   click_link 'My Classes'
   click_button name, match: :first

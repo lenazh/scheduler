@@ -12,7 +12,7 @@ div.row ng-controller="CoursesCtrl as courses"
         th.col-md-1
       tr ng-repeat="course in courses.all"
         td
-          button[class="btn btn-link" ng-click="courses.select(course)" ng-attr-id="owned-class-{{course.id}}"] {{ course.name }} 
+          button[class="btn btn-link" ng-click="courses.selectAndNavigate(course, '/calendar/' + course.id)" ng-attr-id="owned-class-{{course.id}}"] {{ course.name }} 
 
         td.text-left 
           button[class="btn btn-default" ng-click="courses.editForm(course)" ng-disabled="courses.disableEditingAndDeletion" ng-attr-id="owned-class-{{course.id}}-edit"] Edit

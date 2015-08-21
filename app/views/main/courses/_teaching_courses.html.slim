@@ -13,7 +13,7 @@ div.row ng-controller="AppointmentsCtrl as appointments"
 
       tr ng-repeat="course in appointments.all"
         td 
-          button[class="btn btn-link" ng-click="appointments.select(course)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }}
+          button[class="btn btn-link" ng-click="appointments.selectAndNavigate(course, '/calendar/' + course.id)" ng-attr-id="teaching-class-{{course.id}}"] {{ course.name }}
         
         td
         

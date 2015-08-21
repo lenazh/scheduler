@@ -56,6 +56,7 @@ Scenario: Renaming a class that is on navbar
   Given "Kerbology" class exists
   And I select this class
   And I should see "Kerbology" in navigation bar title
+  And I am on the courses page
   When I edit this class
   And I fill in "name" with "Spaceflight 101"
   And I press "Update"
@@ -66,6 +67,7 @@ Scenario: Deleting a class that is on navbar
   Given "Kerbology" class exists
   And I select this class
   And I should see "Kerbology" in navigation bar title
+  And I am on the courses page
   When I delete this class
   Then I shouldn't see "Spaceflight 101" in navigation bar title
 
@@ -74,3 +76,9 @@ Scenario: Manage GSIs button
   Given "Kerbology" class exists
   When I press "Manage GSIs"
   Then I should see "GSI employment" section
+
+
+Scenario: Select a class
+  Given "Kerbin geopolitics" class exists
+  When I select this class from the classes I own
+  Then I should see "Schedule" section
