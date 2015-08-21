@@ -20,6 +20,6 @@ div.row ng-controller="AppointmentsCtrl as appointments"
         td.text-center ng-bind="course.created_at | date"
         
         td.text-center
-          button[class="btn btn-default" ng-click="courses.selectAndNavigate(course, '/courses/' + course.id + '/gsi')" ng-attr-id="teaching-class-{{course.id}}-view-gsis"] View GSIs 
+          button[class="btn btn-default" ng-click="appointments.selectAndNavigate(course, '/courses/' + course.id + '/gsi')" ng-attr-id="teaching-class-{{course.id}}-view-gsis"] View GSIs 
 
         td

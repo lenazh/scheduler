@@ -114,4 +114,3 @@ describe "navbarFactory", ->
       path = "example.com"
       Navbar.navigate path
       expect($location.path).toHaveBeenCalledWith path
-
