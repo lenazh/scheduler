@@ -6,7 +6,7 @@ describe PreferencePolicy do
   let(:section) { create(:section) }
   let(:gsi) do
     gsi = create(:user, name: 'Snoopy')
-    gsi.courses_to_teach << section.course
+    create(:employment, course: section.course, gsi: gsi)
     gsi.preferences << create(:preference,
                               user_id: gsi.id, section_id: section.id)
     gsi.save!

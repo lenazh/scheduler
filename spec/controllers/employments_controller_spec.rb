@@ -68,8 +68,7 @@ describe EmploymentsController do
 
       describe 'if the GSI has other appointments' do
         before(:each) do
-          gsi.courses_to_teach << another_course
-          gsi.save!
+          create(:employment, course: another_course, gsi: gsi)
         end
 
         it "doesn't destroy the GSI" do
@@ -162,8 +161,7 @@ describe EmploymentsController do
 
         describe 'if the updated GSI has other appointments' do
           before(:each) do
-            gsi.courses_to_teach << another_course
-            gsi.save!
+            create(:employment, course: another_course, gsi: gsi)
           end
 
           describe "if the new GSI doesn't exist" do

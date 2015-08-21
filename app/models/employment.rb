@@ -5,4 +5,5 @@ class Employment < ActiveRecord::Base
   belongs_to :course
   validates :course_id, presence: true
   validates :user_id, presence: true
+  validates :hours_per_week, inclusion: { in: 0..168 }
 end
