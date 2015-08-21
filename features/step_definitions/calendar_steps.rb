@@ -1,8 +1,3 @@
-# returns the calendar cell HTML ID attribute given hour and weekday
-def calendar_cell_id(hour, weekday)
-  weekday + hour.gsub(/:/, '')
-end
-
 Given(/^I create "(.*?)" at "(.*?)" on "(.*?)"$/) do |name, hour, weekday|
   find('td#' + calendar_cell_id(hour, weekday)).click
   fill_in 'name', with: name

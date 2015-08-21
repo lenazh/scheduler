@@ -9,19 +9,9 @@ end
 Then(/^I should(n't)? see "(.*?)" section$/) do |negate, name|
   id = name.downcase.gsub(/ /, '-')
   selector = "h1##{id}, h2##{id}, h3##{id}"
-  if negate
-    expect(page).to have_no_css selector
-  else
-    expect(page).to have_css selector
-  end
+  expect_css_within 'body', selector, negate
 end
 
 Then(/^I should(n't)? see "(.*?)" in navigation bar title$/) do |negate, name|
-  with_scope('navbar title') do
-    if negate
-      expect(page).to have_no_content(name)
-    else
-      expect(page).to have_content(name)
-    end
-  end
+  expect_content_within 'nav .navbar-brand', name, negate
 end

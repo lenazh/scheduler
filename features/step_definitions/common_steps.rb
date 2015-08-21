@@ -14,6 +14,15 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
-When /^(?:|I )press "([^"]*)"$/ do |button|
+Given(/^the web site is set up$/) do
+  # Place additional initialization here if needed
+end
+
+Given(/^I reload the page$/) do
+  visit current_path
+end
+
+
+When /^(?:|I )press "(.*?)"$/ do |button|
   click_button(button)
 end
