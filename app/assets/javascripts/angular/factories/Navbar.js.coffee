@@ -105,6 +105,7 @@
 
   navigate = (path) ->
     $location.path path
+    selectCurrentItem()
 
   selectCurrentItem()
 
