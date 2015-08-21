@@ -4,7 +4,7 @@
 
 
 # Automated GSI scheduling project
-## Are you a head GSI for the upcoming semester?
+### Are you a head GSI for the upcoming semester?
 
   - Create a class schedule
   - Enroll the GSIs to find out which sections each one of them prefers
