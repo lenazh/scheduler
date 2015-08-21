@@ -6,7 +6,7 @@ cache: bundler
 before_install:
 - 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
 before_script:
-- cp config/database.yml.travis config/database.yml
+- cp config/database.travis.yml config/database.yml
 - psql -c 'create database "test-postgres_test";' -U postgres
 script:
 - bundle exec rake db:migrate db:test:prepare
