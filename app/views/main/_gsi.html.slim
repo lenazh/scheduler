@@ -9,11 +9,11 @@ div.row
     table[class="table table-striped" id="gsi-roster"]
       thead 
       tr
-        th Name
-        th Email
-        th Hours/week
-        th
-        th
+        th.col-md-1 Name
+        th.col-md-1 Email
+        th.col-md-2 Hours/week
+        th.col-md-1
+        th.col-md-1
       tr ng-repeat="gsi in gsiCtrl.all"
         td ng-attr-id="gsi-name-{{gsi.id}}" ng-bind="gsi.name" 
         td ng-attr-id="gsi-email-{{gsi.id}}" ng-bind="gsi.email"
