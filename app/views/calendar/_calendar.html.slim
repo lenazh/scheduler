@@ -1,5 +1,5 @@
-div ng-if="showSwitch"
-  select.form-control ng-model="role" ng-options="role.value as role.label for role in roles" name="role" id="schedule-role"
+div ng-show="showSwitch"
+  select.form-control ng-model="role" ng-options="role.value as role.label for role in roles" name="role" id="schedule-role" ng-change="console.log('Role changed')"
 
 div ng-switch="role"
   p ng-switch-when="owner"
