@@ -41,6 +41,8 @@
 #   .unemployed() returns an array of GSIs who can teach more sections.
 #     Each GSI has 'unused_hours' field with how many more hours he/she
 #     can teach
+#   .gsisWithNoPreferences() returns the list of gsis that can teach less
+#     classes than their appoinment requires them to
 #   .needHours() returns how many hours/week are needed to teach all
 #     the sections
 #   .maxHours() returns how many hours/week the GSIs provide combined
@@ -353,6 +355,11 @@ class AutoScheduler
     for gsi in unemployedGsiList
       gsi['unused_hours'] = sections_to_hours @_availability(gsi)
     unemployedGsiList
+
+  # Returns the list of the GSIs who can make fewer sections than their
+  # appointment requires
+  gsisWithNoPreferences: ->
+    (gsi for gsi in @_gsis when hours_to_sections(gsi.hours_per_week) > gsi.sections_can_teach)
 
   # returns how happy are the GSIs with their assignments on average
   quality: -> @_quality

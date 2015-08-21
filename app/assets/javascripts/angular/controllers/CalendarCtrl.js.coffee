@@ -1,3 +1,11 @@
+# This file needs to be refactored
+
+# TODO
+# Calendar needs to be a separate object or a factory
+# Autoscheduler needs to construct without sections and GSIs
+# and initialize when both become available and every time
+# sections change
+
 @schedulerModule.controller 'CalendarCtrl',
   ['$scope', '$cookies', 'Section', 'Employment',
   ($scope, $cookies, Section, Employment) ->
@@ -239,7 +247,7 @@
         Employment.roster (_gsis) ->
           gsis = _gsis
           scheduler = new schedulerApp.AutoScheduler(sections, gsis)
-          $scope.schedulerReady = true
+          $scope.schedulerReady = true if sections.length > 0
 
       for section in sections
         addSectionToCells section
@@ -305,6 +313,18 @@
 
     $scope.displayUnemployed = ->
       (scheduler.quality() != 0.0) && (scheduler.unemployed().length > 0)
+
+    $scope.displayGsisWithNoPreferences = ->
+      scheduler.gsisWithNoPreferences().length > 0
+
+    $scope.schedulerGsisWithNoPreferences = ->
+      scheduler.gsisWithNoPreferences()
+
+    $scope.displaySectionsNobodyCanTeach = ->
+      scheduler.sectionsNobodyCanTeach().length > 0
+
+    $scope.schedulerSectionsNobodyCanTeach = ->
+      scheduler.sectionsNobodyCanTeach()
 
     $scope.schedulerStatus = ->
       scheduler.status()
