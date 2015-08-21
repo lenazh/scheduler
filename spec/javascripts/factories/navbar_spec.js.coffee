@@ -49,8 +49,9 @@ describe "navbarFactory", ->
     it "is defined (only used internally so far)", ->
       expect(Navbar.deselect).toBeDefined()
 
-  # it "selects the correct menu item based on the $location.path() when it initializes", ->
-  #   pending "need to stub out $location somehow"
+  # it "selects the correct menu item based on the 
+  # $location.path() when it initializes", ->
+  # pending "need to stub out $location somehow"
 
   describe 'course()', ->
     it "returns the current course", ->
@@ -61,8 +62,8 @@ describe "navbarFactory", ->
     course = {}
     navbarCourse = {}
     expirationDate = ->
-        now = new Date()
-        expires = new Date now.getFullYear() + 1, now.getMonth(), now.getDate()
+      now = new Date()
+      expires = new Date now.getFullYear() + 1, now.getMonth(), now.getDate()
 
     beforeEach ->
       course = {

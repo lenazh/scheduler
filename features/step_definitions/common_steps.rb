@@ -22,7 +22,6 @@ Given(/^I reload the page$/) do
   visit current_path
 end
 
-
 When /^(?:|I )press "(.*?)"$/ do |button|
   click_button(button)
 end
