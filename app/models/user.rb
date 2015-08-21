@@ -78,6 +78,11 @@ class User < ActiveRecord::Base
     Section.where('gsi_id = ? AND course_id = ?', id, course.id).count
   end
 
+  # returns how many sections the user can make
+  def preferences_in(course)
+    preferences.length
+  end
+
   # returns falsy value if the information of user teaching this section is
   # not in db and truthy value if it is
   def appointment_persisted?(section)
