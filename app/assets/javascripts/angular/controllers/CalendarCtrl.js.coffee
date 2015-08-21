@@ -292,7 +292,6 @@
         propose(scheduler._solutionArray)
       else
         alert 'There are no possible solutions'
-      
 
     $scope.schedulerNext = ->
       if scheduler.next()
@@ -306,8 +305,12 @@
       else
         alert 'There is no previous solution'
 
+    $scope.disableSchedulerSave = ->
+      scheduler._solutionArray.length == 0
+
     $scope.schedulerSave = ->
-      saveSchedule(scheduler._solutionArray)
+      if scheduler._solutionArray.length > 0
+        saveSchedule(scheduler._solutionArray)
 
     $scope.schedulerHappiness = ->
       scheduler.quality() * 100

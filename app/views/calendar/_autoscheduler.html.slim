@@ -8,7 +8,7 @@ div#autoscheduler ng-if="schedulerReady && isOwner"
       button[class="btn btn-primary" ng-click="schedulerFirst()"] Auto-schedule
       button[class="btn btn-default" ng-click="schedulerPrevious()"] << Previous
       button[class="btn btn-default" ng-click="schedulerNext()"] Next >>
-      button[class="btn btn-success" ng-click="schedulerSave()"] Save
+      button[class="btn btn-success" ng-click="schedulerSave()" ng-disabled="disableSchedulerSave()"] Save
 
     div.checkbox
       label
