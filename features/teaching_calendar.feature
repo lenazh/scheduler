@@ -17,4 +17,4 @@ Background:
 Scenario: Section has a "collapse" button
   Given I expand "Spaceflight 101" section
   Then I should see the minimize button
-  And when I click the minimize button the section collapses
+#  And when I click the minimize button the section collapses

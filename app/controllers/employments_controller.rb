@@ -71,7 +71,7 @@ class EmploymentsController < ApplicationController
     gsi = find_or_create_by(gsi_params[:email])
     return false unless gsi.persisted?
     @employment.gsi = gsi
-    notify_user(user)
+    notify_user(gsi)
     true
   end
 

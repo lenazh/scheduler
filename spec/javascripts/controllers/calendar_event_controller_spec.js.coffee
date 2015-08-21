@@ -108,6 +108,7 @@ describe "CalendarEventCtrl", ->
 
     describe "when delete is clicked (delete(...) is called)", ->
       it "calls CalendarCtrl.deleteSection", ->
+        spyOn(window, 'confirm').and.returnValue true
         $scope.delete(mouseEventMock)
         expect(calendarMock.deleteSection).toHaveBeenCalledWith($scope.event)
 

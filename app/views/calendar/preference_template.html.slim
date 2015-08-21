@@ -1,13 +1,13 @@
 div.event-parent
-  div.event ng-style="{top: event.style.top, height: event.style.height}" ng-if="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+  div class="event event-collapsed" ng-style="{top: event.style.top, height: event.style.height}" ng-if="!showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     p
-      b ng-bind="event.name"
+      b ng-bind="event.name" class="section-name"
     p
-      b ng-bind="event.weekday"
+      b ng-bind="event.weekday" class="section-weekday"
     p Room: {{event.room}}
     p Begins: {{event.start_hour}}:{{pad(event.start_minute)}}
 
-  div.event ng-style="editStyle" ng-if="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
+  div class="event event-expanded" ng-style="editStyle" ng-if="showEditForm" ng-click="toggleExpand($event)" ng-class="eventClass()"
     div.event-control-panel
       div class="event-control minimize-event" ng-click="toggleExpand($event)"
         | -
