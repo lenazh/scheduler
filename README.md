@@ -4,7 +4,12 @@
 
 
 # Automated GSI scheduling project
-### Are you a head GSI for the upcoming semester?
+### The idea
+
+The purpose of the project is to make the lives of graduate student instructors/teaching assistants easier.
+Once the schedule is created and everyone selected which sections they can teach, the website provides a way to automatically match the sections with people who would like to teach them the most.
+
+### How to use
 
   - Create a class schedule
   - Enroll the GSIs to find out which sections each one of them prefers
