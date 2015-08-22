@@ -13,6 +13,6 @@ Once the class schedule is created and everyone chose which sections they can te
 
   - Create a class schedule
   - Enroll the GSIs to find out which sections each one of them prefers
-  - Find every possible way of assigning sections a few clicks
+  - Find every possible way of assigning sections in a few clicks
 
 Heroku deployment: http://gsi-scheduler.herokuapp.com
