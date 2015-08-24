@@ -1,4 +1,4 @@
-describe 'AutoScheduler', ->
+describe 'AutoScheduler single lecture no time conflicts', ->
   sections = []
   gsis = []
   scheduler = {}
@@ -17,7 +17,9 @@ describe 'AutoScheduler', ->
           [
             {
               'id': 1, 'name': '101',
-              'available_gsis': []
+              'available_gsis': [],
+              'start_hour': 8, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
             },
             {
               'id': 2, 'name': '102',

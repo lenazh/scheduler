@@ -1,4 +1,4 @@
-describe 'AutoScheduler', ->
+describe 'AutoScheduler single lecture no time conflicts', ->
   sections = []
   gsis = []
   scheduler = {}
@@ -19,7 +19,9 @@ describe 'AutoScheduler', ->
             'available_gsis': [
               { 'id': 1, 'preference': 1.0, 'hours_per_week': 20 },
               { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-            ]
+            ],
+              'start_hour': 8, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
           },
           {
             'id': 2, 'name': '102',
@@ -27,20 +29,26 @@ describe 'AutoScheduler', ->
               { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
               { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
               { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
-            ]
+            ],
+              'start_hour': 10, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
           },
           {
             'id': 3, 'name': '103',
             'available_gsis': [
               { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
-            ]
+            ],
+              'start_hour': 12, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
           },
           {
             'id': 4, 'name': '104',
             'available_gsis': [
               { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
               { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-            ]
+            ],
+              'start_hour': 14, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
           }
         ]
 

@@ -26,7 +26,9 @@
 //= require .//angular//helpers//CourseFormController
 //= require .//angular//helpers//EmploymentFormController
 //= require .//angular//helpers//ResourceList
-//= require .//angular//helpers//AutoScheduler
+//= require .//angular//helpers//AutoScheduler//GSIs
+//= require .//angular//helpers//AutoScheduler//GreedySolver
+//= require .//angular//helpers//AutoScheduler//AutoScheduler
 //= require_tree .//angular//factories
 //= require_tree .//angular//directives
 //= require_tree .//angular//controllers
