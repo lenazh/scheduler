@@ -9,35 +9,50 @@ class GSIs
   # stores the list of all GSIs
   _gsis: []
 
+  # converts hours/week into maximum number of sections the GSI can teach
+  hours_to_sections = (hours) ->
+    hours / 10
+
+  # converts the number of sections into the hours/week required
+  sections_to_hours = (sections) ->
+    sections * 10
+
   # returns what section the lecture belongs to
   section_to_lecture = (section) ->
-    section.name.substring(0, 1)
+    section.name.trim().substring(0, 1)
 
   # changes the availability of the gsi by x
   _changeAvailability: (gsi, x) ->
     @_gsiData[gsi.id]['availability'] += x
 
-  # sets the availability of the gsi to x and resets lecture index
-  _setAvailability: (gsi, x) ->
+  # sets the availability of the gsi to maximum and resets the lecture index
+  _initializeGSI: (gsi) ->
     @_gsiData[gsi.id] = {}
-    @_gsiData[gsi.id]['availability'] = x
+    hours = gsi['hours_per_week']
+    @_gsiData[gsi.id]['availability'] = @hours_to_sections hours
     @_gsiData[gsi.id]['lectures'] = {}
 
-  # returns how many hours the GSI is teaching in lecture that
+  # returns how many sections the GSI is teaching in lecture that
   # section belongs to
-  _getHours: (gsi, section) ->
+  _getSectionNumber: (gsi, section) ->
     lecture = section_to_lecture section
     if typeof(@_gsiData[gsi.id]['lectures'][lecture]) == 'undefined'
       @_gsiData[gsi.id]['lectures'][lecture] = 0
     @_gsiData[gsi.id]['lectures'][lecture]
 
-  # changes how many hours a GSI is teathing within the lecture
+  # changes how many sections a GSI is teaching within the lecture
   # that section belongs to by x
-  _changeHours: (gsi, section, x) ->
+  _changeSectionNumber: (gsi, section, x) ->
     lecture = section_to_lecture section
     if typeof(@_gsiData[gsi.id]['lectures'][lecture]) == 'undefined'
       @_gsiData[gsi.id]['lectures'][lecture] = 0
     @_gsiData[gsi.id]['lectures'][lecture] += x
+    sectionNumber = @_gsiData[gsi.id]['lectures'][lecture]
+    if (sectionNumber < 0)
+      throw "GSI #{gsi.id} #{gsi.name} is teaching negative number of \
+      sections in lecture #{lecture} after being unassigned from section \
+      #{section.name}"
+    sectionNumber
 
   # returns whether the GSI is teaching the lecture the section
   # belongs to
@@ -54,43 +69,34 @@ class GSIs
         return true if hours > 0
     return false
 
+  # marks all GSIs as free
+  _initialize: -> reset()
 
   # public methods
-
   constructor: (gsis) ->
     @_gsis = angular.copy gsis
-
-  # converts hours/week into maximum number of sections the GSI can teach
-  hours_to_sections = (hours) ->
-    hours / 10
-
-  # converts the number of sections into the hours/week required
-  sections_to_hours = (sections) ->
-    sections * 10
+    @initialize()
 
   # indicates whether the scheduler should assign GSIs sections only within
   # the same lecture
   keepWithinTheSameLecture: true
 
   # marks that the GSI teaching the section
-  assign: (gsi, section, index) ->
+  assign: (gsi, section) ->
     if @_availability(gsi) > 0
       @_changeAvailability(gsi, -1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
-    section.lastGsi = gsi
-    section.lastGsiIndex = index
-    @_changeHours(gsi, section, 1) if @keepWithinTheSameLecture()
+    @_changeSectionNumber(gsi, section, 1) if @keepWithinTheSameLecture()
 
   # marks that the GSI is no longer teaching the section
   unassign: (gsi, section) ->
-    section.lastGsi = null
     if @_availability(gsi) < hours_to_sections(gsi['hours_per_week'])
       @_changeAvailability(gsi, +1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
-    @_changeHours(gsi, section, -1) if @keepWithinTheSameLecture()
+    @_changeSectionNumber(gsi, section, -1) if @keepWithinTheSameLecture()
 
   # returns true if the GSI can teach and false otherwise
   canTeach: (gsi, section) ->
@@ -103,12 +109,14 @@ class GSIs
   availability: (gsi) ->
     @_gsiData[gsi.id]['availability']
 
+  # returns the list of all GSIs
   all: ->
     _gsis
 
+  # marks all GSIs as free
   reset: ->
     for gsi in @_gsis
-      @_setAvailability gsi, hours_to_sections(gsi['hours_per_week'])
+      @_initializeGSI gsi
 
 
 schedulerApp.GSIs = GSIs

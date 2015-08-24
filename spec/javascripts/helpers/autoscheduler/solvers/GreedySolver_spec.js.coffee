@@ -1,7 +1,8 @@
-describe 'AutoScheduler multiple lectures no time conflicts', ->
+describe 'Greedy solver', ->
   sections = []
   gsis = []
-  scheduler = {}
+  solver = {}
+  GSIs = {}
 
   describe 'When sections belong to different lectures', ->
     beforeEach ->
@@ -53,15 +54,7 @@ describe 'AutoScheduler multiple lectures no time conflicts', ->
           }
         ]
 
-      scheduler = new schedulerApp.scheduler(sections, gsis)
+      GSIs = new schedulerApp.GSIs(gsis)
+      solver = new schedulerApp.GreedySolver(sections, GSIs)
 
-    describe 'keep within same lecture', ->
-      it 'is true by default', ->
-        expect(scheduler.keepWithinTheSameLecture()).toBe true
-
-    describe 'setter', ->
-      it 'updates the value correctly', ->
-        scheduler.keepWithinTheSameLecture true
-        expect(scheduler.keepWithinTheSameLecture).toBe true
-        scheduler.keepWithinTheSameLecture false
-        expect(scheduler.keepWithinTheSameLecture).toBe false
+    describe 'public methods', ->

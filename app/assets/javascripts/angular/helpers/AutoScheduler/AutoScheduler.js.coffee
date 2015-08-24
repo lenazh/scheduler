@@ -51,8 +51,8 @@ class AutoScheduler
   # "private" methods and fields
   _sections: []
   _status: ['Not initialized']
-  _solvable: false
   _GSIs: {}
+  _solvable: false
 
   # Sets correspondence between the sections and GSIs, such as
   # { section1 => gsi1, section2 => gsi2, ... }
@@ -63,17 +63,11 @@ class AutoScheduler
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
   _quality: 0.0
 
-  # indicates whether the scheduler should assign GSIs sections only within
-  # the same lecture
-  _keepWithinTheSameLecture: true
-
   # converts hours/week into maximum number of sections the GSI can teach
-  hours_to_sections = (hours) ->
-    @_GSIs.hours_to_sections(hours)
+  hours_to_sections: (hours) -> @_GSIs.hours_to_sections(hours)
 
   # converts the number of sections into the hours/week required
-  sections_to_hours = (sections) ->
-    @_GSIs.sections_to_hours(sections)
+  sections_to_hours: (sections) -> @_GSIs.sections_to_hours(sections)
 
   # updates the status of the solver
   _updateStatus: ->
@@ -88,14 +82,18 @@ class AutoScheduler
     if @solvable()
       @_status.push 'Ready to schedule'
 
+  # performs basic checks of the system before running the solver
+  _checkIfSolvable: ->
+    @_solvable = (@sectionsNobodyCanTeach().length == 0) &&
+      @enoughGsiHours()
+
   # public methods and fields
 
   constructor: (sections, gsis) ->
     @_sections = angular.copy sections
     @_GSIs = new schedulerApp.GSIs(gsis)
     @_solver = new schedulerApp.GreedySolver(sections, @_GSIs)
-    @reset()
-    @checkIfSolvable()
+    @_checkIfSolvable()
     @_updateStatus()
 
   # getter/setter for keepWithinTheSameLecture
@@ -113,8 +111,7 @@ class AutoScheduler
   solvable: -> @_solvable
 
   # how many hours/week you need to teach all the sections
-  needHours: ->
-    sections_to_hours @_sections.length
+  needHours: -> @sections_to_hours @_sections.length
 
   # how many hours/week all the enrolled GSIs can teash
   maxHours: ->
@@ -123,12 +120,8 @@ class AutoScheduler
       hours += gsi.hours_per_week
     hours
 
-  # brings the solver to the initial state
+  # brings the AutoScheduler to the initial state
   reset: -> @_solver.reset()
-
-  # performs basic checks of the system
-  checkIfSolvable: ->
-    @_solvable = (@sectionsNobodyCanTeach().length == 0) && @enoughGsiHours()
 
   # Check whether the total hours the GSIs can teach is more or
   # equal to the total hours required to teach the classes
@@ -139,40 +132,46 @@ class AutoScheduler
   sectionsNobodyCanTeach: ->
     (section for section in @_sections when section['available_gsis'].length == 0)
 
-  # returns first available solution or null if none exists
-  first: ->
-    @reset()
-    @_solver.solve(@_fillRight, true)
-
-  # returns next available solution or null if none exists
-  next: ->
-    @_solver.advanceSearch(true)
-    @_solver.solve(@_fillRight, true)
-
-  # returns the previous solution or null if none exists
-  previous: ->
-    @_solver.advanceSearch(false)
-    @_solver.solve(@_fillRight, false)
-
-  # returns the current selected solution or null if no solution
-  current: ->
-    return null unless @solvable
-    @_solution
-
   # Returns the list of unemployed GSIs and how many more hours/week
   # they can teach
   unemployed: ->
     unemployedGsiList = (gsi for gsi in @_GSIs.all() when @_GSIs.availability(gsi) > 0)
     for gsi in unemployedGsiList
-      gsi['unused_hours'] = sections_to_hours @_GSIs.availability(gsi)
+      gsi['unused_hours'] = @sections_to_hours @_GSIs.availability(gsi)
     unemployedGsiList
 
   # Returns the list of the GSIs who can make fewer sections than their
   # appointment requires
   gsisWithNoPreferences: ->
-    (gsi for gsi in @_GSIs.all() when hours_to_sections(gsi.hours_per_week) > gsi.sections_can_teach)
+    (gsi for gsi in @_GSIs.all() when @hours_to_sections(gsi.hours_per_week) > gsi.sections_can_teach)
 
   # returns how happy are the GSIs with their assignments on average
-  quality: -> @_quality
+  quality: -> @_solver.quality()
+
+  # returns first available solution or null if none exists
+  first: ->
+    return null unless @solvable()
+    @_solver.first()
+
+  # returns next available solution or null if none exists
+  next: ->
+    return null unless @solvable()
+    @_solver.next()
+
+  # returns the previous solution or null if none exists
+  previous: ->
+    return null unless @solvable()
+    @_solver.previous()
+
+  # returns the current selected solution or null if no solution
+  solution: ->
+    return null unless @solvable()
+    @_solver.solution()
+
+  # returns the current selected solution adapted for testing
+  # or null if no solution
+  testSolution: ->
+    return null unless @solvable()
+    @_solver.testSolution()
 
 schedulerApp.AutoScheduler = AutoScheduler

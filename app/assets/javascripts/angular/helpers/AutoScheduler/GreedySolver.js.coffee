@@ -3,6 +3,24 @@ class GreedySolver
   _sections: []
   _GSIs: {}
 
+  # Sets correspondence between the sections and GSIs, such as
+  # { section1 => gsi1, section2 => gsi2, ... }
+  _solution: {}
+  _solutionArray: []
+
+  # Autoscheduler who owns this solver
+  _owner: {}
+
+  # Average satisfaction level of GSIs, calculated as
+  # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
+  _quality: 0.0
+
+  # converts hours/week into maximum number of sections the GSI can teach
+  hours_to_sections: (hours) -> @_GSIs.hours_to_sections(hours)
+
+  # converts the number of sections into the hours/week required
+  sections_to_hours: (sections) -> @_GSIs.sections_to_hours(sections)
+
   # returns the next available GSI given a section and the gsi
   _nextGsi: (section) ->
     start = section.lastGsiIndex + 1
@@ -83,6 +101,16 @@ class GreedySolver
   _fillLeft: (next) =>
     @_fill(@_sections.length - 1, next, -1)
 
+  # finds the solution given the solver function and direction
+  _solve: (solver, next) ->
+    return null unless @_owner.solvable()
+    if solver(next)
+      @_buildSolution()
+    else
+      @_solution = null
+      @_quality = 0
+    @_solution
+
   _buildSolution: ->
     @_solution = {}
     @_solutionArray = new Array(@_sections.length)
@@ -104,6 +132,8 @@ class GreedySolver
     section.lastGsi = null
     section.lastGsiIndex = -1
 
+  # resets every section
+  _initialize: -> @_resetAllSections()
   _resetAllSections: ->
     for section in @_sections
       @_resetSection(section)
@@ -118,16 +148,15 @@ class GreedySolver
     @_resetSection(section)
     @_GSIs.unassign(gsi, section)
 
-
   # "public" methods
-
   constructor: (sections, GSIs) ->
     @_sections = angular.copy sections
     @_GSIs = GSIs
+    @_initialize()
 
   # resets the solver to the initial state
   reset: ->
-    @_resetSectionIndexes()
+    @_resetAllSections()
     @_GSIs.reset()
 
   # advances the search by one step forward or backward
@@ -137,14 +166,19 @@ class GreedySolver
     return unless section.lastGsi
     section.lastGsi = @_advanceGsi(section, next)
 
-  # finds the solution given the solver function and direction
-  solve: (solver, next) ->
-    return null unless @solvable()
-    if solver(next)
-      @_buildSolution()
-    else
-      @_solution = null
-      @_quality = 0
-    @_solution  
+  # returns first available solution or null if none exists
+  first: ->
+    @reset()
+    @_solve(@_fillRight, true)
+
+  # returns next available solution or null if none exists
+  next: ->
+    @_solver.advanceSearch(true)
+    @_solve(@_fillRight, true)
+
+  # returns the previous solution or null if none exists
+  previous: ->
+    @_solver.advanceSearch(false)
+    @_solver.solve(@_fillRight, false)
 
 schedulerApp.GreedySolver = GreedySolver
