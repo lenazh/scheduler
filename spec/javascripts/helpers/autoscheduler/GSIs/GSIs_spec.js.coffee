@@ -5,6 +5,7 @@ describe 'GSIs data object', ->
   vader = {}
   glados = {}
   honey = {}
+  gsi = {}
 
   section101 = {}
   section102 = {}
@@ -80,6 +81,7 @@ describe 'GSIs data object', ->
     vader = gsis[0]
     glados = gsis[1]
     honey = gsis[2]
+    gsi = glados
 
     GSIs = new schedulerApp.GSIs(gsis)
 
@@ -95,8 +97,8 @@ describe 'GSIs data object', ->
 
   describe 'reset', ->
     beforeEach ->
-      GSIs.reset()
       spyOn(GSIs, '_initializeGSI')
+      GSIs.reset()
 
     it 'makes GSIs available for the number of sections\
     corresponding to his/her appointment', ->
@@ -113,11 +115,10 @@ describe 'GSIs data object', ->
     describe 'when sections have no time conflicts', ->
       describe 'GSI has no hours left', ->
         it 'is false', ->
-          gsi = gsis[2]
-          GSIs.assign(gsi, section101)
-          expect(GSIs.canTeach(gsi, section102)).toBe false
-          expect(GSIs.canTeach(gsi, section201)).toBe false
-          expect(GSIs.canTeach(gsi, section202)).toBe false
+          GSIs.assign(honey, section101)
+          expect(GSIs.canTeach(honey, section102)).toBe false
+          expect(GSIs.canTeach(honey, section201)).toBe false
+          expect(GSIs.canTeach(honey, section202)).toBe false
 
       describe 'GSI has hours left but teaches for a different lecture', ->
         it 'is false', ->
@@ -142,9 +143,9 @@ describe 'GSIs data object', ->
 
   describe 'assign', ->
     it 'decreases the GSI availability by one', ->
-      availability = GSIs._availability(gsi)
+      availability = GSIs.availability(gsi)
       GSIs.assign gsi, section101
-      expect(GSIs._availability(gsi)).toBe(availability - 1)
+      expect(GSIs.availability(gsi)).toBe(availability - 1)
 
     it 'increases the number of sections the GSI is teaching in that \
     lecture by one without changin the other lectures', ->
@@ -160,9 +161,9 @@ describe 'GSIs data object', ->
       GSIs.assign gsi, section101
 
     it 'increases the GSI availability by one', ->
-      availability = GSIs._availability(gsi)
+      availability = GSIs.availability(gsi)
       GSIs.unassign gsi, section101
-      expect(GSIs._availability(gsi)).toBe(availability + 1)
+      expect(GSIs.availability(gsi)).toBe(availability + 1)
 
     it 'decreases the number of sections the GSI is teaching in that \
     lecture by one without changin the other lectures', ->
@@ -220,7 +221,7 @@ describe 'GSIs data object', ->
 
     describe '_getSectionNumber', ->
       it 'returns zero if the GSI is not teaching for any section', ->
-        expect(GSIs._getSectionNumber).toEqual 0
+        expect(GSIs._getSectionNumber(vader, section101)).toEqual 0
 
       it 'returns one if the GSI is teaching one section \
       within this lecture', ->

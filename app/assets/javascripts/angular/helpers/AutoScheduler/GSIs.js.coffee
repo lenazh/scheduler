@@ -21,6 +21,9 @@ class GSIs
   section_to_lecture = (section) ->
     section.name.trim().substring(0, 1)
 
+  # same exposed for testing purposes
+  section_to_lecture: (section) -> section_to_lecture(section)
+
   # changes the availability of the gsi by x
   _changeAvailability: (gsi, x) ->
     @_gsiData[gsi.id]['availability'] += x
@@ -29,7 +32,7 @@ class GSIs
   _initializeGSI: (gsi) ->
     @_gsiData[gsi.id] = {}
     hours = gsi['hours_per_week']
-    @_gsiData[gsi.id]['availability'] = @hours_to_sections hours
+    @_gsiData[gsi.id]['availability'] = hours_to_sections hours
     @_gsiData[gsi.id]['lectures'] = {}
 
   # returns how many sections the GSI is teaching in lecture that
@@ -70,12 +73,12 @@ class GSIs
     return false
 
   # marks all GSIs as free
-  _initialize: -> reset()
+  _initialize: -> @reset()
 
   # public methods
   constructor: (gsis) ->
     @_gsis = angular.copy gsis
-    @initialize()
+    @_initialize()
 
   # indicates whether the scheduler should assign GSIs sections only within
   # the same lecture
@@ -83,27 +86,27 @@ class GSIs
 
   # marks that the GSI teaching the section
   assign: (gsi, section) ->
-    if @_availability(gsi) > 0
+    if @availability(gsi) > 0
       @_changeAvailability(gsi, -1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
-    @_changeSectionNumber(gsi, section, 1) if @keepWithinTheSameLecture()
+    @_changeSectionNumber(gsi, section, 1) if @keepWithinTheSameLecture
 
   # marks that the GSI is no longer teaching the section
   unassign: (gsi, section) ->
-    if @_availability(gsi) < hours_to_sections(gsi['hours_per_week'])
+    if @availability(gsi) < hours_to_sections(gsi['hours_per_week'])
       @_changeAvailability(gsi, +1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
-    @_changeSectionNumber(gsi, section, -1) if @keepWithinTheSameLecture()
+    @_changeSectionNumber(gsi, section, -1) if @keepWithinTheSameLecture
 
   # returns true if the GSI can teach and false otherwise
   canTeach: (gsi, section) ->
     if @keepWithinTheSameLecture
-      (@_availability(gsi) > 0) && !@_teachingAnyOtherLecture(gsi, section)
+      (@availability(gsi) > 0) && !@_teachingAnyOtherLecture(gsi, section)
     else
-      @_availability(gsi) > 0
+      @availability(gsi) > 0
 
   # returns how many more sections the GSI can teach
   availability: (gsi) ->
@@ -111,7 +114,7 @@ class GSIs
 
   # returns the list of all GSIs
   all: ->
-    _gsis
+    @_gsis
 
   # marks all GSIs as free
   reset: ->
