@@ -221,10 +221,10 @@ describe 'Greedy solver', ->
 
   describe 'finding a solution', ->
     expectSolution = (actual, expected) ->
-      console.log "Actual solution:"
-      console.log actual
-      console.log "Expected solution:"
-      console.log expected
+      # console.log "Actual solution:"
+      # console.log actual
+      # console.log "Expected solution:"
+      # console.log expected
       for key, value of expected
         expect(actual[key].id).toEqual value
 
@@ -245,182 +245,249 @@ describe 'Greedy solver', ->
         expectSolution solution, expectedSolution
         expect(quality).toEqual expectedQuality
 
-    beforeEach ->
-      gsis =
-        [
-          { 'id': 1, 'hours_per_week': 20, 'name': 'Vader' },
-          { 'id': 2, 'hours_per_week': 80, 'name': 'GlaDOS' },
-          { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
-        ]
+    describe 'without time conflicts', ->
+      beforeEach ->
+        gsis =
+          [
+            { 'id': 1, 'hours_per_week': 20, 'name': 'Vader' },
+            { 'id': 2, 'hours_per_week': 80, 'name': 'GlaDOS' },
+            { 'id': 3, 'hours_per_week': 10, 'name': 'Honey Bunny' },
+          ]
 
-      sections =
-        [
+        sections =
+          [
+            {
+              'id': 1, 'name': '101',
+              'available_gsis': [
+                { 'id': 1, 'preference': 1.0, 'hours_per_week': 20 },
+                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
+              ],
+              'start_hour': 8, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            },
+            {
+              'id': 2, 'name': '102',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
+                { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
+                { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
+              ],
+              'start_hour': 10, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            },
+            {
+              'id': 3, 'name': '103',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
+              ],
+              'start_hour': 12, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            },
+            {
+              'id': 4, 'name': '104',
+              'available_gsis': [
+                { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
+                { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
+              ],
+              'start_hour': 14, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            }
+          ]
+
+        GSIs = new schedulerApp.GSIs(gsis)
+        solver = new schedulerApp.GreedySolver(sections, GSIs)   
+
+      it 'returns expected solutions', ->
+        expectedData = [
           {
-            'id': 1, 'name': '101',
-            'available_gsis': [
-              { 'id': 1, 'preference': 1.0, 'hours_per_week': 20 },
-              { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-            ],
-            'start_hour': 8, 'start_minute': 0, 'duration_hours': 2.0,
-            'weekday': 'Monday'
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: true
           },
           {
-            'id': 2, 'name': '102',
-            'available_gsis': [
-              { 'id': 2, 'preference': 0.75, 'hours_per_week': 80 },
-              { 'id': 3, 'preference': 0.75, 'hours_per_week': 10 },
-              { 'id': 1, 'preference': 0.25, 'hours_per_week': 20 }
-            ],
-            'start_hour': 10, 'start_minute': 0, 'duration_hours': 2.0,
-            'weekday': 'Monday'
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+            },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
           },
           {
-            'id': 3, 'name': '103',
-            'available_gsis': [
-              { 'id': 2, 'preference': 0.5, 'hours_per_week': 80 }
-            ],
-            'start_hour': 12, 'start_minute': 0, 'duration_hours': 2.0,
-            'weekday': 'Monday'
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: true
           },
           {
-            'id': 4, 'name': '104',
-            'available_gsis': [
-              { 'id': 3, 'preference': 1.0, 'hours_per_week': 10 },
-              { 'id': 2, 'preference': 0.25, 'hours_per_week': 80 }
-            ],
-            'start_hour': 14, 'start_minute': 0, 'duration_hours': 2.0,
-            'weekday': 'Monday'
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
+            quality: (1.25 / 4.0), next: true
+          },
+          { solution: null, quality: 0.0, next: true },
+          { solution: null, quality: 0.0, next: true },
+          { solution: null, quality: 0.0, next: true },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
+            quality: (1.25 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
+            quality: (2.0 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
+            quality: (1.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: false
+          },
+          { solution: null, quality: 0.0, next: false },
+          { solution: null, quality: 0.0, next: false },
+          { solution: null, quality: 0.0, next: false },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
+            quality: (2.0 / 4.0), next: true
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
+            quality: (2.75 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
+            quality: (2.5 / 4.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
+            quality: (3.25 / 4.0), next: false
           }
         ]
+        expectData expectedData
 
-      GSIs = new schedulerApp.GSIs(gsis)
-      solver = new schedulerApp.GreedySolver(sections, GSIs)   
 
-    it 'returns expected solutions', ->
-      expectedData = [
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
-          quality: (3.25 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: true
+    describe 'with time conflicts', ->
+      beforeEach ->
+        gsis =
+          [
+            { 'id': 1, 'hours_per_week': 20, 'name': 'Vader' },
+            { 'id': 2, 'hours_per_week': 20, 'name': 'GlaDOS' },
+          ]
+
+        sections =
+          [
+            {
+              'id': 1, 'name': '101',
+              'available_gsis': [
+                { 'id': 1, 'preference': 1.0, 'hours_per_week': 20 },
+                { 'id': 2, 'preference': 0.25, 'hours_per_week': 20 }
+              ],
+              'start_hour': 8, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            },
+            {
+              'id': 2, 'name': '102',
+              'available_gsis': [
+                { 'id': 2, 'preference': 1.0, 'hours_per_week': 20 },
+                { 'id': 1, 'preference': 0.5, 'hours_per_week': 20 }
+              ],
+              'start_hour': 10, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            },
+            {
+              'id': 3, 'name': '103',
+              'available_gsis': [
+                { 'id': 2, 'preference': 0.75, 'hours_per_week': 20 }
+              ],
+              'start_hour': 10, 'start_minute': 0, 'duration_hours': 2.0,
+              'weekday': 'Monday'
+            }
+          ]
+
+        GSIs = new schedulerApp.GSIs(gsis)
+        solver = new schedulerApp.GreedySolver(sections, GSIs)   
+
+      it 'returns expected solutions', ->
+        expectedData = [
+          {
+            solution: { 1: 1, 2: 1, 3: 2 },
+            quality: (2.25 / 3.0), next: true
           },
-        {
-          solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
-          quality: (2.75 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
-          quality: (2.0 / 4.0), next: true
-        },
-        {
-          solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
-          quality: (2.5 / 4.0), next: true
-        },
-        {
-          solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
-          quality: (1.75 / 4.0), next: true
-        },
-        {
-          solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
-          quality: (1.75 / 4.0), next: true
-        },
-        {
-          solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
-          quality: (2.0 / 4.0), next: true
-        },
-        {
-          solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
-          quality: (1.25 / 4.0), next: true
-        },
-        { solution: null, quality: 0.0, next: true },
-        { solution: null, quality: 0.0, next: true },
-        { solution: null, quality: 0.0, next: true },
-        {
-          solution: { 1: 2, 2: 1, 3: 2, 4: 2 },
-          quality: (1.25 / 4.0), next: false
-        },
-        {
-          solution: { 1: 2, 2: 1, 3: 2, 4: 3 },
-          quality: (2.0 / 4.0), next: false
-        },
-        {
-          solution: { 1: 2, 2: 3, 3: 2, 4: 2 },
-          quality: (1.75 / 4.0), next: false
-        },
-        {
-          solution: { 1: 2, 2: 2, 3: 2, 4: 2 },
-          quality: (1.75 / 4.0), next: false
-        },
-        {
-          solution: { 1: 2, 2: 2, 3: 2, 4: 3 },
-          quality: (2.5 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
-          quality: (2.0 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
-          quality: (2.75 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
-          quality: (3.25 / 4.0), next: false
-        },
-        { solution: null, quality: 0.0, next: false },
-        { solution: null, quality: 0.0, next: false },
-        { solution: null, quality: 0.0, next: false },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
-          quality: (3.25 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
-          quality: (2.75 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 2 },
-          quality: (2.0 / 4.0), next: true
-        },
-        {
-          solution: { 1: 1, 2: 1, 3: 2, 4: 3 },
-          quality: (2.75 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 3, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 2 },
-          quality: (2.5 / 4.0), next: false
-        },
-        {
-          solution: { 1: 1, 2: 2, 3: 2, 4: 3 },
-          quality: (3.25 / 4.0), next: false
-        }
-      ]
-      expectData expectedData
+          {
+            solution: { 1: 2, 2: 1, 3: 2 },
+            quality: (1.5 / 3.0), next: true
+          },
+          { solution: null, quality: 0.0, next: true },
+          { solution: null, quality: 0.0, next: true },
+          {
+            solution: { 1: 2, 2: 1, 3: 2 },
+            quality: (1.5 / 3.0), next: false
+          },
+          {
+            solution: { 1: 1, 2: 1, 3: 2 },
+            quality: (2.25 / 3.0), next: false
+          },
+          { solution: null, quality: 0.0, next: false }
+        ]
+        expectData expectedData
 
 

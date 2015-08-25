@@ -85,7 +85,7 @@ class GSIs
       for newWeekday in newWeekdays
         if @_timeConflictSingleWeekday(existingSection,
           newSection, existingWeekday.trim(), newWeekday.trim())
-          return true
+            return true
     return false
 
   # Returns true if assigning section to gsi would create a time conflict
