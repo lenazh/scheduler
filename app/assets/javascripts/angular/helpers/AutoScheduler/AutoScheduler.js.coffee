@@ -4,7 +4,7 @@
 # scheduler = new AutoScheduler(sections, gsis)
 #
 # where
-# sections is an array of sections to be scheduled and 
+# sections is an array of sections to be scheduled and
 # gsis is an array of all available gsis
 #
 # each section in sections is a hash. Each section has to have
@@ -55,7 +55,7 @@ class AutoScheduler
   _solvable: false
 
   # Average satisfaction level of GSIs, calculated as
-  # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
+  # (gsi1.preference + gsi2.preference + ...)/count(gsi)
   _quality: 0.0
 
   # converts hours/week into maximum number of sections the GSI can teach
