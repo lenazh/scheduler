@@ -3,6 +3,14 @@ div#autoscheduler ng-if="schedulerReady && isOwner && (role == 'owner')"
     h2#autoscheduler-title Auto-scheduler
 
   div.row
+    p
+      | Please check the calendar above to see if you like the GSI assignments. Click "Save" to store the schedule.
+    p
+      b
+        | Please click "Save" before making any manual changes to the assignments
+      |  to make the consistency checks work.
+
+  div.row
     form.form-inline ng-if="schedulerSolvable()"
       button[class="btn btn-danger" ng-click="schedulerReset()"] Reset
       button[class="btn btn-primary" ng-click="schedulerFirst()"] Auto-schedule
