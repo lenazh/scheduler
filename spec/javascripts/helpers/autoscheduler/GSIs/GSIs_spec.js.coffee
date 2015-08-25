@@ -139,7 +139,7 @@ describe 'GSIs data object', ->
           expect(GSIs.canTeach(gsi, section102)).toBe true
 
     describe 'when sections have time conflicts', ->
-      it 'checks something', ->
+      it 'checks something'
 
   describe 'assign', ->
     it 'decreases the GSI availability by one', ->

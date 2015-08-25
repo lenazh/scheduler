@@ -55,33 +55,7 @@ describe 'AutoScheduler single lecture no time conflicts', ->
       scheduler = new schedulerApp.AutoScheduler(sections, gsis)
       scheduler._keepWithinTheSameLecture = false
 
-    describe 'maxHours()', ->
-      it 'returns how many hours/week all GSIs can provide combined', ->
-        maxHours = 0
-        for gsi in gsis
-          maxHours += gsi.hours_per_week
-        expect(scheduler.maxHours()).toBe maxHours
 
-    describe 'needHours()', ->
-      it 'returns how many hours/week you need to teach all the sections', ->
-        needHours = sections.length * 10
-        expect(scheduler.needHours()).toBe needHours
-
-    describe 'enoughGsiHours()', ->
-      it 'returns true', ->
-        expect(scheduler.enoughGsiHours()).toBe true
-
-    describe 'sectionsNobodyCanTeach()', ->
-      it 'returns an empty array', ->
-        expect(scheduler.sectionsNobodyCanTeach()).toEqual []
-
-    describe 'status()', ->
-      it 'should be ready', ->
-        expect(scheduler.status().join()).toMatch /Ready/
-
-    describe 'solvable()', ->
-      it 'should be true', ->
-        expect(scheduler.solvable()).toBe true
 
     describe 'next()/previous()', ->
       expectSolution = (actual, expected) ->
@@ -232,16 +206,7 @@ describe 'AutoScheduler single lecture no time conflicts', ->
         ]
         expectData expectedData
 
-    describe 'unemployed()', ->
-      it "returns a list of underemployed GSIs and how many \
-      more sections they can teach", ->
-        solution = scheduler.next()
-        unemployed = scheduler.unemployed()
-        expect(unemployed[0].name).toBe 'Vader'
-        expect(unemployed[0]['unused_hours']).toBe 10
-        expect(unemployed[1].name).toBe 'GlaDOS'
-        expect(unemployed[1]['unused_hours']).toBe 60
-        expect(unemployed[2]).not.toBeDefined()
+
 
 
     describe "'private' functions", ->

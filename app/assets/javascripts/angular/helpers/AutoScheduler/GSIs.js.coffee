@@ -12,16 +12,16 @@ class GSIs
   # converts hours/week into maximum number of sections the GSI can teach
   hours_to_sections = (hours) ->
     hours / 10
+  hours_to_sections: (hours) -> hours_to_sections(hours)
 
   # converts the number of sections into the hours/week required
   sections_to_hours = (sections) ->
     sections * 10
+  sections_to_hours: (sections) -> sections_to_hours(sections)
 
   # returns what section the lecture belongs to
   section_to_lecture = (section) ->
     section.name.trim().substring(0, 1)
-
-  # same exposed for testing purposes
   section_to_lecture: (section) -> section_to_lecture(section)
 
   # changes the availability of the gsi by x

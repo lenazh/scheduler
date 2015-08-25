@@ -146,7 +146,9 @@ class AutoScheduler
     (gsi for gsi in @_GSIs.all() when @hours_to_sections(gsi.hours_per_week) > gsi.sections_can_teach)
 
   # returns how happy are the GSIs with their assignments on average
-  quality: -> @_solver.quality()
+  quality: ->
+    return 0.0 unless @solvable()
+    @_solver.quality()
 
   # returns first available solution or null if none exists
   first: ->

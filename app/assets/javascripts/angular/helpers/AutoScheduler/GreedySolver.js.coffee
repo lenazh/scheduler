@@ -181,4 +181,12 @@ class GreedySolver
     @_solver.advanceSearch(false)
     @_solver.solve(@_fillRight, false)
 
+  # returns the latest found solution
+  solution: ->
+    _solutionArray
+
+  # returns the latest found solution adapted for testing
+  testSolution: ->
+    _testSolution
+
 schedulerApp.GreedySolver = GreedySolver
