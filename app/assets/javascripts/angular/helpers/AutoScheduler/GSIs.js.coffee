@@ -39,7 +39,6 @@ class GSIs
 
   # Adds the section to the list of sections taught by the gsi
   _addSection: (gsi, section) ->
-    console.log "'#{gsi.name}' is assigned to teach '#{section.name}'"
     if @_gsiData[gsi.id]['sections'][section.id]
       throw "Trying to assign section '#{section.name}' to GSI \
       '#{gsi.name}' who already has this section assigned"
@@ -47,7 +46,6 @@ class GSIs
 
   # Removes the section to the list of sections taught by the gsi
   _removeSection: (gsi, section) ->
-    console.log "'#{gsi.name}' is unassigned from '#{section.name}'"
     if typeof(@_gsiData[gsi.id]['sections'][section.id]) == 'undefined'
       throw "Trying to unassign section '#{section.name}' to GSI \
       '#{gsi.name}' that was never assigned to him/her"
