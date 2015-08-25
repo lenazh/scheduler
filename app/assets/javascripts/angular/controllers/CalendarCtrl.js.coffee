@@ -14,7 +14,7 @@
     getKey = (hour, weekday) ->
       return hours.indexOf(hour) * weekdays.length +
         weekdays.indexOf(weekday)
-    
+
     getHourKey = (section) ->
       hourKey section['start_hour']
 
@@ -84,7 +84,7 @@
     startHourValid = (section) ->
       start_hour = section['start_hour']
       isWithin start_hour, calendar_start_hour, calendar_end_hour
-      
+
     startMinuteValid = (section) ->
       start_minute = section['start_minute']
       isWithin start_minute, 0, 59
@@ -116,7 +116,7 @@
     deleteSection = (section) ->
       Section.remove section, ->
         deleteSectionFromCells section
-        
+
     updateSection = (section, successCallback) ->
       Section.update(
         section
@@ -188,7 +188,7 @@
     emptyCellOnClick = (hour, weekday) ->
       if $scope.role == 'owner'
         return newGhostSection(hour, weekday)
-      
+
 
   # Initialize the calendar
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -288,29 +288,29 @@
       resetCalendar()
 
     $scope.schedulerFirst = ->
-      if scheduler.first()
-        propose(scheduler._solutionArray)
+      if scheduler.first().length > 0
+        propose(scheduler.solution())
       else
         alert 'There are no possible solutions'
 
     $scope.schedulerNext = ->
-      if scheduler.next()
-        propose(scheduler._solutionArray)
-      else 
+      if scheduler.next().length > 0
+        propose(scheduler.solution())
+      else
         alert 'There is no next solution'
 
     $scope.schedulerPrevious = ->
-      if scheduler.previous()
-        propose(scheduler._solutionArray)
+      if scheduler.previous().length > 0
+        propose(scheduler.solution())
       else
         alert 'There is no previous solution'
 
     $scope.disableSchedulerSave = ->
-      scheduler._solutionArray.length == 0
+      scheduler.solution().length == 0
 
     $scope.schedulerSave = ->
-      if scheduler._solutionArray.length > 0
-        saveSchedule(scheduler._solutionArray)
+      if scheduler.solution().length > 0
+        saveSchedule(scheduler.solution())
 
     $scope.schedulerHappiness = ->
       scheduler.quality() * 100
