@@ -289,28 +289,28 @@
 
     $scope.schedulerFirst = ->
       if scheduler.first()
-        propose(scheduler._solutionArray)
+        propose(scheduler.solution())
       else
         alert 'There are no possible solutions'
 
     $scope.schedulerNext = ->
       if scheduler.next()
-        propose(scheduler._solutionArray)
+        propose(scheduler.solution())
       else 
         alert 'There is no next solution'
 
     $scope.schedulerPrevious = ->
       if scheduler.previous()
-        propose(scheduler._solutionArray)
+        propose(scheduler.solution())
       else
         alert 'There is no previous solution'
 
     $scope.disableSchedulerSave = ->
-      scheduler._solutionArray.length == 0
+      scheduler.solution().length == 0
 
     $scope.schedulerSave = ->
-      if scheduler._solutionArray.length > 0
-        saveSchedule(scheduler._solutionArray)
+      if scheduler.solution().length > 0
+        saveSchedule(scheduler.solution())
 
     $scope.schedulerHappiness = ->
       scheduler.quality() * 100

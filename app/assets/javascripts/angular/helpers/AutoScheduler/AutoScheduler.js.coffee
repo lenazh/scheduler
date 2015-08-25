@@ -54,11 +54,6 @@ class AutoScheduler
   _GSIs: {}
   _solvable: false
 
-  # Sets correspondence between the sections and GSIs, such as
-  # { section1 => gsi1, section2 => gsi2, ... }
-  _solution: {}
-  _solutionArray: []
-
   # Average satisfaction level of GSIs, calculated as
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
   _quality: 0.0
