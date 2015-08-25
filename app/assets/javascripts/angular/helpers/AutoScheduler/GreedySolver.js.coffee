@@ -9,7 +9,7 @@ class GreedySolver
   _solution: []
 
   # Average satisfaction level of GSIs, calculated as
-  # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
+  # (gsi1.preference + gsi2.preference + ...)/count(gsi)
   _quality: 0.0
 
   # converts hours/week into maximum number of sections the GSI can teach
@@ -113,10 +113,10 @@ class GreedySolver
   # assigns last GSI index
   _assignSection: (section, gsi, index) ->
     section.lastGsi = gsi
-    section.lastGsiIndex = index 
+    section.lastGsiIndex = index
 
   # resets last GSI index to the beginning
-  _resetSectionIndex: (section) ->   
+  _resetSectionIndex: (section) ->
     section.lastGsi = null
     section.lastGsiIndex = -1
 

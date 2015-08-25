@@ -8,7 +8,7 @@ describe 'Autoscheduler', ->
       gsis =
         [
           {
-            'id': 1, 'name': 'Vader', 'hours_per_week': 20, 
+            'id': 1, 'name': 'Vader', 'hours_per_week': 20,
             'sections_can_teach': 2
           },
           {

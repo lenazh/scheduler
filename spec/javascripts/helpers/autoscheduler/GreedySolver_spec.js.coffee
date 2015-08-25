@@ -210,7 +210,7 @@ describe 'Greedy solver', ->
           expect(GSIs.assign)
             .toHaveBeenCalledWith { name: 'FakeGsi'}, { name: 'FakeSection' }
 
-      describe '_unassign(gsi, section, index)', ->  
+      describe '_unassign(gsi, section, index)', ->
         beforeEach ->
           spyOn(GSIs, 'unassign')
           solver._unassign { name: 'FakeGsi'}, { name: 'FakeSection' }
@@ -295,7 +295,7 @@ describe 'Greedy solver', ->
           ]
 
         GSIs = new schedulerApp.GSIs(gsis)
-        solver = new schedulerApp.GreedySolver(sections, GSIs)   
+        solver = new schedulerApp.GreedySolver(sections, GSIs)
 
       it 'returns expected solutions', ->
         expectedData = [
@@ -464,7 +464,7 @@ describe 'Greedy solver', ->
           ]
 
         GSIs = new schedulerApp.GSIs(gsis)
-        solver = new schedulerApp.GreedySolver(sections, GSIs)   
+        solver = new schedulerApp.GreedySolver(sections, GSIs)
 
       it 'returns expected solutions', ->
         expectedData = [

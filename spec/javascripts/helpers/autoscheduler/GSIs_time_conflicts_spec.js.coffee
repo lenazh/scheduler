@@ -12,14 +12,14 @@ describe 'GSIs data object', ->
 
   expect_failure = (section1, section2)->
     GSIs.assign(gsi, section1)
-    expect(GSIs.canTeach(gsi, section2)).toBe false  
+    expect(GSIs.canTeach(gsi, section2)).toBe false
 
   describe 'time conflicts', ->
     beforeEach ->
       gsis = [{ 'id': 2, 'name': 'GlaDOS', 'hours_per_week': 80 }]
       gsi = gsis[0]
 
-      GSIs = new schedulerApp.GSIs(gsis)    
+      GSIs = new schedulerApp.GSIs(gsis)
 
     describe 'Full hours single weekday', ->
       describe 'Monday 8:00-12:00 is scheduled then', ->
@@ -118,7 +118,7 @@ describe 'GSIs data object', ->
               'start_minute': 0, 'name': '102'
             }
           it 'creates a time conflict', ->
-            expect_failure(section1, section2)               
+            expect_failure(section1, section2)
 
     describe 'Full hours multiple weekdays', ->
       describe 'Monday, Wednesday 10:00-12:00 is scheduled then', ->
@@ -226,7 +226,7 @@ describe 'GSIs data object', ->
               'start_minute': 30, 'name': '102'
             }
           it 'is OK to schedule', ->
-            expect_success(section1, section2)           
+            expect_success(section1, section2)
 
     describe 'Fractional hours single weekday set #2', ->
       describe 'Monday 10:30-12:30 is scheduled then', ->
@@ -375,4 +375,4 @@ describe 'GSIs data object', ->
               'start_minute': 45, 'name': '102'
             }
           it 'is OK to schedule', ->
-            expect_success(section1, section2)            
+            expect_success(section1, section2)
