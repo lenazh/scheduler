@@ -5,11 +5,8 @@ class GreedySolver
 
   # Sets correspondence between the sections and GSIs, such as
   # { section1 => gsi1, section2 => gsi2, ... }
-  _solution: {}
+  _testSolution: {}
   _solutionArray: []
-
-  # Autoscheduler who owns this solver
-  _owner: {}
 
   # Average satisfaction level of GSIs, calculated as
   # (gsi1.preference + gsi2.preference + ...)/count(gsi) 
@@ -63,14 +60,11 @@ class GreedySolver
   # sets the GSI of that section to the first (or last) possible GSI,
   # depending on direction
   _resetSection: (id, next) ->
-    return if (id == -1) && next
-    return if (id == @_sections.length) && !next
-    if (id < -1) || (id > @_sections.length)
-      throw "Index is out of range"
+    return if (id < 0) or (id >= @_sections.length)
 
     section = @_sections[id]
     gsi = section.lastGsi
-    _unassign(gsi, section) if gsi
+    @_unassign(gsi, section) if gsi
     @_setIndexBeforeFirst(section, next)
 
   # recursively assigns GSIs to sections with index id and larger
@@ -95,23 +89,23 @@ class GreedySolver
   _fillLeft: (next) =>
     @_fill(@_sections.length - 1, next, -1)
 
-  # finds the solution given the solver function and direction
+  # returns the solution given the solver function and direction
   _solve: (solverFunction, next) ->
-    return null unless @_owner.solvable()
     if solverFunction(next)
       @_buildSolution()
     else
+      @_testSolution = null
       @_solution = null
-      @_quality = 0
+      @_quality = 0.0
     @_solution
 
   _buildSolution: ->
-    @_solution = {}
-    @_solutionArray = new Array(@_sections.length)
-    @_quality = 0
+    @_testSolution = {}
+    @_solution = new Array(@_sections.length)
+    @_quality = 0.0
     for section, index in @_sections
-      @_solution[section.id] = section.lastGsi
-      @_solutionArray[index] = section.lastGsi
+      @_testSolution[section.id] = section.lastGsi
+      @_solution[index] = section.lastGsi
       @_quality += parseFloat(section.lastGsi.preference)
     @_quality /= @_sections.length
     return
@@ -122,7 +116,7 @@ class GreedySolver
     section.lastGsiIndex = index 
 
   # resets last GSI index to the beginning
-  _resetSection: (section) ->   
+  _resetSectionIndex: (section) ->   
     section.lastGsi = null
     section.lastGsiIndex = -1
 
@@ -130,7 +124,7 @@ class GreedySolver
   _initialize: -> @_resetAllSections()
   _resetAllSections: ->
     for section in @_sections
-      @_resetSection(section)
+      @_resetSectionIndex(section)
 
   # marks that the GSI teaching the section
   _assign: (gsi, section, index) ->
@@ -139,16 +133,16 @@ class GreedySolver
 
   # marks that the GSI is no longer teaching the section
   _unassign: (gsi, section) ->
-    @_resetSection(section)
+    section.lastGsi = null
     @_GSIs.unassign(gsi, section)
 
   # returns the upcoming GSI given section and direction
   _advanceGsi: (section, next) ->
     gsi = section.lastGsi
-    _unassign(gsi, section) if gsi
+    @_unassign(gsi, section) if gsi
     gsi =
-      if next then @_nextGsi(section, section.lastGsi)
-      else @_previousGsi(section, section.lastGsi)
+      if next then @_nextGsi(section, gsi)
+      else @_previousGsi(section, gsi)
     @_setIndexAfterLast(section, next) unless gsi
     gsi
 
@@ -186,11 +180,12 @@ class GreedySolver
     @_solve(@_fillRight, false)
 
   # returns the latest found solution
-  solution: ->
-    _solutionArray
+  solution: -> @_solution
+
+  # returns the quality of the latest solution
+  quality: ->  @_quality
 
   # returns the latest found solution adapted for testing
-  testSolution: ->
-    _testSolution
+  testSolution: -> @_testSolution
 
 schedulerApp.GreedySolver = GreedySolver
