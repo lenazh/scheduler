@@ -104,7 +104,7 @@
 
     processSection = (section) ->
       newSection = angular.copy section
-      newSection['weekdays'] = newSection['weekday'].split /[,; ]+/
+      newSection['weekdays'] = newSection['weekday'].split(/[,; ]+/)
       newSection['style'] = getStyle newSection
       newSection['isValid'] = isSectionValid newSection
       newSection['errors'] = {}

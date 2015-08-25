@@ -28,12 +28,71 @@ class GSIs
   _changeAvailability: (gsi, x) ->
     @_gsiData[gsi.id]['availability'] += x
 
-  # sets the availability of the gsi to maximum and resets the lecture index
+  # sets the availability of the gsi to maximum and resets
+  # lecture and section indexes
   _initializeGSI: (gsi) ->
     @_gsiData[gsi.id] = {}
     hours = gsi['hours_per_week']
     @_gsiData[gsi.id]['availability'] = hours_to_sections hours
     @_gsiData[gsi.id]['lectures'] = {}
+    @_gsiData[gsi.id]['sections'] = {}
+
+  # Adds the section to the list of sections taught by the gsi
+  _addSection: (gsi, section) ->
+    if @_gsiData[gsi.id]['sections'][section.id]
+      throw "Trying to assign section '#{section.name}' to GSI \
+      '#{gsi.name}' who already has this section assigned"
+    @_gsiData[gsi.id]['sections'][section.id] = section
+
+  # Removes the section to the list of sections taught by the gsi
+  _removeSection: (gsi, section) ->
+    if typeof(@_gsiData[gsi.id]['sections'][section.id]) == 'undefined'
+      throw "Trying to unassign section '#{section.name}' to GSI \
+      '#{gsi.name}' that was never assigned to him/her"
+    delete @_gsiData[gsi.id]['sections'][section.id]
+
+  # Returns the list of all the section this GSI has assigned
+  _listSections: (gsi) -> @_gsiData[gsi.id]['sections']
+
+  # Converts the section into an object that is easier to compare to
+  _extractTime: (section) ->
+    result = {}
+    result.start = section['start_hour'] + section['start_minute'] / 60
+    result.start = Math.round(result.start * 100) / 100
+    result.end = result.start + section['duration_hours']
+    result
+
+  # returns true if there is a time overlap between the sections,
+  # excluding the endpoints
+  _sectionsOverlap: (existing, created) ->
+    return true if existing.start <= created.start < existing.end
+    return true if existing.start < created.end < existing.end
+    return true if created.start <= existing.start < created.end
+    return true if created.start < existing.end < created.end
+    false
+
+  # Returns true if newSection and existingSection have a time conflict
+  # given newWeekday and existingWeekday
+  _timeConflictSingleWeekday: (existing, created, existingWeekday, createdWeekday) ->
+    return false unless existingWeekday == createdWeekday
+    @_sectionsOverlap(@_extractTime(existing), @_extractTime(created))
+
+  # Returns true if newSection and existingSection have a time conflict
+  _timeConflictCheck: (existingSection, newSection) ->
+    existingWeekdays = existingSection['weekday'].split(/[,; ]+/)
+    newWeekdays = newSection['weekday'].split(/[,; ]+/)
+    for existingWeekday in existingWeekdays
+      for newWeekday in newWeekdays
+        if @_timeConflictSingleWeekday(existingSection,
+          newSection, existingWeekday.trim(), newWeekday.trim())
+          return true
+    return false
+
+  # Returns true if assigning section to gsi would create a time conflict
+  _createsTimeConflict: (gsi, newSection) ->
+    for key, existingSection of @_listSections(gsi)
+      return true if @_timeConflictCheck(existingSection, newSection)
+    return false
 
   # returns how many sections the GSI is teaching in lecture that
   # section belongs to
@@ -90,6 +149,7 @@ class GSIs
       @_changeAvailability(gsi, -1)
     else
       throw "GSI #{gsi.id} #{gsi.name} was assigned above maximal workload"
+    @_addSection(gsi, section)
     @_changeSectionNumber(gsi, section, 1) if @keepWithinTheSameLecture
 
   # marks that the GSI is no longer teaching the section
@@ -99,10 +159,12 @@ class GSIs
     else
       throw "GSI #{gsi.id} #{gsi.name} was being returned more work hours \
       than he/she initially had"
+    @_removeSection(gsi, section)
     @_changeSectionNumber(gsi, section, -1) if @keepWithinTheSameLecture
 
   # returns true if the GSI can teach and false otherwise
   canTeach: (gsi, section) ->
+    return false if @_createsTimeConflict(gsi, section)
     if @keepWithinTheSameLecture
       (@availability(gsi) > 0) && !@_teachingAnyOtherLecture(gsi, section)
     else
