@@ -6,11 +6,11 @@ describe 'GSIs data object', ->
   section1 = {}
   section2 = {}
 
-  expect_success = (section1, section2)->
+  expect_success = (section1, section2) ->
     GSIs.assign(gsi, section1)
     expect(GSIs.canTeach(gsi, section2)).toBe true
 
-  expect_failure = (section1, section2)->
+  expect_failure = (section1, section2) ->
     GSIs.assign(gsi, section1)
     expect(GSIs.canTeach(gsi, section2)).toBe false
 

@@ -52,7 +52,7 @@ describe 'Greedy solver', ->
 
         describe 'when a GSI who can teach is found', ->
           it 'assigns the GSI to the section and returns it', ->
-            spyOn(GSIs, 'canTeach').and.callFake (gsi)->
+            spyOn(GSIs, 'canTeach').and.callFake (gsi) ->
               switch gsi.name
                 when 'GlaDOS' then false
                 when 'Vader' then false
