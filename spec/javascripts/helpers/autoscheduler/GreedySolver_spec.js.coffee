@@ -217,7 +217,8 @@ describe 'Greedy solver', ->
 
         it 'calls GSIs.unassign(...) with correct parameters', ->
           expect(GSIs.unassign)
-            .toHaveBeenCalledWith { name: 'FakeGsi'}, { name: 'FakeSection', lastGsi: null }
+            .toHaveBeenCalledWith { name: 'FakeGsi'},
+              { name: 'FakeSection', lastGsi: null }
 
   describe 'finding a solution', ->
     expectSolution = (actual, expected) ->
