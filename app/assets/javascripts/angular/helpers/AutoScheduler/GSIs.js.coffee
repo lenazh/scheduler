@@ -39,6 +39,7 @@ class GSIs
 
   # Adds the section to the list of sections taught by the gsi
   _addSection: (gsi, section) ->
+    console.log "'#{gsi.name}' is assigned to teach '#{section.name}'"
     if @_gsiData[gsi.id]['sections'][section.id]
       throw "Trying to assign section '#{section.name}' to GSI \
       '#{gsi.name}' who already has this section assigned"
@@ -46,6 +47,7 @@ class GSIs
 
   # Removes the section to the list of sections taught by the gsi
   _removeSection: (gsi, section) ->
+    console.log "'#{gsi.name}' is unassigned from '#{section.name}'"
     if typeof(@_gsiData[gsi.id]['sections'][section.id]) == 'undefined'
       throw "Trying to unassign section '#{section.name}' to GSI \
       '#{gsi.name}' that was never assigned to him/her"
@@ -57,9 +59,10 @@ class GSIs
   # Converts the section into an object that is easier to compare to
   _extractTime: (section) ->
     result = {}
-    result.start = section['start_hour'] + section['start_minute'] / 60
+    result.start = parseFloat(section['start_hour']) +
+      parseFloat(section['start_minute']) / 60
     result.start = Math.round(result.start * 100) / 100
-    result.end = result.start + section['duration_hours']
+    result.end = result.start + parseFloat(section['duration_hours'])
     result
 
   # returns true if there is a time overlap between the sections,
