@@ -46,34 +46,28 @@ class GreedySolver
     for i in [start..end]
       gsi = section.available_gsis[i]
       if @_GSIs.canTeach(gsi, section)
-        _assign(gsi, section, i)
+        @_assign(gsi, section, i)
         return gsi
     null
 
-  # returns the upcoming GSI given section and direction
-  _advanceGsi: (section, next) ->
-    gsi = section.lastGsi
-    _unassign(gsi, section) if gsi
-    gsi =
-      if next then @_nextGsi(section, section.lastGsi)
-      else @_previousGsi(section, section.lastGsi)
-    @_setIndexAfterLast(section, next) unless gsi
-    gsi
-
   # Rewinds the section index to beyond the last available
-  # GSI in 'next' diraction
+  # GSI in 'next' direction
   _setIndexAfterLast: (section, next) ->
     section.lastGsiIndex = if next then section.available_gsis.length else -1
 
   # Rewinds the section index to beyond the first available
-  # GSI in 'next' diraction
+  # GSI in 'next' direction
   _setIndexBeforeFirst: (section, next) ->
     section.lastGsiIndex = if next then -1 else section.available_gsis.length
 
   # sets the GSI of that section to the first (or last) possible GSI,
   # depending on direction
   _resetSection: (id, next) ->
-    return if (id < 0) or (id >= @_sections.length)
+    return if (id == -1) && next
+    return if (id == @_sections.length) && !next
+    if (id < -1) || (id > @_sections.length)
+      throw "Index is out of range"
+
     section = @_sections[id]
     gsi = section.lastGsi
     _unassign(gsi, section) if gsi
@@ -102,9 +96,9 @@ class GreedySolver
     @_fill(@_sections.length - 1, next, -1)
 
   # finds the solution given the solver function and direction
-  _solve: (solver, next) ->
+  _solve: (solverFunction, next) ->
     return null unless @_owner.solvable()
-    if solver(next)
+    if solverFunction(next)
       @_buildSolution()
     else
       @_solution = null
@@ -127,7 +121,7 @@ class GreedySolver
     section.lastGsi = gsi
     section.lastGsiIndex = index 
 
-  # resets last GSI index
+  # resets last GSI index to the beginning
   _resetSection: (section) ->   
     section.lastGsi = null
     section.lastGsiIndex = -1
@@ -148,6 +142,23 @@ class GreedySolver
     @_resetSection(section)
     @_GSIs.unassign(gsi, section)
 
+  # returns the upcoming GSI given section and direction
+  _advanceGsi: (section, next) ->
+    gsi = section.lastGsi
+    _unassign(gsi, section) if gsi
+    gsi =
+      if next then @_nextGsi(section, section.lastGsi)
+      else @_previousGsi(section, section.lastGsi)
+    @_setIndexAfterLast(section, next) unless gsi
+    gsi
+
+  # advances the search by one step forward or backward
+  _advanceSearch: (next) ->
+    index = @_sections.length - 1
+    section = @_sections[index]
+    return unless section.lastGsi
+    section.lastGsi = @_advanceGsi(section, next)
+
   # "public" methods
   constructor: (sections, GSIs) ->
     @_sections = angular.copy sections
@@ -159,13 +170,6 @@ class GreedySolver
     @_resetAllSections()
     @_GSIs.reset()
 
-  # advances the search by one step forward or backward
-  advanceSearch: (next) ->
-    index = @_sections.length - 1
-    section = @_sections[index]
-    return unless section.lastGsi
-    section.lastGsi = @_advanceGsi(section, next)
-
   # returns first available solution or null if none exists
   first: ->
     @reset()
@@ -173,13 +177,13 @@ class GreedySolver
 
   # returns next available solution or null if none exists
   next: ->
-    @_solver.advanceSearch(true)
+    @_advanceSearch(true)
     @_solve(@_fillRight, true)
 
   # returns the previous solution or null if none exists
   previous: ->
-    @_solver.advanceSearch(false)
-    @_solver.solve(@_fillRight, false)
+    @_advanceSearch(false)
+    @_solve(@_fillRight, false)
 
   # returns the latest found solution
   solution: ->
