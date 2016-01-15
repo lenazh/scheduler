@@ -188,14 +188,15 @@ class AutoScheduler
       # break if time > 604800 * 1e6
     time /= 1e6
 
+    help = " Try splitting the class into separate sections to decrease time."
     if (time > 217728000)
-      return toDecimals(time / 217728000) + " years"
+      return toDecimals(time / 217728000) + " years." + help
     if (time > 18144000)
-      return toDecimals(time / 18144000) + " months"
+      return toDecimals(time / 18144000) + " months." + help
     if (time > 604800)
-      return toDecimals(time / 604800) + " weeks"
+      return toDecimals(time / 604800) + " weeks" + help
     if (time > 86400)
-      return toDecimals(time / 86400) + " days"
+      return toDecimals(time / 86400) + " days" + help
     if (time > 3600)
       return toDecimals(time / 3600) + " hours"
     if (time > 60)
