@@ -60,3 +60,7 @@ div#autoscheduler ng-if="schedulerReady && isOwner && (role == 'owner')"
       p
         b Status:
       p ng-repeat="status in schedulerStatus()" ng-bind="status"
+      p
+        b Worst-case time to find a solution:
+      p
+        | {{ schedulerWorstCase() }}

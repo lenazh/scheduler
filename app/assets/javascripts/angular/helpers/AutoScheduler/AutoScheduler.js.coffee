@@ -171,4 +171,28 @@ class AutoScheduler
     return null unless @solvable()
     @_solver.testSolution()
 
+  # 1 minute = 60 seconds
+  # 1 hour = 3600 seconds
+  # 1 day = 86400
+  # 1 week = 604800
+  # 1 month = 18144000
+  # 1 year = 217728000
+
+  toDecimals = (value) ->
+    return Math.round(value * 10) / 10
+
+  worstCase: ->
+    time = 1
+    for section in @_sections
+      time *= section['available_gsis'].length
+      break if time > 86400 * 1e6
+    time /= 1e6
+    if (time > 86400)
+      return "> 1 day"
+    if (time > 3600)
+      return toDecimals(time / 3600) + " hours"
+    if (time > 60)
+      return toDecimals(time / 60) + " minutes"
+    return toDecimals(time) + " seconds"
+
 schedulerApp.AutoScheduler = AutoScheduler

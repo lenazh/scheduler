@@ -345,6 +345,9 @@
     $scope.schedulerSameLectureChange = (value) ->
       scheduler.keepWithinTheSameLecture(value)
 
+    $scope.schedulerWorstCase = ->
+      scheduler.worstCase()
+
     $scope.cellId = (hour, weekday) -> weekday + hour.replace(/:/, '')
 
     $scope.pad = (minutes) ->
