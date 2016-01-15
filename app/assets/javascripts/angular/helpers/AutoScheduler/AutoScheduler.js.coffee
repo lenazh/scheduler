@@ -185,10 +185,15 @@ class AutoScheduler
     time = 1
     for section in @_sections
       time *= section['available_gsis'].length
-      break if time > 604800 * 1e6
+      # break if time > 604800 * 1e6
     time /= 1e6
+
+    if (time > 217728000)
+      return toDecimals(time / 217728000) + " years"
+    if (time > 18144000)
+      return toDecimals(time / 18144000) + " months"
     if (time > 604800)
-      return "over a week"
+      return toDecimals(time / 604800) + " weeks"
     if (time > 86400)
       return toDecimals(time / 86400) + " days"
     if (time > 3600)
