@@ -243,6 +243,7 @@
     Employment.init(courseId)
     Section.all (_sections) ->
       sections = _sections
+      $scope.sections = _sections
       if isOwner
         Employment.roster (_gsis) ->
           gsis = _gsis
@@ -251,6 +252,7 @@
 
       for section in sections
         addSectionToCells section
+
 
 
 
@@ -344,6 +346,12 @@
       scheduler.keepWithinTheSameLecture(value)
 
     $scope.cellId = (hour, weekday) -> weekday + hour.replace(/:/, '')
+
+    $scope.pad = (minutes) ->
+      if (minutes < 10)
+        return "0" + minutes
+      else
+        return minutes
 
     return
   ]
