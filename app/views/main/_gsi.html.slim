@@ -1,41 +1,43 @@
-div.page-header
-  h1#gsi-employment GSI roster
 
-div.row 
-  p
-    | GSIs with 10 hours/week appointments can teach one section per week, GSIs with 20 hours/week appointments can teach two sections per week, etc.
+div.container
+  div.page-header
+    h1#gsi-employment GSI roster
 
-  form.form-inline[name="form" novalidate]  
-    table[class="table table-striped" id="gsi-roster"]
-      thead 
-      tr
-        th.col-md-1 Name
-        th.col-md-1 Email
-        th.col-md-2 Hours/week
-        th.col-md-1
-        th.col-md-1
-      tr ng-repeat="gsi in gsiCtrl.all"
-        td ng-attr-id="gsi-name-{{gsi.id}}" ng-bind="gsi.name" 
-        td ng-attr-id="gsi-email-{{gsi.id}}" ng-bind="gsi.email"
-        td ng-attr-id="gsi-hours-{{gsi.id}}" ng-bind="gsi.hours_per_week"
+  div.row
+    p
+      | GSIs with 10 hours/week appointments can teach one section per week, GSIs with 20 hours/week appointments can teach two sections per week, etc.
 
-        td.text-right 
-          button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit" ng-show="gsiCtrl.isOwner"] Edit
+    form.form-inline[name="form" novalidate]
+      table[class="table table-striped" id="gsi-roster"]
+        thead
+        tr
+          th.col-md-1 Name
+          th.col-md-1 Email
+          th.col-md-2 Hours/week
+          th.col-md-1
+          th.col-md-1
+        tr ng-repeat="gsi in gsiCtrl.all"
+          td ng-attr-id="gsi-name-{{gsi.id}}" ng-bind="gsi.name"
+          td ng-attr-id="gsi-email-{{gsi.id}}" ng-bind="gsi.email"
+          td ng-attr-id="gsi-hours-{{gsi.id}}" ng-bind="gsi.hours_per_week"
 
-        td.text-right 
-          button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete" ng-show="gsiCtrl.isOwner"] X
-        
-      tr ng-show="gsiCtrl.isOwner"
-        td
-        td
-          input.form-control[placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.fields.email" name="email"]
+          td.text-right
+            button[class="btn btn-default" ng-click="gsiCtrl.editForm(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-edit" ng-show="gsiCtrl.isOwner"] Edit
 
-        td
-          input.form-control[placeholder="Hours per week..." required type="number" ng-trim="true" ng-model="gsiCtrl.fields.hours_per_week" name="hours"]
+          td.text-right
+            button[class="btn btn-danger" ng-click="gsiCtrl.remove(gsi)" ng-disabled="gsiCtrl.disableEditingAndDeletion" ng-attr-id="gsi-{{gsi.id}}-delete" ng-show="gsiCtrl.isOwner"] X
 
-          button[class="btn btn-defauls" ng-click="gsiCtrl.addForm()" ng-hide="gsiCtrl.hideUpdateButton"] Cancel
+        tr ng-show="gsiCtrl.isOwner"
+          td
+          td
+            input.form-control[placeholder="Add by email..." required type="email" ng-trim="true" ng-model="gsiCtrl.fields.email" name="email"]
 
-        td class="text-right" colspan="2"          
-          button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="!gsiCtrl.form_is_valid() || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
+          td
+            input.form-control[placeholder="Hours per week..." required type="number" ng-trim="true" ng-model="gsiCtrl.fields.hours_per_week" name="hours"]
 
-          button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="!gsiCtrl.form_is_valid()" ng-hide="gsiCtrl.hideUpdateButton"] Update
+            button[class="btn btn-defauls" ng-click="gsiCtrl.addForm()" ng-hide="gsiCtrl.hideUpdateButton"] Cancel
+
+          td class="text-right" colspan="2"
+            button[class="btn btn-success" ng-click="gsiCtrl.saveNew()" ng-disabled="!gsiCtrl.form_is_valid() || gsiCtrl.disableEditingAndDeletion" ng-hide="gsiCtrl.hideAddButton"] Add
+
+            button[class="btn btn-primary" ng-click="gsiCtrl.update()" ng-disabled="!gsiCtrl.form_is_valid()" ng-hide="gsiCtrl.hideUpdateButton"] Update
