@@ -8,8 +8,8 @@ div ng-switch="role"
     | Click sections to choose how much you would like to teach each one.
 
 table[class="table table-striped" id="schedule-table"]
-  thead 
-  th 
+  thead
+  th
   th ng-repeat="weekday in weekdays" ng-bind="weekday"
   tr ng-repeat="hour in hours"
     td.time-col ng-bind="hour"
@@ -18,6 +18,6 @@ table[class="table table-striped" id="schedule-table"]
         calendar-event class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event" hour="hour" weekday="weekday"
       div.event-parent ng-switch-when="gsi"
         calendar-preference class="event-table" ng-repeat="(id, event) in getSections(hour, weekday)" event="event"
-  tr 
+  tr
     td
     td ng-repeat="weekday in weekdays"
