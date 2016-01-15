@@ -6,7 +6,7 @@ div#gsi-list
   div.row
     ol
       li ng-repeat="section in sections"
-        | Section {{section.name}}, {{section.start_hour}}:{{pad(section.start_minute)}}, {{section.weekday}}
+        | Section <b>{{section.name}}</b>, {{section.start_hour}}:{{pad(section.start_minute)}}, {{section.weekday}}
         ol
           li ng-repeat="gsi in section.available_gsis"
-            | {{gsi.name}}, preference: {{gsi.preference}}
+            | <b>{{gsi.name}}</b>, preference: <b>{{gsi.preference}}</b>, max hours per week: <b>{{gsi.hours_per_week}}</b>
