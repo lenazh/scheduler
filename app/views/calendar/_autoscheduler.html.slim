@@ -12,7 +12,8 @@ div#autoscheduler ng-if="schedulerReady && isOwner && (role == 'owner')"
 
   div.row
     form.form-inline ng-if="schedulerSolvable()"
-      button[class="btn btn-danger" ng-click="schedulerReset()"] Reset
+      button[class="btn btn-danger" ng-click="unassignAll()"] Unassign all
+      button[class="btn btn-danger" ng-click="schedulerReset()"] Revert
       button[class="btn btn-primary" ng-click="schedulerFirst()"] Auto-schedule
       button[class="btn btn-default" ng-click="schedulerPrevious()"] << Previous
       button[class="btn btn-default" ng-click="schedulerNext()"] Next >>

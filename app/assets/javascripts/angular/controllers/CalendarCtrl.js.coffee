@@ -145,6 +145,12 @@
         section.gsi = gsi
         redrawSection section
 
+    unassignAll = () ->
+      Section.clear (_sections) ->
+        sections = _sections
+        for section in sections
+          redrawSection section
+
     resetCalendar = () ->
       Section.all (_sections) ->
         sections = _sections
@@ -337,6 +343,9 @@
 
     $scope.schedulerSectionsNobodyCanTeach = ->
       scheduler.sectionsNobodyCanTeach()
+
+    $scope.unassignAll = ->
+      unassignAll()
 
     $scope.schedulerStatus = ->
       scheduler.status()
